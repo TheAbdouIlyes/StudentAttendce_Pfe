@@ -20,19 +20,24 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from exams import views
 from exams.views import GenerateQRCode
-from exams.views import QRCodeView,handle_scan,login_with_email_phone,CreateAuthTableView,log_visit
+from exams.views import CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-router = DefaultRouter()
-router.register(r'students', views.StudentViewSet)
-router.register(r'exams', views.ExamViewSet)
-router.register(r'attendance', views.AttendanceViewSet)
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
+    
     path('generate-qr/', GenerateQRCode.as_view(), name='generate-qr'),
-   path('api/scan/', handle_scan, name='handle_scan'),
-   path('p/',login_with_email_phone,name='login'),
-   path('c/', CreateAuthTableView.as_view(), name='create-auth-table'),
-    path("api/log-visit/", log_visit, name="log-visit")
+   
+    path('teacher_l/',login_with_matricul_secret,name='t_login'),
+    path('stud_l/',login_with_matricul_roll,name='s_login'),
+    
+    path('teacher/', CreateteacherView.as_view(), name='create-teacher'),
+    path('t/', TokenObtainPairView.as_view(), name="get_token"),
+    path('s/', subjectCreate.as_view(), name="subject_create"),
+    path('att/<int:pk1>/etu/<int:pk>/', is_presente.as_view(), name="present"),
+    path('stud/',CreatestudView.as_view(),name='c_stud'),
+   
    ]
