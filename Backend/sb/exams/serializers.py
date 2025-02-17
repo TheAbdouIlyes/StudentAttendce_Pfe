@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Student, Exam, Attendance,AuthTable
+from .models import Student, Exam, Attendance,AuthTable,teacher,teach,subject
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,8 +16,16 @@ class AttendanceSerializer(serializers.ModelSerializer):
         model = Attendance
         fields = '__all__'
 
-class AuthTableSerializer(serializers.ModelSerializer):
+class teacherSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AuthTable
+        model = teacher
         fields = '__all__'
         read_only_fields = ['created_at']
+
+
+
+
+class subjetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = subject
+        fields = '__all__'
