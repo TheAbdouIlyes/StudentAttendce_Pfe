@@ -1,21 +1,14 @@
-from django.db import models
+
 
 # Create your models here.
 from django.db import models
 
 
 
-    
-class QRCodeData(models.Model):
-    data = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.data
-
-
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils import timezone
+
 
 class AuthTable(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # Links to auth_user
@@ -34,26 +27,40 @@ level_CHOICES=[
     ('m1','M1'),
     ('m2','M2')
 ]
-
+speciality_choices=[('info','info'),
+                    ('physic','physic'),
+                    ('gestion','gestion'),
+                    ('biology','biology'),
+                    ('pharmacy','pharmacy'),
+                    ('medcine','medcine')
+                    ]
+semester_choices=[
+    ('s1','S1'),
+    ('s2','S2')
+]
 class subject(models.Model):
     name=  models.CharField(max_length=100,unique=True, null=True)
     level= models.CharField(max_length=20, choices=level_CHOICES,default="l1")
+    speciality= models.CharField(max_length=100,choices=speciality_choices, default="info")
+    semester= models.CharField(max_length=100,choices=semester_choices, default="s1")
+   
+
 
 
 
 class Exam(models.Model):
     subject= models.ForeignKey(subject, on_delete=models.CASCADE)
-    date = models.DateField()
-
-    def __str__(self):
-        return self.name
+    date = models.DateField(default=timezone.now)
+    time= models.TimeField(default=timezone.now)
+    amphi=models.CharField(max_length=15,default="ben ba3toch")
+   
 
 
 
 
 
 class teacher(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE) 
+    user = models.OneToOneField(User, on_delete=models.CASCADE,default=1) 
     
     matricul= models.CharField(max_length=15,unique=True, null=True)
     secret_number= models.CharField(max_length=15,unique=True, null=True)
@@ -64,13 +71,24 @@ class teacher(models.Model):
 class teach(models.Model):
     subject= models.ForeignKey(subject, on_delete=models.CASCADE)
     teacher= models.ForeignKey(teacher, on_delete=models.CASCADE)
+    teaching= models.BooleanField(default=False)
+
 
 class Student(models.Model):
-    name = models.CharField(max_length=100)
+    Name = models.OneToOneField(User, on_delete=models.CASCADE)
+    matricul= models.CharField(max_length=15,unique=True, null=True)
     roll_number = models.CharField(max_length=20, unique=True)
     level= models.CharField(max_length=20, choices=level_CHOICES,default="l1")
-    def __str__(self):
-        return self.name
+    speciality= models.CharField(max_length=100,choices=speciality_choices, default="info")
+   
+
+class surveillance(models.Model):
+    teacher = models.ForeignKey(teacher, on_delete=models.CASCADE)
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    
+    is_present = models.BooleanField(default=False)
+
+   
 
 
 class Attendance(models.Model):
@@ -79,5 +97,6 @@ class Attendance(models.Model):
     
     is_present = models.BooleanField(default=False)
 
-    def __str__(self):
-        return f"{self.student.name} - {self.exam.name}"
+   
+
+
