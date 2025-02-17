@@ -35,7 +35,7 @@ REST_FRAMEWORK = {
     ],
 }
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=10),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
 # Application definition
@@ -100,8 +100,10 @@ DATABASES = {
     }
 }
 AUTHENTICATION_BACKENDS = [
-    "exams.auth_backends.EmailPhoneAuthBackend",  # Custom backend
-    "django.contrib.auth.backends.ModelBackend",  # Default backend
+    "exams.auth_backends.EmailPhoneAuthBackend",
+     "exams.auth_backends.matriculsecretAuthBackend",   
+    "django.contrib.auth.backends.ModelBackend",
+      "exams.auth_backends.matriculsecretAuthBackendetud",  
 ]
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
