@@ -7,6 +7,11 @@ from .serializers import StudentSerializer, ExamSerializer, AttendanceSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import generics
 
+class Examadd(generics.CreateAPIView):
+    queryset = Exam.objects.all()
+    serializer_class = ExamSerializer
+    permission_classes = [IsAuthenticated]
+
 
 class ExamUpdate(generics.UpdateAPIView):
     queryset = Exam.objects.all()
@@ -71,6 +76,11 @@ class subjectCreate(generics.ListCreateAPIView):
         teachers = teacher.objects.all()  
         presences = [teach(teacher=etu, subject=subject_instance) for etu in teachers]
         teach.objects.bulk_create(presences)  
+        
+
+        teachers = teacher.objects.all()  
+        surveillances = [surveillance(teacher=etu, exam=exam_instance) for etu in teachers]
+        surveillance.objects.bulk_create(surveillances)  
 
         return subject_instance  # ✅ Retourne le sujet avec l'examen lié
  
@@ -171,7 +181,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from .models import AuthTable,teacher,teach
-from .serializers import teacherSerializer
+from .serializers import teacherSerializer,teachSerializer,surveillanceSerializer
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -196,7 +206,7 @@ class CreateteacherView(APIView):
 
         # Check if the user already exists
       
-        if User.objects.filter(first_name=first_name ,last_name=last_name , email=email).exists():
+        if User.objects.filter(first_name=first_name ,last_name=last_name ,email=email).exists():
                
                return Response({"error": "teacher already exists."}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -207,13 +217,15 @@ class CreateteacherView(APIView):
         random_password = "".join(random.choices(string.ascii_letters + string.digits, k=12))
         username= "".join(random.choices(string.ascii_letters + string.digits, k=12))
         # Create the new user
-        new_user = User.objects.create_user( username=username,first_name=first_name,last_name=last_name ,password=random_password)
+        new_user = User.objects.create_user( username=username,first_name=first_name,email=email,last_name=last_name ,password=random_password)
 
         # Create the AuthTable entry for the new user
         auth_table_entry = teacher.objects.create(user=new_user, secret_number=secret_number,  matricul= matricul)
         serializer =  teacherSerializer(auth_table_entry) 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-       
+
+
+
 class CreatestudView(APIView):
     permission_classes = [IsAuthenticated]  # Only authenticated users with AuthTable can create new ones
 
@@ -247,17 +259,161 @@ class CreatestudView(APIView):
         random_password = "".join(random.choices(string.ascii_letters + string.digits, k=12))
         username= "".join(random.choices(string.ascii_letters + string.digits, k=12))
         # Create the new user
-        new_user = User.objects.create_user( username=username,first_name=first_name,last_name=last_name ,password=random_password)
+        new_user = User.objects.create_user( username=username,first_name=first_name,email=email,last_name=last_name ,password=random_password)
 
         # Create the AuthTable entry for the new user
         auth_table_entry = Student.objects.create(Name=new_user, roll_number=roll_number,  matricul= matricul, level= level,speciality=speciality)
         serializer =  StudentSerializer(auth_table_entry) 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
+    
+class UpdateTeacherView(APIView):
+    permission_classes = [IsAuthenticated]  # Only authenticated users can update a teacher
+
+    def put(self, request, teacher_id):
+        try:
+            teacher_instance = teacher.objects.get(id=teacher_id)
+        except teacher.DoesNotExist:
+            return Response({"error": "Teacher not found"}, status=status.HTTP_404_NOT_FOUND)
+        # Ensure the user updating is the owner OR an admin (optional check)
+        
+
+        # Get updated fields from request
+        first_name = request.data.get("first_name", teacher_instance.user.first_name)
+        last_name = request.data.get("last_name", teacher_instance.user.last_name)
+        email = request.data.get("email", teacher_instance.user.email)
+        secret_number = request.data.get("secret_number", teacher_instance.secret_number)
+        matricul = request.data.get("matricul", teacher_instance.matricul)
+
+        # Update User model
+        teacher_instance.user.first_name = first_name
+        teacher_instance.user.last_name = last_name
+        teacher_instance.user.email = email
+        teacher_instance.user.save()
+
+        # Update Teacher model
+        teacher_instance.secret_number = secret_number
+        teacher_instance.matricul = matricul
+        teacher_instance.save()
+
+        # Serialize and return response
+        serializer = teacherSerializer(teacher_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class UpdateStudentView(APIView):
+    permission_classes = [IsAuthenticated]  # Only authenticated users can update a student
+
+    def put(self, request, student_id):
+        try:
+            student_instance = Student.objects.get(id=student_id)
+        except Student.DoesNotExist:
+            return Response({"error": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Ensure the user updating is the owner OR an admin (optional check)
+        if request.user != student_instance.Name and not request.user.is_staff:
+            return Response({"error": "You do not have permission to update this student."}, status=status.HTTP_403_FORBIDDEN)
+
+        # Get updated fields from request
+        first_name = request.data.get("first_name", student_instance.Name.first_name)
+        last_name = request.data.get("last_name", student_instance.Name.last_name)
+        email = request.data.get("email", student_instance.Name.email)
+        roll_number = request.data.get("roll_number", student_instance.roll_number)
+        matricul = request.data.get("matricul", student_instance.matricul)
+        level = request.data.get("level", student_instance.level)
+        speciality = request.data.get("speciality", student_instance.speciality)
+
+        # Update User model
+        student_instance.Name.first_name = first_name
+        student_instance.Name.last_name = last_name
+        student_instance.Name.email = email
+        student_instance.Name.save()
+
+        # Update Student model
+        student_instance.roll_number = roll_number
+        student_instance.matricul = matricul
+        student_instance.level = level
+        student_instance.speciality = speciality
+        student_instance.save()
+
+        # Serialize and return response
+        serializer = StudentSerializer(student_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    
+class teaching(generics.UpdateAPIView):
+       serializer_class =teachSerializer
+       permission_classes = [IsAuthenticated]
+       def get_object(self):
+        id = self.kwargs['pk']
+        id1 = self.kwargs['pk1']
+        
+        try:
+            # Attempt to retrieve the presence object
+            pre = teach.objects.get(teacher=id, subject=id1)
+            return pre
+        except teach.DoesNotExist:
+            # Handle the case where the object does not exist
+            return None
+       def put(self, request, *args, **kwargs):
+        # Get the object using the overridden get_object method
+        presence_instance = self.get_object()
+        
+        if presence_instance is None:
+            return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+        # Update the is_present field
+        presence_instance.teaching = True
+        presence_instance.save()
+
+        # Optionally, serialize the updated object to return it in the response
+        serializer = self.get_serializer(presence_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+class  teacher_present(generics.UpdateAPIView):
+       
+       serializer_class =surveillanceSerializer
+       permission_classes = [IsAuthenticated]
+       def get_object(self):
+        id = self.kwargs['pk']
+        id1 = self.kwargs['pk1']
+        
+        try:
+            # Attempt to retrieve the presence object
+            pre = surveillance.objects.get(teacher=id, exam=id1)
+            return pre
+        except surveillance.DoesNotExist:
+            # Handle the case where the object does not exist
+            return None
+       def put(self, request, *args, **kwargs):
+        # Get the object using the overridden get_object method
+        presence_instance = self.get_object()
+        
+        if presence_instance is None:
+            return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+        # Update the is_present field
+        presence_instance.is_present = True
+        presence_instance.save()
 
+        # Optionally, serialize the updated object to return it in the response
+        serializer = self.get_serializer(presence_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
+ 
 
+class ListStudentView(generics.ListAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+    permission_classes = [IsAuthenticated]  # Only authenticated users can view the list
 
+    def get_queryset(self):
+        return Student.objects.select_related('Name').all() 
+       
+
+class ListTeacherView(generics.ListAPIView):
+    queryset = teacher.objects.all()
+    serializer_class = teacherSerializer
+    permission_classes = [IsAuthenticated]  # Only authenticated users can view the list
+
+    def get_queryset(self):
+        return teacher.objects.select_related('user').all() 
        
