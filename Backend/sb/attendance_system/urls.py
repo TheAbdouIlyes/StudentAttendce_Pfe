@@ -20,24 +20,33 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from exams import views
 from exams.views import GenerateQRCode
-from exams.views import CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView
+from exams.views import CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView,ExamUpdate,UpdateTeacherView,UpdateStudentView,teaching,teacher_present,ListStudentView,ListTeacherView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
 
 
 urlpatterns = [
+
     path('admin/', admin.site.urls),
     
     path('generate-qr/', GenerateQRCode.as_view(), name='generate-qr'),
-   
+    path("exam/update/<int:pk>/",ExamUpdate.as_view(),name='exam_update'),
     path('teacher_l/',login_with_matricul_secret,name='t_login'),
     path('stud_l/',login_with_matricul_roll,name='s_login'),
-    
     path('teacher/', CreateteacherView.as_view(), name='create-teacher'),
     path('t/', TokenObtainPairView.as_view(), name="get_token"),
     path('s/', subjectCreate.as_view(), name="subject_create"),
     path('att/<int:pk1>/etu/<int:pk>/', is_presente.as_view(), name="present"),
+   # path('',.as_view,name=),
+    path('u_teacher/<int:teacher_id>',UpdateTeacherView.as_view(),name="update_teacher"),
+    path('u_student/<int:student_id>',UpdateStudentView.as_view(),name="update_student"),
+    path('tea/<int:pk>/sub/<int:pk1>/',teaching.as_view(),name="t_teaching"),
+    path('tea/<int:pk>/exa/<int:pk1>/',teacher_present.as_view(),name="t_present"),
+    path('student_list/',ListStudentView.as_view(),name="student_list"),
+    path('Teacher_list/',ListTeacherView.as_view(),name="Teacher_list"),
     path('stud/',CreatestudView.as_view(),name='c_stud'),
-   
+    
+
    ]
+
