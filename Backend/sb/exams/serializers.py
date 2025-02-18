@@ -1,10 +1,15 @@
 from rest_framework import serializers
-from .models import Student, Exam, Attendance,AuthTable,teacher,teach,subject
+from .models import Student, Exam, Attendance,AuthTable,teacher,teach,subject,surveillance
 
 class StudentSerializer(serializers.ModelSerializer):
+
+    first_name = serializers.CharField(source="Name.first_name", read_only=True)
+    last_name = serializers.CharField(source="Name.last_name", read_only=True)
+    email = serializers.EmailField(source="Name.email", read_only=True)
+
     class Meta:
         model = Student
-        fields = '__all__'
+        fields = ["id", "first_name", "last_name", "email", "roll_number", "matricul", "level", "speciality"]
 
 class ExamSerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,10 +22,20 @@ class AttendanceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class teacherSerializer(serializers.ModelSerializer):
+    first_name = serializers.CharField(source="user.first_name", read_only=True)
+    last_name = serializers.CharField(source="user.last_name", read_only=True)
+    email = serializers.EmailField(source="user.email", read_only=True)
+
     class Meta:
         model = teacher
-        fields = '__all__'
+        fields = ["id", "first_name", "last_name", "email", "secret_number", "matricul"]
         read_only_fields = ['created_at']
+
+class teachSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= teach
+        fields = '__all__'
+
 
 
 
@@ -29,3 +44,11 @@ class subjetSerializer(serializers.ModelSerializer):
     class Meta:
         model = subject
         fields = '__all__'
+
+
+
+class surveillanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = surveillance
+        fields = '__all__'
+
