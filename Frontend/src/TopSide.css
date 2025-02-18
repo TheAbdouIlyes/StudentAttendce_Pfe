@@ -1,0 +1,8 @@
+.TopSideSection{
+    width: 100vw;
+    height: 10vh;
+    background-color: rgb(75, 93, 72);
+    display: flex;align-items: center;justify-content: space-between;
+
+    
+}
