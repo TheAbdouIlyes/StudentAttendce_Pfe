@@ -417,3 +417,101 @@ class ListTeacherView(generics.ListAPIView):
     def get_queryset(self):
         return teacher.objects.select_related('user').all() 
        
+class ListTeachView(generics.ListAPIView):
+    serializer_class = subjetSerializer
+    permission_classes = [IsAuthenticated]         
+
+    def get_queryset(self):
+        id = self.kwargs['pk']  # Get teacher ID
+        modules = teach.objects.filter(teacher__id=id, teaching=True).values_list('subject', flat=True)
+        return subject.objects.filter(id__in=modules)  # Use __in to filter multiple IDs
+    
+
+class ListSurveillanceView(generics.ListAPIView):
+     serializer_class = teacherSerializer
+     permission_classes = [IsAuthenticated] 
+     def get_queryset(self):
+        id = self.kwargs['pk']  # Get teacher ID
+        modules = surveillance.objects.filter(exam__id=id, is_present=True).values_list('teacher', flat=True)
+        return teacher.objects.filter(id__in=modules)
+
+
+class StudentListByLevel(generics.ListAPIView):
+    serializer_class = StudentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        level = self.kwargs.get('level')  # Get level from URL parameter
+        return Student.objects.filter(level=level)   
+
+class studentListByspesiality(generics.ListAPIView):
+     serializer_class = StudentSerializer
+     permission_classes = [IsAuthenticated]
+     def get_queryset(self):
+        spesiality= self.kwargs.get('spe')  
+        return Student.objects.filter(speciality=spesiality)  
+     
+class subjetListByspecialityandlevelandsemester(generics.ListAPIView):
+    serializer_class = subjetSerializer
+    permission_classes = [IsAuthenticated]
+    def get_queryset(self):
+        spesiality= self.kwargs.get('spe')  
+        level= self.kwargs.get('spe1')
+        semester= self.kwargs.get('spe2')
+        return subject.objects.filter(speciality=spesiality,level=level,semester=semester)  
+    
+
+
+
+from datetime import datetime
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
+
+class CheckTokenView(APIView):
+    permission_classes = [IsAuthenticated]  # Ensures the user is logged in
+
+    def get(self, request):
+        token = request.headers.get("Authorization", "").split("Bearer ")[-1]  # Extract token safely
+
+        if not token or token == "Authorization":
+            return Response({"expired": True, "error": "No token provided"}, status=400)
+
+        try:
+            access_token = AccessToken(token)  # Decode token
+            exp_time = access_token["exp"]  # Get expiration timestamp
+            is_expired = datetime.fromtimestamp(exp_time) < datetime.utcnow()  # Compare with current time
+
+            return Response({"expired": is_expired, "error": None})
+
+        except (TokenError, InvalidToken) as e:  # Handle expired or invalid tokens
+            return Response({"expired": True, "error": str(e)}, status=401)
+
+        except Exception as e:
+            return Response({"expired": True, "error": f"Unexpected error: {str(e)}"}, status=400)
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]  # Only logged-in users can access
+
+    def post(self, request):
+        try:
+            refresh_token = request.data.get("refresh_token")  # Get refresh token from request body
+            
+            if not refresh_token:
+                return Response({"error": "Refresh token is required"}, status=400)
+
+            token = RefreshToken(refresh_token)  # Decode the token
+            token.blacklist()  # Blacklist the token (Requires Blacklist App)
+            
+            return Response({"message": "Successfully logged out"}, status=200)
+        
+        except Exception as e:
+            return Response({"error": f"Logout failed: {str(e)}"}, status=400)
