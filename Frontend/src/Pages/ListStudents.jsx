@@ -90,7 +90,7 @@ export default function ListStudents() {
       </div>
 
       <div className='MainSection-Bottom'>
-        <ReactVirtualizedTable/>
+     <ReactVirtualizedTable/>
       </div>
     </div>
   )
