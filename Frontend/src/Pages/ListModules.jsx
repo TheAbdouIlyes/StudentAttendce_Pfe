@@ -1,7 +1,13 @@
 import React from 'react'
-
+import "./ListModules.css"
 export default function ListModules() {
   return (
-    <div>List</div>
+    <div className='Modules_container'>List
+    
+    
+    
+    
+    </div>
+
   )
 }
