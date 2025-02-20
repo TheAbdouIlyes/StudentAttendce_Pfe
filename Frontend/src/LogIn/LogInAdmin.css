@@ -1,0 +1,77 @@
+.Admin-Container{
+    width: 100%;
+    height: 100%;
+    background-color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.LeftSide-LogIn{
+    width: 55%;
+    height: 100%;
+    border-radius:0 10rem 10rem 0 ;
+    background-color: var(--primary-color);
+
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+.LeftSide-LogIn2{
+    width: 92%;
+    height: 100%;
+    border-radius:0 13rem 13rem 0 ;
+
+
+    background-color: var(--tertiary-color);
+
+
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+.LeftSide-LogIn3{
+    width: 88%;
+    height: 100%;
+    border-radius:0 13rem 13rem 0 ;
+
+    
+    background-color: #004631;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.RightSide-LogIn{
+    width: 45%;
+    height: 100%;
+    /* background-color: var(--tertiary-color); */
+    background-color: var(--secondary-color);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    
+
+}
+.LogIn-Title{
+    margin-bottom: 0;
+}
+.Login-Submit{
+    text-decoration: none;
+    background-color: var(--tertiary-color);
+    color: var(--tertiaryText-color);
+    padding: 0.5rem 2rem 0.5rem 2rem;
+    border-radius: 0.5rem;
+    border: 2px solid var(--tertiary-color);
+    transition: 0.25s;
+    margin-top: 6%;
+}
+
+.Login-Submit:hover{
+    background-color: var(--secondary-color);
+    color: var(--primaryText-color);
+
+}

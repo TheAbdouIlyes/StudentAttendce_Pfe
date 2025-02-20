@@ -1,8 +1,16 @@
 .TopSideSection{
     width: 100vw;
     height: 10vh;
-    background-color: rgb(75, 93, 72);
+    background-color:var(--secondary-color);
     display: flex;align-items: center;justify-content: space-between;
 
-    
+
+
+}
+.Logo{
+    margin-left:2% ;
+
+}
+.Mail{
+    margin-right: 2%;
 }

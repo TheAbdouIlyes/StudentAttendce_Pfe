@@ -4,12 +4,13 @@ import './TopSide.css'
 export default function TopSide() {
   return (
     <div className='TopSideSection'> 
+
         <div className='Logo'>
-            Logo
+            Touthless
         </div>
 
         <div className='Mail'>
-            ab.madani@univ-alger.dz
+            ab.madani@univ-alger.dz -
         </div>
     </div>
   )

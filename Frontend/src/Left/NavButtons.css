@@ -1,0 +1,88 @@
+.navButton{
+    display: flex;align-items: center;justify-content: center;
+    width: 14vw;
+    height: 45px;
+    border-radius: 0.5rem;
+    color: var(--MainText);
+    font-weight: 550;
+    margin-bottom: 3px;
+    transition:all 0.5s;
+}
+
+.navButton:hover{
+    cursor: pointer;
+    background-color: var(--tertiary-color);
+    color: white;
+.buttonContent{
+        color: aliceblue
+};
+
+    /* scale: 1.02; */
+   
+}
+
+
+.navButton .active  {
+    border-radius: 0.5rem;
+
+    cursor: pointer;
+    background-color: var(--tertiary-color);
+    color: white;
+
+    .buttonContent{
+            color: aliceblue
+    };
+
+    /* scale: 1.02; */
+  }
+  .navButton .active path  {
+    fill: rgb(255, 255, 255);
+
+  }
+ 
+
+
+.navButton svg{
+    margin-right: 6px;
+}
+
+.buttonContent{
+    /* padding-left: 16%; */
+
+    width: 100%;
+    height: 100%;
+    display: flex;align-items: center;justify-content: start;
+    padding-left:15% ;
+    color: var(--MainText);
+
+    text-decoration: none;
+
+}
+.icon{
+    /* margin-left: 23%; */
+    margin-right: 3px;
+}
+
+.icon svg{
+    height: 24px;
+    width: 23px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navButton:hover path {
+fill: white;
+}
+
+/* .icon svg path{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
+
+
+/* Buttons.css */
+
+  
+  

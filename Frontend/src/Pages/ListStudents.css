@@ -1,0 +1,36 @@
+.Student-Container{
+    background-color: var(--secondary-color);
+    width: 98%;
+    height: 95%;
+    border-radius: 1rem 0 0 1rem   ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    overflow: hidden;
+}
+
+.MainSection-Top{
+    width: 100%;
+    height: 12%;
+    /* background-color: aquamarine; */
+
+
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.MainSection-Top h1{
+    margin:0;
+}
+
+.MainSection-Bottom{
+    width: 100%;
+    height: 88%;
+
+    /* background-color: blue; */
+
+}
