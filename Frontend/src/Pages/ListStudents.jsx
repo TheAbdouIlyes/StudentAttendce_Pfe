@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react'
 import "./ListStudents.css"
 import ReactVirtualizedTable from './ReactVirtualizedTable'
@@ -12,6 +11,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 
 export default function ListStudents() {
+
+
+  const [isEditing, setIsEditing] = useState(false);
 
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -32,6 +34,7 @@ export default function ListStudents() {
   };
 
 
+  
 
 
   //Add ---------\
@@ -43,6 +46,7 @@ export default function ListStudents() {
 
   const handleEditStudent = () => {
     console.log("Edit student button clicked");
+    setIsEditing(prev=>!prev);
   };
 
   const handleDeleteStudent = () => {
@@ -90,7 +94,7 @@ export default function ListStudents() {
       </div>
 
       <div className='MainSection-Bottom'>
-        <ReactVirtualizedTable/>
+        <ReactVirtualizedTable  isEditing={isEditing} setIsEditing={setIsEditing} />
       </div>
     </div>
   )
