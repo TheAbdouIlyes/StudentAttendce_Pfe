@@ -1,0 +1,352 @@
+.TheTaskCrad{
+    position: relative;
+    color: white;
+    color: #000000;
+    font-weight: 500;
+    overflow: hidden;
+    /* overflow-y: hidden; */
+    width: 310px;
+    margin: 2px;
+    margin-left: 2.2%;
+    height: auto;
+  
+    height: 180px;
+
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.473);
+    border-radius: 10px;
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+ 
+ 
+}
+.TopCard{
+    width: 100%;
+    height: 40px;
+    /* background-color: blue; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.TopCard h5{
+    margin: 0;
+    margin-left: 20px;
+}
+.TasksChangesBtn{
+    
+    width: 50%;
+    display: flex;
+    justify-content: end;align-items: center;gap: 2px;
+}
+.BtnDAnimation,.BtnEAnimation{
+    display: flex;align-items: center;justify-content: center;
+    padding: 0;
+    height: 32px;
+    width: 32px;
+    margin: 3%;
+    box-shadow: 0 7px 10px rgba(20, 20, 20, 0.523);
+    /* border:1px solid #bed8ff; */
+    /* border: none; */
+    border-radius: 50%;
+
+}
+.TasksChangesBtn button svg{
+ 
+    margin: 0;
+   
+    width: 100%;height: 100%;
+
+
+}
+.TasksChangesBtn button:hover{
+    cursor: pointer;
+}
+.CheckboxCards{
+    /* margin-right: 12px; */
+    accent-color: white;
+    /* margin: 0; */
+    margin: 3%;
+    /* margin-top: -25px; */
+    border: none;
+    outline: none;
+    height: 24px;
+    width: 24px;
+    appearance: none;
+    border: 1px solid #bed8ff;
+    
+    border-radius: 50%;
+
+}
+.CheckboxCards:checked {
+    background-color: #000000; /* Green when checked */
+    border-color: #000000; /* Change border color when checked */
+  }
+.CheckboxCards:hover{
+    cursor: pointer;
+    background-color:#2f7df2 ;
+}
+.TheTask{
+    display: flex;align-items: start;justify-content: center;
+    overflow: hidden;
+
+
+    word-wrap: break-word; /* Break long words */
+    word-break: break-word; /* Ensure it breaks long words properly */
+    overflow-wrap: break-word; /* Alternative for broader browser support */
+
+
+
+    /* color: #115ACA; */
+    /* background-color: #ffffffff; */
+    /* background-image: linear-gradient(to right, #434343 0%, black 100%); */
+    width: 100%;
+    height: auto;
+    /* min-height: 50px; */
+    /* background-color: rgb(255, 145, 0); */
+    flex-grow: 1;
+}
+.paperDiv{
+    /* background-color: #2f7df2; */
+    display: flex;align-items: center;justify-content: start;flex-direction: column;
+    
+    
+    margin-left: 5%;
+    margin-top: 3%;
+
+
+
+}
+
+.TheTask p{
+
+    width: 100%;
+    height: 100%;
+    margin: 3% 3% 2% 2%;
+
+}
+.BotCard{
+    color: #DFF6FF;
+
+    height: 40px;
+    width: 100%;
+    /* background-color: rgb(8, 134, 38); */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.Category{
+    color: #115ACA;
+    padding: 5px;
+    padding: 5px 15px 5px 15px;
+    border-radius: 20px;
+    font-size: 15px;
+    background-color: #DFF6FF;
+    font-weight: bold;
+    height: 40%;
+
+    display: flex;justify-content: center;align-items: center;
+
+}
+.Time{
+    /* width: 30%; */
+    /* height: 40%; */
+
+    color: #115ACA;
+    padding: 5px;
+    border-radius: 20px;
+    font-size: 14px;
+    background-color: #DFF6FF;
+    font-weight: bold;
+    margin: 0 8px 0 2px;
+
+
+    
+
+}
+.Date{
+    /* width: fit-content; */
+    /* height: 40%; */
+    margin: 0 2px 0 8px;
+    font-weight: bold;
+    color: #115ACA;
+    padding: 5px;
+    border-radius: 20px;
+    font-size: 14px;
+    background-color: #DFF6FF;
+}
+.TimeDiv{
+    /* width: 50%; */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;align-items: center;
+}
+
+.BtnEAnimation{
+
+    border: 2px solid #115ACA;
+}
+.BtnEAnimation svg path,.BtnDAnimation svg circle ,.BtnDAnimation svg rect {
+    transition: all 0.25s;
+
+}
+.BtnEAnimation:hover svg path{
+    stroke:  white;
+    fill: #115ACA;
+}
+.BtnEAnimation:hover svg rect,.BtnEAnimation:hover svg circle{
+    fill:  #115ACA;
+
+}
+
+
+.BtnDAnimation{
+    z-index: 5;
+    border: 2px solid #B90800;
+    
+
+}
+.BtnEAnimation:hover{
+    /* scale: 1.1; */
+    animation: shake 5s;
+}
+.BtnDAnimation svg path,.BtnDAnimation svg circle  {
+    transition: all 0.25s;
+
+}
+.BtnDAnimation:hover svg circle{
+    fill: #B90800;
+}
+.BtnDAnimation:hover svg path {
+   fill:#B90800 ; 
+   stroke: white;
+  
+}
+.BtnDAnimation:hover {
+
+    
+   
+    /* Start the shake animation and make the animation last for 0.5 seconds */
+    animation: shake 1s;
+  
+    /* When the animation is finished, start again */
+    animation-iteration-count: infinite;
+  
+
+  }
+  
+  @keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  }
+
+
+  .saveCancel{
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+
+    justify-content: space-evenly;
+    align-items: center;
+
+  }
+  .TheTask textarea{
+    border-radius: 20px;
+    border: none;
+    height: 80%;
+
+    text-decoration: underline #DFF6FF;
+
+    background: none;
+    margin-top: 2%;
+    resize: none;
+    width: 80%;
+    margin-left: 2%;
+    outline: none;
+  }
+  .saveCancel button:hover{
+    cursor: pointer;
+    background-color: #DFF6FF;
+    color: #115ACA;
+
+  }
+
+  .saveCancel button{
+    width: 40%;
+    height: 70%;
+    transition: all 0.25s;
+    border-radius: 20px;
+ 
+    border: 1px solid #DFF6FF;
+    background: none;
+  }
+
+
+  .EditInput{
+    width: 25%;
+    height: 90%;
+    background: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ProgressBtn{
+    width: 60px;
+    display: flex;align-items: center;justify-content: center;
+    padding: 0;
+    height: 32px;
+   
+ 
+
+
+    border-radius: 10px;
+
+
+    width: 32px;
+    margin: 3%;
+
+    border-radius: 50%;
+ 
+  }
+  #undoneTask{
+    border: 2px solid #115ACA;
+    background: #DFF6FF;
+    color: #115ACA;
+    /* box-shadow: 0 7px 10px rgba(20, 20, 20, 0.523); */
+
+  }
+  #doneTask{
+    border: 2px solid #177929;
+    background: #c0ffb7;
+
+  }
+  #CancelTask{
+    border: 2px solid #f7bb00;
+    background: #ffefc1;
+  }
+
+
+
+  .Choche{ 
+    position: absolute;
+    width:100%;
+    height: 15px;
+    top: 70%;
+    right: -20%;
+    transform: rotate(-40deg);
+    border-radius: 50px;
+    background-color: #353c45;
+    z-index: 4;
+  }
