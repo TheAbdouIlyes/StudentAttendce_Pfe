@@ -515,3 +515,10 @@ class LogoutView(APIView):
         
         except Exception as e:
             return Response({"error": f"Logout failed: {str(e)}"}, status=400)
+        
+
+class examlist(generics.ListAPIView):
+    queryset = Exam.objects.select_related("subject")
+    serializer_class = ExamSerializer
+    permission_classes = [IsAuthenticated]  # display the name of the subject 
+

@@ -12,9 +12,12 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = ["id", "first_name", "last_name", "email", "roll_number", "matricul", "level", "speciality"]
 
 class ExamSerializer(serializers.ModelSerializer):
+
+    subject_name = serializers.CharField(source='subject.name', read_only=True)
+
     class Meta:
         model = Exam
-        fields = '__all__'
+        fields =['id', 'subject_name','date','time','amphi']
 
 class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
