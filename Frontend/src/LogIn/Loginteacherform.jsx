@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-export default function LogInForm() {
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
+export default function LogInteacherform() {
+  const [credentials, setCredentials] = useState({ matricul: '', secret_number: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -17,14 +17,14 @@ export default function LogInForm() {
     setError('');
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/t/", {
+      const response = await fetch("http://127.0.0.1:8000/teacher_l/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          username: credentials.username, // Adjust field names if needed
-          password: credentials.password
+            matricul: credentials.matricul, 
+            secret_number: credentials.secret_number
         })
       });
 
@@ -45,26 +45,26 @@ export default function LogInForm() {
   return (
     <div>
       <form onSubmit={handleSubmit} className='FormLogIn'>
-        <h3 className='LogIn-Info'>username</h3>
+        <h3 className='LogIn-Info'>matricul</h3>
         <Box sx={{ width: 300, marginBottom: 4, maxWidth: '100%' }}>
           <TextField
             fullWidth
-            id="username"
-            name="username"
-            value={credentials.username}
+            id="matricul"
+            name="matricul"
+            value={credentials.matricul}
             onChange={handleInputChange}
             required
           />
         </Box>
 
-        <h3 className='LogIn-Info'>password</h3>
+        <h3 className='LogIn-Info'>secret number</h3>
         <Box sx={{ width: 300, marginBottom: 4, maxWidth: '100%' }}>
           <TextField
             fullWidth
-            id="password"
-            name="password"
-            type="password"
-            value={credentials.password}
+            id="secret_number"
+            name="secret_number"
+            type="secret_number"
+            value={credentials.secret_number}
             onChange={handleInputChange}
             required
           />

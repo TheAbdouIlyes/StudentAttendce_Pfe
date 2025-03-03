@@ -15,9 +15,12 @@
     "@mui/icons-material": "^6.4.5",
     "@mui/material": "^6.4.5",
     "chance": "^1.1.12",
+    "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
+    "jwt-decoder": "^0.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.1.5",
+    "react-router-dom": "^7.2.0",
     "react-virtuoso": "^4.12.5"
   },
   "devDependencies": {

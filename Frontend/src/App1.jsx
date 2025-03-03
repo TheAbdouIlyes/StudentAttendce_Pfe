@@ -4,13 +4,13 @@ import TopSide from './Top/TopSide';
 import Dashboard from './Pages/Dashboard';
 import ProtectedRoute from "./context/ProtectedRoute";
 
-//pages
+// Pages
 import ListStudents from './Pages/ListStudents';
 import ListTeachers from './Pages/ListTeachers';
 import ListExams from './Pages/ListExams';
 import ListModules from './Pages/ListModules';
 
-import "./App.css"
+import "./App.css";
 import UserID from "./LogIn/UserID";
 import LogInAdmin from "./LogIn/LogInAdmin";
 import LogInStudent from "./LogIn/LogInStudent";
@@ -29,17 +29,12 @@ function Layout() {
         </div>
         <div className="MainSection">
           <Routes>
-            <Route index element={<Dashboard />}  />
-            <ProtectedRoute>
-            <Route path="Dashboard" element={<Dashboard />} />
-           </ProtectedRoute>
-            <Route path="ListStudents" element={<ListStudents />} />
-            <Route path="ListTeachers" element={<ListTeachers />} />
-            <Route path="ListExams" element={<ListExams />} />
-            <Route path="ListModules" element={<ListModules />} />
-
-            {/* <Route path="Settings" element={<Settings />} /> */}
-            {/* <Route path="*" element={<Error />} /> */}
+            <Route index element={<Dashboard />} />
+            <Route path="dashboard" element={<Dashboard />} />
+            <Route path="liststudents" element={<ListStudents />} />
+            <Route path="listteachers" element={<ListTeachers />} />
+            <Route path="listexams" element={<ListExams />} />
+            <Route path="listmodules" element={<ListModules />} />
           </Routes>
         </div>
       </div>
@@ -51,16 +46,21 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Login Page */}
-        <Route path="/" element={<div className="ThePage"> <UserID/> </div>} />
+        {/* Public Routes */}
+        <Route path="/" element={<UserID />} />
+        <Route path="/admin" element={<LogInAdmin />} />
+        <Route path="/student" element={<LogInStudent />} />
+        <Route path="/teacher" element={<LogInTeacher />} />
 
-        <Route path="/Admin" element={<div className="ThePage"> <LogInAdmin/> </div>} />
-        <Route path="/Student" element={<div className="ThePage"> <LogInStudent/> </div>} />
-        <Route path="/Teacher" element={<div className="ThePage"> <LogInTeacher/> </div>} />
-        
-        {/* Main Layout with Nested Routes */}
-        <Route path="/*" element={<Layout />} />
-
+        {/* Protected Routes - Wrap Entire Layout */}
+        <Route
+          path="/*"
+          element={
+            <ProtectedRoute>
+              <Layout />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );
