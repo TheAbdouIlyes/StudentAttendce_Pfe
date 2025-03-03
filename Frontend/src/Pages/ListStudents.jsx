@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import "./ListStudents.css"
-import ReactVirtualizedTable from './ReactVirtualizedTable'
+import ReactVirtualizedTable from './Comps/ReactVirtualizedTable'
 import EditButtons from './Comps/EditButtons'
 import { Button, Menu, MenuItem } from '@mui/material'
 import FilterListIcon from '@mui/icons-material/FilterList'
@@ -58,27 +58,32 @@ export default function ListStudents() {
   return (
     <div className='Student-Container'>
       <div className='MainSection-Top'>
-        <h1>Student List</h1>
+
+
+        <h1 className='StudentListTitle'>Student List</h1>
 
         
 
         {/* <EditButtons/> */}
 
-        <Button variant="contained" startIcon={<AddIcon />}  onClick={handleAddStudent} >
-          Add
-        </Button>
+        <div className='Buttons-side'>
+          <Button variant="contained" startIcon={<AddIcon />}  onClick={handleAddStudent} className="add-button" >
+            Add
+          </Button>
 
-        <Button variant="contained" startIcon={<EditIcon />} onClick={handleEditStudent}>
-          Edit
-        </Button>
+          <Button variant="contained" startIcon={<EditIcon />} onClick={handleEditStudent}>
+            Edit
+          </Button>
 
-        <Button variant="contained" startIcon={<DeleteIcon />} onClick={handleDeleteStudent}>
-          Delete
-        </Button>
+          <Button variant="contained" startIcon={<DeleteIcon />} onClick={handleDeleteStudent}>
+            Delete
+          </Button>
+        </div>
 
-        <Button variant="contained" startIcon={<FilterListIcon />} onClick={handleClick}>
+
+        {/* <Button variant="contained" startIcon={<FilterListIcon />} onClick={handleClick}>
           Filter
-        </Button>
+        </Button> */}
 
         <Menu
           anchorEl={anchorEl}

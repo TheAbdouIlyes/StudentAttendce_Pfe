@@ -23,8 +23,19 @@
     justify-content: space-between;
 }
 
-.MainSection-Top h1{
-    margin:0;
+.Buttons-side{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.StudentListTitle{
+    margin:0 0 0 2% !important;
+    /* margin-left: 4px; */
+    font-size: 1.5rem;
+
 }
 
 .MainSection-Bottom{
@@ -33,4 +44,20 @@
 
     /* background-color: blue; */
 
+}
+
+
+
+/* buttons-------------------- */
+
+.add-button {
+    background-color: var(--tertiary-color) !important;
+    color: white !important;
+    /* padding: 8px 16px !important; */
+    border-radius: 1.5rem!important;
+    font-size: 16px !important;
+}
+
+.add-button:hover {
+    background-color: var(--quaternary-color) !important;
 }

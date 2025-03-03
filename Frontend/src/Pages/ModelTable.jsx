@@ -26,6 +26,9 @@ const initialRows = [
   
 
 ];
+
+
+
 const VirtuosoTableComponents = {
   Scroller: React.forwardRef((props, ref) => <TableContainer component={Paper} {...props} ref={ref} />),
   Table: (props) => <Table {...props} sx={{ borderCollapse: "separate", tableLayout: "fixed" }} />,

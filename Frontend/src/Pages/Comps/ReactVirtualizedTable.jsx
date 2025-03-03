@@ -97,7 +97,8 @@ export default function ReactVirtualizedTable({ isEditing }) {
                 {row[column.dataKey]}
                 {isEditing && column.dataKey !== "id" && (
                   <IconButton
-                    sx={{ margin: "8px" }}
+                    sx={{ margin: "8px" , mt: 0, mb: 0, pt: 0, pb: 0 ,height: 30 }
+                  }
                     onClick={() => handleEditClick(index, column.dataKey, row[column.dataKey])}
                   >
                     <EditIcon fontSize="small" />
