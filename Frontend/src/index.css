@@ -12,6 +12,7 @@
   /* --primary-color: #DBDCFF; */
   --primary-color: #bfffd8;
   --secondary-color: #ffffff;
+  /* --tertiary-color: #001811; */
   --tertiary-color: #01875f;
   --quaternary-color: #09b984;
 
@@ -46,3 +47,5 @@ body {
 button:hover{
   cursor: pointer;
 }
+
+

@@ -18,52 +18,45 @@ import "./App.css";
 
 // Import your pages
 import Dashboard from './Pages/Dashboard';
-import ListStudents from './Pages/ListStudents';
-import ListTeachers from './Pages/ListTeachers';
-import ListExams from './Pages/ListExams';
-import ListModules from './Pages/ListModules';
+import ListStudents from './TeacherPages/ListStudents';
+
 
 const NAVIGATION = [
   { kind: 'header', title: 'Stats' },
   { segment: 'dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
   { kind: 'divider' },
-  { kind: 'header', title: 'Lists' },
+  { kind: 'header', title: 'Students' },
   { 
     segment: 'ListStudents', 
-    title: 'Students', 
+    title: 'L1', 
     icon: <SchoolIcon />, 
-    children: [
-      { segment: '', title: 'Info', icon: <DescriptionIcon /> },
-      { segment: '', title: 'Bio', icon: <DescriptionIcon /> },
-      { segment: '', title: 'Medcin', icon: <DescriptionIcon /> },
-    ],
-  },
-  { segment: 'ListTeachers', title: 'Teachers', icon: <PeopleIcon /> },
-  { segment: 'ListExams', title: 'Exams', icon: <AssignmentIcon /> ,
-    children: [
-      // { kind: 'divider' },
-      // { kind: 'header', title: 'S1' },
-      { segment: '', title: 'Info', icon: <DescriptionIcon /> },
-      { segment: '', title: 'Bio', icon: <DescriptionIcon /> },
-      { segment: '', title: 'Medcin', icon: <DescriptionIcon /> },
 
-      // { kind: 'divider' },
-      // { kind: 'header', title: 'S2' },
-      // { segment: '', title: 'Info', icon: <DescriptionIcon /> },
-      // { segment: '', title: 'Bio', icon: <DescriptionIcon /> },
-      // { segment: '', title: 'Medcin', icon: <DescriptionIcon /> },
-    ],
   },
-  { segment: 'ListModules', title: 'Modules', icon: <ClassIcon /> ,
-    children: [
-      { segment: '', title: 'Info', icon: <DescriptionIcon /> },
-      { segment: '', title: 'Bio', icon: <DescriptionIcon /> },
-      { segment: '', title: 'Medcin', icon: <DescriptionIcon /> },
-    ],
+  { 
+    segment: 'ListStudents', 
+    title: 'L2', 
+    icon: <SchoolIcon />, 
+
   },
-  { kind: 'divider' },
-  { kind: 'header', title: 'Settings' },
-  { segment: 'Settings', title: 'Settings', icon: <SettingsIcon /> },
+  { 
+    segment: 'ListStudents', 
+    title: 'L3', 
+    icon: <SchoolIcon />, 
+
+  },
+  { 
+    segment: 'ListStudents', 
+    title: 'M1', 
+    icon: <SchoolIcon />, 
+
+  },
+  { 
+    segment: 'ListStudents', 
+    title: 'M2', 
+    icon: <SchoolIcon />, 
+
+  },
+
   { kind: 'divider' },
   { kind: 'header', title: 'Exit' },
 
@@ -108,6 +101,26 @@ const demoTheme = extendTheme({
     },
   },
 
+
+//   components: {
+//     MuiContainer: {
+//       styleOverrides: {
+//         root: {
+//           margin: 0,
+//           padding: 0,
+//         },
+//       },
+//     },
+//     MuiPaper: {
+//       styleOverrides: {
+//         root: {
+//           margin: 0,
+//           padding: 0,
+//         },
+//       },
+//     },
+//   },
+
 });
 
 const Skeleton = styled('div')(({ theme, height }) => ({
@@ -125,7 +138,7 @@ function DashboardLayoutBasic() {
       navigation={NAVIGATION} 
       router={{ navigate }} 
       theme={demoTheme}  
-      branding={{ logo:"", appName: "Checkly" ,title: 'Admin' }}
+      branding={{ logo:"", appName: "Checkly" ,title: 'Teacher' }}
       
     >
       <DashboardLayout>
@@ -133,9 +146,7 @@ function DashboardLayoutBasic() {
           <Routes>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="ListStudents" element={<ListStudents />} />
-            <Route path="ListTeachers" element={<ListTeachers />} />
-            <Route path="ListExams" element={<ListExams />} />
-            <Route path="ListModules" element={<ListModules />} />
+
             <Route
               path="*"
               element={
@@ -156,7 +167,7 @@ function DashboardLayoutBasic() {
   );
 }
 
-export default function App() {
+export default function App2() {
   return (
     <Router>
       <Routes>

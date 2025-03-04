@@ -41,26 +41,12 @@ const NAVIGATION = [
   { segment: 'ListTeachers', title: 'Teachers', icon: <PeopleIcon /> },
   { segment: 'ListExams', title: 'Exams', icon: <AssignmentIcon /> ,
     children: [
-      // { kind: 'divider' },
-      // { kind: 'header', title: 'S1' },
-      { segment: '', title: 'Info', icon: <DescriptionIcon /> },
-      { segment: '', title: 'Bio', icon: <DescriptionIcon /> },
-      { segment: '', title: 'Medcin', icon: <DescriptionIcon /> },
-
-      // { kind: 'divider' },
-      // { kind: 'header', title: 'S2' },
-      // { segment: '', title: 'Info', icon: <DescriptionIcon /> },
-      // { segment: '', title: 'Bio', icon: <DescriptionIcon /> },
-      // { segment: '', title: 'Medcin', icon: <DescriptionIcon /> },
-    ],
-  },
-  { segment: 'ListModules', title: 'Modules', icon: <ClassIcon /> ,
-    children: [
       { segment: '', title: 'Info', icon: <DescriptionIcon /> },
       { segment: '', title: 'Bio', icon: <DescriptionIcon /> },
       { segment: '', title: 'Medcin', icon: <DescriptionIcon /> },
     ],
   },
+  { segment: 'ListModules', title: 'Modules', icon: <ClassIcon /> },
   { kind: 'divider' },
   { kind: 'header', title: 'Settings' },
   { segment: 'Settings', title: 'Settings', icon: <SettingsIcon /> },
@@ -108,6 +94,25 @@ const demoTheme = extendTheme({
     },
   },
 
+
+//   components: {
+//     MuiContainer: {
+//       styleOverrides: {
+//         root: {
+//           margin: 0,
+//           padding: 0,
+//         },
+//       },
+//     },
+//     MuiPaper: {
+//       styleOverrides: {
+//         root: {
+//           margin: 0,
+//           padding: 0,
+//         },
+//       },
+//     },
+//   },
 });
 
 const Skeleton = styled('div')(({ theme, height }) => ({
@@ -125,7 +130,7 @@ function DashboardLayoutBasic() {
       navigation={NAVIGATION} 
       router={{ navigate }} 
       theme={demoTheme}  
-      branding={{ logo:"", appName: "Checkly" ,title: 'Admin' }}
+      branding={{ logo:"", appName: "Checkly" ,title: 'Student' }}
       
     >
       <DashboardLayout>
@@ -156,7 +161,7 @@ function DashboardLayoutBasic() {
   );
 }
 
-export default function App() {
+export default function App3() {
   return (
     <Router>
       <Routes>
