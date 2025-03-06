@@ -1,9 +1,25 @@
 .Exams-Container{
-    /* background-color: aqua; */
+    background-color: aqua;
     width: 100%;
     height: 100%;
 
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    overflow: hidden;
+}
+
+.TopExams{
+    width: 100%;
+    height: 12%;
+    /* background-color: bisque; */
+}
+
+
+.MainExams{
+    width: 100%;
+    height: 88%;
+ 
 }

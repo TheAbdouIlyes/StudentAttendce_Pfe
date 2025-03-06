@@ -16,6 +16,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import logo from "./Logo.png";
 import "./App.css";
 
+
+
 // Import your pages
 import Dashboard from './Pages/Dashboard';
 import ListStudents from './Pages/ListStudents';
@@ -23,43 +25,32 @@ import ListTeachers from './Pages/ListTeachers';
 import ListExams from './Pages/ListExams';
 import ListModules from './Pages/ListModules';
 
+import ModulesTest from './Pages/ModulesTest2';
+
 const NAVIGATION = [
   { kind: 'header', title: 'Stats' },
   { segment: 'dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
   { kind: 'divider' },
   { kind: 'header', title: 'Lists' },
   { 
-    segment: 'ListStudents', 
-    title: 'Students', 
-    icon: <SchoolIcon />, 
-    children: [
-      { segment: '', title: 'Info', icon: <DescriptionIcon /> },
-      { segment: '', title: 'Bio', icon: <DescriptionIcon /> },
-      { segment: '', title: 'Medcin', icon: <DescriptionIcon /> },
-    ],
+    segment: 'ListStudents', title: 'Students', icon: <SchoolIcon />,
   },
-  { segment: 'ListTeachers', title: 'Teachers', icon: <PeopleIcon /> },
-  { segment: 'ListExams', title: 'Exams', icon: <AssignmentIcon /> ,
-    children: [
-      // { kind: 'divider' },
-      // { kind: 'header', title: 'S1' },
-      { segment: '', title: 'Info', icon: <DescriptionIcon /> },
-      { segment: '', title: 'Bio', icon: <DescriptionIcon /> },
-      { segment: '', title: 'Medcin', icon: <DescriptionIcon /> },
-
-      // { kind: 'divider' },
-      // { kind: 'header', title: 'S2' },
-      // { segment: '', title: 'Info', icon: <DescriptionIcon /> },
-      // { segment: '', title: 'Bio', icon: <DescriptionIcon /> },
-      // { segment: '', title: 'Medcin', icon: <DescriptionIcon /> },
-    ],
+  { segment: 'ListTeachers', title: 'Teachers', icon: <PeopleIcon />
+  },
+  { segment: 'ListExams', title: 'Exams', icon: <AssignmentIcon /> 
   },
   { segment: 'ListModules', title: 'Modules', icon: <ClassIcon /> ,
     children: [
-      { segment: '', title: 'Info', icon: <DescriptionIcon /> },
-      { segment: '', title: 'Bio', icon: <DescriptionIcon /> },
-      { segment: '', title: 'Medcin', icon: <DescriptionIcon /> },
+      { segment: '', title: 'L1', icon: <DescriptionIcon /> },
+      { segment: '', title: 'L2', icon: <DescriptionIcon /> },
+      { segment: '', title: 'L3', icon: <DescriptionIcon /> },
+      { segment: '', title: 'M1', icon: <DescriptionIcon /> },
+      { segment: '', title: 'M2', icon: <DescriptionIcon /> },
     ],
+
+  },
+
+  { segment: 'ModulesTest', title: 'ModulesTest', icon: <ClassIcon /> 
   },
   { kind: 'divider' },
   { kind: 'header', title: 'Settings' },
@@ -136,6 +127,7 @@ function DashboardLayoutBasic() {
             <Route path="ListTeachers" element={<ListTeachers />} />
             <Route path="ListExams" element={<ListExams />} />
             <Route path="ListModules" element={<ListModules />} />
+            <Route path="ModulesTest" element={<ModulesTest />} />
             <Route
               path="*"
               element={

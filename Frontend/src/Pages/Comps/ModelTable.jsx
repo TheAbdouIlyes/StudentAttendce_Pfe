@@ -12,17 +12,23 @@ import EditIcon from "@mui/icons-material/Edit";
 
 const columns = [
   { width: 50, label: "ID", dataKey: "id" },
-  { width: 100, label: "Name", dataKey: "name" },
-  { width: 150, label: "Speciality", dataKey: "speciality" },
-  { width: 120, label: "Semester", dataKey: "semester" },
-  { width: 80, label: "Year of Study", dataKey: "yearOfStudy" },
+  { width: 100, label: "Modules S 1 or 2", dataKey: "name" },
+  { width: 50, label: "Coef", dataKey: "coef" },
+
 ];
 
 const initialRows = [
-  { id: 1, name: "tdg", speciality: "info",semester:"s1",yearOfStudy: "l2" },
-  { id: 2, name: "asd2", speciality: "info",semester:"s1",yearOfStudy: "l2" },
-  { id: 3, name: "logic", speciality: "info",semester:"s1",yearOfStudy: "l2" },
-  { id: 4, name: "si", speciality: "info",semester:"s1",yearOfStudy: "l2" },
+  {id: 1, name: "tdg",coef:5 },
+  { id: 2, name: "asd2",coef:5 },
+  { id: 3, name: "logic",coef:5 },
+  { id: 4, name: "maths" ,coef:5},
+  { id: 5, name: "biology",coef:5 },
+  { id: 6, name: "chemistry",coef:5 },
+  { id: 7, name: "physics",coef:5 },
+  { id: 8, name: "history",coef:5 },
+  { id: 9, name: "english" ,coef:5},
+  { id: 10, name: "french" ,coef:5},
+  { id: 11, name: "spanish" ,coef:5},
   
 
 ];
@@ -49,7 +55,7 @@ function fixedHeaderContent() {
   );
 }
 
-export default function ReactVirtualizedTable({ isEditing }) {
+export default function ModelTable({ isEditing }) {
   const [rows, setRows] = React.useState(initialRows);
   const [editingCell, setEditingCell] = React.useState(null);
   const [editValue, setEditValue] = React.useState("");
