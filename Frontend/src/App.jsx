@@ -24,7 +24,7 @@ import ListStudents from './Pages/ListStudents';
 import ListTeachers from './Pages/ListTeachers';
 import ListExams from './Pages/ListExams';
 import ListModules from './Pages/ListModules';
-
+import Listexam from './Pages/examlistOrigins.jsx';
 import ModulesTest from './Pages/ModulesTest2';
 
 const NAVIGATION = [
@@ -38,6 +38,8 @@ const NAVIGATION = [
   { segment: 'ListTeachers', title: 'Teachers', icon: <PeopleIcon />
   },
   { segment: 'ListExams', title: 'Exams', icon: <AssignmentIcon /> 
+  },
+  { segment: 'examlist', title: 'Exams1', icon: <SchoolIcon/> 
   },
   { segment: 'ListModules', title: 'Modules', icon: <ClassIcon /> ,
     children: [
@@ -128,6 +130,7 @@ function DashboardLayoutBasic() {
             <Route path="ListExams" element={<ListExams />} />
             <Route path="ListModules" element={<ListModules />} />
             <Route path="ModulesTest" element={<ModulesTest />} />
+            <Route path="examlist" element={<Listexam/>} />
             <Route
               path="*"
               element={

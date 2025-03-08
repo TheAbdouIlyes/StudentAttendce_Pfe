@@ -57,8 +57,9 @@ export default function Navbar() {
         <Buttons title="List Teachers" icon={DashboardIcon} navPath="../ListTeachers" />
         <Buttons title="List Students" icon={DashboardIcon} navPath="../ListStudents" />
         <Buttons title="List Exams" icon={DashboardIcon} navPath="../ListExams" />
-        <Buttons title="List Modules" icon={DashboardIcon} navPath="../ListModules" />
       
+        <Buttons title="List Modules" icon={DashboardIcon} navPath="../ListModules" />
+        <Buttons title="List exam1" icon={DashboardIcon} navPath="../examlist" />
       </div>
 
 
