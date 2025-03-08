@@ -1,0 +1,9 @@
+.AddNewModule-Container{
+    /* width: 60%; */
+    height: 100%;
+}
+.AddModule-Header{
+    display: flex;
+    justify-content: space-between;
+    background-color: aqua;
+}

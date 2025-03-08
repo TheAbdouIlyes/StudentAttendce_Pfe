@@ -21,7 +21,7 @@ import Dashboard from './Pages/Dashboard';
 import ListStudents from './Pages/ListStudents';
 import ListTeachers from './Pages/ListTeachers';
 import ListExams from './Pages/ListExams';
-import ListModules from './Pages/ListModules';
+import ListModules from './Pages/Modules/ListModules';
 
 const NAVIGATION = [
   { kind: 'header', title: 'Stats' },

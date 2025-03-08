@@ -8,7 +8,7 @@ import ProtectedRoute from "./context/ProtectedRoute";
 import ListStudents from './Pages/ListStudents';
 import ListTeachers from './Pages/ListTeachers';
 import ListExams from './Pages/ListExams';
-import ListModules from './Pages/ListModules';
+import ListModules from './Pages/Modules/ListModules';
 
 import "./App.css"
 import UserID from "./LogIn/UserID";
