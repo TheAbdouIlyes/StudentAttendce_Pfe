@@ -1,7 +1,7 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
-import "./examlistOrigins.css"; // Keep your CSS
+import "./Examan1.css"; // Keep your CSS
 
 const exams = [
   { id: 1, title: "L1", path: "/exam/l1" },
@@ -11,7 +11,7 @@ const exams = [
   { id: 5, title: "M2", path: "/exam/m2" },
 ];
 
-export default function ExamListOrigins() {
+export default function Examan1() {
   const navigate = useNavigate();
   const theme = useTheme(); // Detects dark or light mode
 

@@ -13,7 +13,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DescriptionIcon from '@mui/icons-material/Description';
 import SettingsIcon from '@mui/icons-material/Settings';
-import logo from "./Logo.png";
+import logo from "./toothless.jpg";
 import "./App.css";
 
 
@@ -23,9 +23,15 @@ import Dashboard from './Pages/Dashboard';
 import ListStudents from './Pages/ListStudents';
 import ListTeachers from './Pages/ListTeachers';
 import ListExams from './Pages/ListExams';
-import ListModules from './Pages/ListModules';
-import Listexam from './Pages/examlistOrigins.jsx';
-import ModulesTest from './Pages/ModulesTest2';
+import ListModules from './Pages/Modules/ListModules';
+
+import AddModule from './Pages/Modules/AddModule';
+
+import ModulesTest from './Pages/Modules/ModulesTest2';
+import ListExamsForm from './Pages/ListExamsForm';
+
+import Examan1 from './Pages/Examan1';
+
 
 const NAVIGATION = [
   { kind: 'header', title: 'Stats' },
@@ -39,21 +45,31 @@ const NAVIGATION = [
   },
   { segment: 'ListExams', title: 'Exams', icon: <AssignmentIcon /> 
   },
-  { segment: 'examlist', title: 'Exams1', icon: <SchoolIcon/> 
+  { segment: 'Examan1', title: 'Exams12', icon: <AssignmentIcon /> 
   },
-  { segment: 'ListModules', title: 'Modules', icon: <ClassIcon /> ,
-    children: [
-      { segment: '', title: 'L1', icon: <DescriptionIcon /> },
-      { segment: '', title: 'L2', icon: <DescriptionIcon /> },
-      { segment: '', title: 'L3', icon: <DescriptionIcon /> },
-      { segment: '', title: 'M1', icon: <DescriptionIcon /> },
-      { segment: '', title: 'M2', icon: <DescriptionIcon /> },
-    ],
+  { segment: 'ExamsForm', title: 'ExamsForm', icon: <AssignmentIcon /> 
+  },
+  // { segment: 'ListModules', title: 'Modules', icon: <ClassIcon /> ,
+    // children: [
+    //   { segment: '', title: 'L1', icon: <DescriptionIcon /> },
+    //   { segment: '', title: 'L2', icon: <DescriptionIcon /> },
+    //   { segment: '', title: 'L3', icon: <DescriptionIcon /> },
+    //   { segment: '', title: 'M1', icon: <DescriptionIcon /> },
+    //   { segment: '', title: 'M2', icon: <DescriptionIcon /> },
+    // ],
 
-  },
+  // },
 
-  { segment: 'ModulesTest', title: 'ModulesTest', icon: <ClassIcon /> 
+  { segment: 'ModulesTest', title: 'ModulesTest', icon: <ClassIcon />, 
+
+    // children: [
+    //   {segment: 'AddModules', title: 'AddModules', icon: <ClassIcon />},
+  
+    // ],
   },
+  // { segment: 'AddModules', title: 'AddModules', icon: <ClassIcon /> 
+  // },
+
   { kind: 'divider' },
   { kind: 'header', title: 'Settings' },
   { segment: 'Settings', title: 'Settings', icon: <SettingsIcon /> },
@@ -118,19 +134,22 @@ function DashboardLayoutBasic() {
       navigation={NAVIGATION} 
       router={{ navigate }} 
       theme={demoTheme}  
-      branding={{ logo:"", appName: "Checkly" ,title: 'Admin' }}
+      branding={{ logo: <img src={logo} alt="App Logo" style={{ width: "50px", height: "50px", borderRadius: "0.75rem" }} />, appName: "Checkly" ,title: 'Admin' }}
       
     >
       <DashboardLayout>
+
         <PageContainer className='MainPage-Conatiner'>
           <Routes>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="ListStudents" element={<ListStudents />} />
             <Route path="ListTeachers" element={<ListTeachers />} />
             <Route path="ListExams" element={<ListExams />} />
+            <Route path="ExamsForm" element={<ListExamsForm />} />
             <Route path="ListModules" element={<ListModules />} />
+            <Route path="ModulesTest/AddModules" element={<AddModule />} />
             <Route path="ModulesTest" element={<ModulesTest />} />
-            <Route path="examlist" element={<Listexam/>} />
+            <Route path="Examan1" element={<Examan1 />} />
             <Route
               path="*"
               element={

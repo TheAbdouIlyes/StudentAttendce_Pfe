@@ -1,6 +1,6 @@
 import React, { useState ,useEffect} from 'react'
 import "./ListStudents.css"
-import ReactVirtualizedTable from './Comps/ReactVirtualizedTable'
+import StudentTable from './Comps/StudentTable'
 import EditButtons from './Comps/EditButtons'
 import { Button, Menu, MenuItem } from '@mui/material'
 import FilterListIcon from '@mui/icons-material/FilterList'
@@ -9,8 +9,23 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 
+import TouchAppIcon from '@mui/icons-material/TouchApp';
+
 
 export default function ListStudents() {
+
+  const initialRows = [
+    { id: 1, firstName: "Alice12", lastName: "Johnson", email: "alice.johnson@example.com", speciality: "Informatics", yearOfStudy: "L1" },
+    { id: 2, firstName: "Bob", lastName: "Smith", email: "bob.smith@example.com", speciality: "Biology", yearOfStudy: "L2" },
+    { id: 3, firstName: "Charlie", lastName: "Brown", email: "charlie.brown@example.com", speciality: "Medicine", yearOfStudy: "L3" },
+    { id: 4, firstName: "David", lastName: "Williams", email: "david.williams@example.com", speciality: "Informatics", yearOfStudy: "M1" },
+    { id: 5, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", speciality: "Biology", yearOfStudy: "M2" },
+    { id: 6, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", speciality: "Biology", yearOfStudy: "M2" },
+    { id: 7, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", speciality: "Biology", yearOfStudy: "M2" },
+    { id: 8, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", speciality: "Biology", yearOfStudy: "M2" },
+    { id: 9, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", speciality: "Biology", yearOfStudy: "M2" },
+    { id: 10, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", speciality: "Biology", yearOfStudy: "M2" },
+  ];
 
 
   const [isEditing, setIsEditing] = useState(false);
@@ -89,10 +104,10 @@ export default function ListStudents() {
           </Button>
         </div>
 
-
+{/* 
         <Button variant="contained" startIcon={<FilterListIcon />} onClick={handleClick}>
           Filter
-        </Button>
+        </Button> */}
 
         {/* <Menu
           anchorEl={anchorEl}
@@ -119,7 +134,7 @@ export default function ListStudents() {
       </div>
 
       <div className='MainSection-Bottom'>
-        <ReactVirtualizedTable  isEditing={isEditing} setIsEditing={setIsEditing} filterType={filterType} filterValue={filterValue} />
+        <StudentTable initialRows={initialRows} isEditing={isEditing} setIsEditing={setIsEditing} filterType={filterType} filterValue={filterValue} />
       </div>
     </div>
   )

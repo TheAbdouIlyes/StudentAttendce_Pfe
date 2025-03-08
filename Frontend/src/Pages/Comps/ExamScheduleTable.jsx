@@ -134,9 +134,7 @@ const ExamScheduleTable = () => {
         </RadioGroup>
       </FormControl>
 
-      <FormControl component="fieldset" 
-      // sx={{ margin: "10px" }}
-      >
+      <FormControl component="fieldset" >
         <FormLabel component="legend">Select Semester</FormLabel>
         <RadioGroup row value={semester} onChange={(e) => setSemester(e.target.value)}>
           {["S1", "S2"].map((sem) => (

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React,{ useState ,useEffect} from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -10,27 +10,16 @@ import { TableVirtuoso } from "react-virtuoso";
 import { IconButton, TextField } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
+
+
+
 const columns = [
   { width: 50, label: "ID", dataKey: "id" },
-  { width: 100, label: "Modules S 1 or 2", dataKey: "name" },
-  { width: 50, label: "Coef", dataKey: "coef" },
-
-];
-
-const initialRows = [
-  {id: 1, name: "tdg",coef:5 },
-  { id: 2, name: "asd2",coef:5 },
-  { id: 3, name: "logic",coef:5 },
-  { id: 4, name: "maths" ,coef:5},
-  { id: 5, name: "biology",coef:5 },
-  { id: 6, name: "chemistry",coef:5 },
-  { id: 7, name: "physics",coef:5 },
-  { id: 8, name: "history",coef:5 },
-  { id: 9, name: "english" ,coef:5},
-  { id: 10, name: "french" ,coef:5},
-  { id: 11, name: "spanish" ,coef:5},
-  
-
+  { width: 100, label: "First Name", dataKey: "firstName" },
+  { width: 150, label: "Last Name", dataKey: "lastName" },
+  { width: 220, label: "Email", dataKey: "email" },
+  { width: 120, label: "Speciality", dataKey: "speciality" },
+  { width: 80, label: "Year of Study", dataKey: "yearOfStudy" },
 ];
 
 
@@ -55,7 +44,7 @@ function fixedHeaderContent() {
   );
 }
 
-export default function ModelTable({ isEditing }) {
+export default function StudentTable({ isEditing ,filterType, filterValue,initialRows  }) {
   const [rows, setRows] = React.useState(initialRows);
   const [editingCell, setEditingCell] = React.useState(null);
   const [editValue, setEditValue] = React.useState("");
@@ -79,6 +68,21 @@ export default function ModelTable({ isEditing }) {
     setEditingCell(null);
   };
 
+
+  const [filteredRows, setFilteredRows] = useState(initialRows);
+
+  useEffect(() => {
+    if (filterType && filterValue) {
+      setFilteredRows(rows.filter(row => row[filterType] === filterValue));
+    } else {
+      setFilteredRows(rows);
+    }
+  }, [filterType, filterValue, rows]);
+
+
+
+
+
   function rowContent(index, row) {
     return (
     
@@ -100,7 +104,8 @@ export default function ModelTable({ isEditing }) {
                 {row[column.dataKey]}
                 {isEditing && column.dataKey !== "id" && (
                   <IconButton
-                    sx={{ margin: "8px" }}
+                    sx={{ margin: "8px" , mt: 0, mb: 0, pt: 0, pb: 0 ,height: 30 }
+                  }
                     onClick={() => handleEditClick(index, column.dataKey, row[column.dataKey])}
                   >
                     <EditIcon fontSize="small" />
