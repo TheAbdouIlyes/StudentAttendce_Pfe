@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState ,useEffect} from 'react'
 import "./ListStudents.css"
 import ReactVirtualizedTable from './Comps/ReactVirtualizedTable'
 import EditButtons from './Comps/EditButtons'
@@ -27,12 +27,21 @@ export default function ListStudents() {
     setAnchorEl(null);
   };
 
-  const handleFilter = (filterType) => {
-    // Implement your filter logic here
-    console.log(`Filtering by: ${filterType}`);
+  // const handleFilter = (filterType) => {
+  //   // Implement your filter logic here
+  //   console.log(`Filtering by: ${filterType}`);
+  //   handleClose();
+  // };
+
+
+  const [filterType, setFilterType] = useState(null);
+  const [filterValue, setFilterValue] = useState(null);
+
+  const handleFilter = (type, value) => {
+    setFilterType(type);
+    setFilterValue(value);
     handleClose();
   };
-
 
   
 
@@ -81,11 +90,11 @@ export default function ListStudents() {
         </div>
 
 
-        {/* <Button variant="contained" startIcon={<FilterListIcon />} onClick={handleClick}>
+        <Button variant="contained" startIcon={<FilterListIcon />} onClick={handleClick}>
           Filter
-        </Button> */}
+        </Button>
 
-        <Menu
+        {/* <Menu
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
@@ -93,13 +102,24 @@ export default function ListStudents() {
           <MenuItem onClick={() => handleFilter('name')}>Filter by Name</MenuItem>
           <MenuItem onClick={() => handleFilter('id')}>Filter by ID</MenuItem>
           <MenuItem onClick={() => handleFilter('class')}>Filter by Class</MenuItem>
+        </Menu> */}
+
+
+        <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+          <MenuItem onClick={() => handleFilter('speciality', 'Informatics')}>Informatics</MenuItem>
+          <MenuItem onClick={() => handleFilter('speciality', 'Biology')}>Biology</MenuItem>
+          <MenuItem onClick={() => handleFilter('speciality', 'Medicine')}>Medicine</MenuItem>
+          <MenuItem onClick={() => handleFilter('yearOfStudy', 'L1')}>Year: L1</MenuItem>
+          <MenuItem onClick={() => handleFilter('yearOfStudy', 'L2')}>Year: L2</MenuItem>
+          <MenuItem onClick={() => handleFilter('yearOfStudy', 'M1')}>Year: M1</MenuItem>
+          <MenuItem onClick={() => handleFilter(null, null)}>Reset Filter</MenuItem>
         </Menu>
 
 
       </div>
 
       <div className='MainSection-Bottom'>
-        <ReactVirtualizedTable  isEditing={isEditing} setIsEditing={setIsEditing} />
+        <ReactVirtualizedTable  isEditing={isEditing} setIsEditing={setIsEditing} filterType={filterType} filterValue={filterValue} />
       </div>
     </div>
   )

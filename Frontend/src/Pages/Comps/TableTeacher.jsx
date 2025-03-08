@@ -1,4 +1,4 @@
-import React,{ useState ,useEffect} from "react";
+import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -10,29 +10,25 @@ import { TableVirtuoso } from "react-virtuoso";
 import { IconButton, TextField } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
-
-
-
 const columns = [
   { width: 50, label: "ID", dataKey: "id" },
   { width: 100, label: "First Name", dataKey: "firstName" },
   { width: 150, label: "Last Name", dataKey: "lastName" },
   { width: 220, label: "Email", dataKey: "email" },
-  { width: 120, label: "Speciality", dataKey: "speciality" },
-  { width: 80, label: "Year of Study", dataKey: "yearOfStudy" },
+  { width: 200, label: "Modules", dataKey: "modules" },
 ];
 
 const initialRows = [
-  { id: 1, firstName: "Alice", lastName: "Johnson", email: "alice.johnson@example.com", speciality: "Informatics", yearOfStudy: "L1" },
-  { id: 2, firstName: "Bob", lastName: "Smith", email: "bob.smith@example.com", speciality: "Biology", yearOfStudy: "L2" },
-  { id: 3, firstName: "Charlie", lastName: "Brown", email: "charlie.brown@example.com", speciality: "Medicine", yearOfStudy: "L3" },
-  { id: 4, firstName: "David", lastName: "Williams", email: "david.williams@example.com", speciality: "Informatics", yearOfStudy: "M1" },
-  { id: 5, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", speciality: "Biology", yearOfStudy: "M2" },
-  { id: 6, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", speciality: "Biology", yearOfStudy: "M2" },
-  { id: 7, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", speciality: "Biology", yearOfStudy: "M2" },
-  { id: 8, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", speciality: "Biology", yearOfStudy: "M2" },
-  { id: 9, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", speciality: "Biology", yearOfStudy: "M2" },
-  { id: 10, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", speciality: "Biology", yearOfStudy: "M2" },
+  { id: 1, firstName: "Alice", lastName: "Johnson", email: "alice.johnson@example.com", modules: "Informatics" },
+  { id: 2, firstName: "Bob", lastName: "Smith", email: "bob.smith@example.com", modules: "Biology"},
+  { id: 3, firstName: "Charlie", lastName: "Brown", email: "charlie.brown@example.com", modules: "Medicine" },
+  { id: 4, firstName: "David", lastName: "Williams", email: "david.williams@example.com", modules: "Informatics" },
+  { id: 5, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", modules: "Biology" },
+  { id: 6, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", modules: "Biology" },
+  { id: 7, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", modules: "Biology" },
+  { id: 8, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", modules: "Biology" },
+  { id: 9, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", modules: "Biology" },
+  { id: 10, firstName: "Emma", lastName: "Davis", email: "emma.davis@example.com", modules: "Biology" },
 ];
 
 const VirtuosoTableComponents = {
@@ -55,7 +51,7 @@ function fixedHeaderContent() {
   );
 }
 
-export default function ReactVirtualizedTable({ isEditing ,filterType, filterValue  }) {
+export default function TableTeacher({ isEditing }) {
   const [rows, setRows] = React.useState(initialRows);
   const [editingCell, setEditingCell] = React.useState(null);
   const [editValue, setEditValue] = React.useState("");
@@ -78,21 +74,6 @@ export default function ReactVirtualizedTable({ isEditing ,filterType, filterVal
     setRows(updatedRows);
     setEditingCell(null);
   };
-
-
-  const [filteredRows, setFilteredRows] = useState(initialRows);
-
-  useEffect(() => {
-    if (filterType && filterValue) {
-      setFilteredRows(rows.filter(row => row[filterType] === filterValue));
-    } else {
-      setFilteredRows(rows);
-    }
-  }, [filterType, filterValue, rows]);
-
-
-
-
 
   function rowContent(index, row) {
     return (

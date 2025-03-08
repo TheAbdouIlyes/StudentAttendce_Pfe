@@ -54,14 +54,13 @@
 
 /* buttons-------------------- */
 
-.add-button {
+/* .add-button {
     background-color: var(--tertiary-color) !important;
     color: white !important;
-    /* padding: 8px 16px !important; */
     border-radius: 1.5rem!important;
     font-size: 16px !important;
 }
 
 .add-button:hover {
     background-color: var(--quaternary-color) !important;
-}
+} */

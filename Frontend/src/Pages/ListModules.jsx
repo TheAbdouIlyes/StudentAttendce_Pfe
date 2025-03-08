@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import "./ListModules.css"
-import ModelTable from './ModelTable'
+import ModelTable from './Comps/ModelTable'
 import EditButtons from './Comps/EditButtons'
 import { Button, Menu, MenuItem } from '@mui/material'
 import FilterListIcon from '@mui/icons-material/FilterList'
