@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import "./Examan1.css"; // Keep your CSS
 
 const exams = [
-  { id: 1, title: "L1", path: "/exam/l1" },
-  { id: 2, title: "L2", path: "/exam/l2" },
-  { id: 3, title: "L3", path: "/exam/l3" },
-  { id: 4, title: "M1", path: "/exam/m1" },
-  { id: 5, title: "M2", path: "/exam/m2" },
+  { id: 1, title: "L1", path: "/l1" },
+  { id: 2, title: "L2", path: "/l2" },
+  { id: 3, title: "L3", path: "/l3" },
+  { id: 4, title: "M1", path: "/m1" },
+  { id: 5, title: "M2", path: "/m2" },
 ];
 
 export default function Examan1() {
@@ -22,7 +22,7 @@ export default function Examan1() {
           <h2>{category}</h2>
           <div className="contener">
             {exams.map((exam) => (
-              <div key={exam.id} className="spec" onClick={() => navigate(exam.path)}>
+              <div key={exam.id} className="spec" onClick={() => navigate(category+"/"+exam.path)}>
                 <h2>{exam.title}</h2>
               </div>
             ))}
