@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import viewsets
-from .models import Student, Exam, Attendance,AuthTable,subject,surveillance
+from .models import Student, Exam, Attendance,AuthTable,subject,surveillance,teacher
 from .serializers import StudentSerializer, ExamSerializer, AttendanceSerializer,subjetSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import generics
@@ -24,33 +24,69 @@ class ExamDelete(generics.DestroyAPIView):
     serializer_class = ExamSerializer
     permission_classes = [IsAuthenticated]
 
+# class is_presente(generics.UpdateAPIView):
+#        serializer_class = AttendanceSerializer
+#        permission_classes = [IsAuthenticated]
+#        def get_object(self):
+#         id = self.kwargs['pk']
+#         id1 = self.kwargs['pk1']
+        
+#         try:
+#             # Attempt to retrieve the presence object
+#             pre = Attendance.objects.get(student=id, exam=id1)
+#             return pre
+#         except Attendance.DoesNotExist:
+#             # Handle the case where the object does not exist
+#             return None
+#        def put(self, request, *args, **kwargs):
+#         # Get the object using the overridden get_object method
+#         presence_instance = self.get_object()
+        
+#         if presence_instance is None:
+#             return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+#         # Update the is_present field
+#         presence_instance.is_present = True
+#         presence_instance.save()
+
+#         # Optionally, serialize the updated object to return it in the response
+#         serializer = self.get_serializer(presence_instance)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+from .models import Attendance, Student, Exam
+from .serializers import AttendanceSerializer
+
 class is_presente(generics.UpdateAPIView):
-       serializer_class = AttendanceSerializer
-       permission_classes = [IsAuthenticated]
-       def get_object(self):
-        id = self.kwargs['pk']
-        id1 = self.kwargs['pk1']
-        
-        try:
-            # Attempt to retrieve the presence object
-            pre = Attendance.objects.get(student=id, exam=id1)
-            return pre
-        except Attendance.DoesNotExist:
-            # Handle the case where the object does not exist
-            return None
-       def put(self, request, *args, **kwargs):
-        # Get the object using the overridden get_object method
+    serializer_class = AttendanceSerializer
+    permission_classes = [AllowAny]
+
+    def get_object(self):
+        matricul = self.kwargs['matricul']
+        exam_name = self.kwargs['exam_name']
+
+        # Retrieve student by matricul
+        student = get_object_or_404(Student, matricul=matricul)
+
+        # Retrieve exam by subject name
+        exam = get_object_or_404(Exam, subject__name=exam_name)
+
+        # Get Attendance object
+        return get_object_or_404(Attendance, student=student, exam=exam)
+
+    def put(self, request, *args, **kwargs):
+        # Get the object using get_object()
         presence_instance = self.get_object()
-        
-        if presence_instance is None:
-            return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
-        # Update the is_present field
+
+        # Update is_present field
         presence_instance.is_present = True
         presence_instance.save()
 
-        # Optionally, serialize the updated object to return it in the response
+        # Serialize and return the updated object
         serializer = self.get_serializer(presence_instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 class subjectCreate(generics.ListCreateAPIView):
     queryset = subject.objects.all()
     serializer_class = subjetSerializer
@@ -342,61 +378,64 @@ class UpdateStudentView(APIView):
     
 class teaching(generics.UpdateAPIView):
        serializer_class =teachSerializer
-       permission_classes = [IsAuthenticated]
-       def get_object(self):
-        id = self.kwargs['pk']
-        id1 = self.kwargs['pk1']
-        
-        try:
-            # Attempt to retrieve the presence object
-            pre = teach.objects.get(teacher=id, subject=id1)
-            return pre
-        except teach.DoesNotExist:
-            # Handle the case where the object does not exist
-            return None
-       def put(self, request, *args, **kwargs):
-        # Get the object using the overridden get_object method
-        presence_instance = self.get_object()
-        
-        if presence_instance is None:
-            return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
-        # Update the is_present field
-        presence_instance.teaching = True
-        presence_instance.save()
+       
+       permission_classes = [AllowAny]
 
-        # Optionally, serialize the updated object to return it in the response
-        serializer = self.get_serializer(presence_instance)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+       def get_object(self):
+           matricul = self.kwargs['matricul']
+           subject_name = self.kwargs['subject_name']
+
+        # Retrieve student by matricul
+           teacher1 = get_object_or_404(teacher, matricul=matricul)
+
+        # Retrieve exam by subject name
+           subject1 = get_object_or_404(subject, name=subject_name)
+
+        # Get Attendance object
+           return get_object_or_404(teach, teacher=teacher1, subject=subject1)
+
+       def put(self, request, *args, **kwargs):
+        # Get the object using get_object()
+          presence_instance = self.get_object()
+
+        # Update is_present field
+          presence_instance.teaching = True
+          presence_instance.save()
+ 
+        # Serialize and return the updated object
+          serializer = self.get_serializer(presence_instance)
+          return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class  teacher_present(generics.UpdateAPIView):
        
        serializer_class =surveillanceSerializer
-       permission_classes = [IsAuthenticated]
-       def get_object(self):
-        id = self.kwargs['pk']
-        id1 = self.kwargs['pk1']
-        
-        try:
-            # Attempt to retrieve the presence object
-            pre = surveillance.objects.get(teacher=id, exam=id1)
-            return pre
-        except surveillance.DoesNotExist:
-            # Handle the case where the object does not exist
-            return None
-       def put(self, request, *args, **kwargs):
-        # Get the object using the overridden get_object method
-        presence_instance = self.get_object()
-        
-        if presence_instance is None:
-            return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
-        # Update the is_present field
-        presence_instance.is_present = True
-        presence_instance.save()
+       permission_classes = [AllowAny]
 
-        # Optionally, serialize the updated object to return it in the response
-        serializer = self.get_serializer(presence_instance)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+       def get_object(self):
+           matricul = self.kwargs['matricul']
+           exam_name = self.kwargs['exam_name']
+
+        # Retrieve student by matricul
+           teacher1 = get_object_or_404(teacher, matricul=matricul)
+
+        # Retrieve exam by subject name
+           exam = get_object_or_404(Exam, subject__name=exam_name)
+
+        # Get Attendance object
+           return get_object_or_404(surveillance, teacher=teacher1, exam=exam)
+
+       def put(self, request, *args, **kwargs):
+        # Get the object using get_object()
+          presence_instance = self.get_object()
+
+        # Update is_present field
+          presence_instance.is_present = True
+          presence_instance.save()
+ 
+        # Serialize and return the updated object
+          serializer = self.get_serializer(presence_instance)
+          return Response(serializer.data, status=status.HTTP_200_OK)
 
  
 
