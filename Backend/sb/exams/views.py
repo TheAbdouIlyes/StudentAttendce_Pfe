@@ -475,20 +475,15 @@ class ListSurveillanceView(generics.ListAPIView):
         return teacher.objects.filter(id__in=modules)
 
 
-class StudentListByLevel(generics.ListAPIView):
-    serializer_class = StudentSerializer
-    permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        level = self.kwargs.get('level')  # Get level from URL parameter
-        return Student.objects.filter(level=level)   
 
-class studentListByspesiality(generics.ListAPIView):
+class studentListByspesialityandLevel(generics.ListAPIView):
      serializer_class = StudentSerializer
-     permission_classes = [IsAuthenticated]
+     permission_classes = [AllowAny]
      def get_queryset(self):
         spesiality= self.kwargs.get('spe')  
-        return Student.objects.filter(speciality=spesiality)  
+        level= self.kwargs.get('level')
+        return Student.objects.filter(speciality=spesiality, level=level)  
      
 class subjetListByspecialityandlevelandsemester(generics.ListAPIView):
     serializer_class = subjetSerializer
@@ -556,8 +551,12 @@ class LogoutView(APIView):
             return Response({"error": f"Logout failed: {str(e)}"}, status=400)
         
 
-class examlist(generics.ListAPIView):
-    queryset = Exam.objects.select_related("subject")
+class ExamListByLevelAndSpeciality(generics.ListAPIView):
     serializer_class = ExamSerializer
-    permission_classes = [IsAuthenticated]  # display the name of the subject 
+    permission_classes = [AllowAny]
 
+    def get_queryset(self):
+        level = self.kwargs.get('level')  
+        speciality = self.kwargs.get('speciality')
+
+        return Exam.objects.filter(subject__level=level, subject__speciality=speciality).select_related("subject")
