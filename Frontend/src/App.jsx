@@ -15,7 +15,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import SettingsIcon from '@mui/icons-material/Settings';
 import logo from "./toothless.jpg";
 import "./App.css";
-
+import UserID from"./LogIn/UserID"
 
 
 // Import your pages
@@ -137,6 +137,7 @@ function DashboardLayoutBasic() {
       branding={{ logo: <img src={logo} alt="App Logo" style={{ width: "50px", height: "50px", borderRadius: "0.75rem" }} />, appName: "Checkly" ,title: 'Admin' }}
       
     >
+    
       <DashboardLayout>
 
         <PageContainer className='MainPage-Conatiner'>
@@ -173,8 +174,18 @@ function DashboardLayoutBasic() {
 export default function App() {
   return (
     <Router>
+      
+      
       <Routes>
+       <Route path="/" element={<div className="ThePage"> <UserID/> </div>} />
+      
+              {/* <Route path="/Admin" element={<div className="ThePage"> <LogInAdmin/> </div>} />
+              <Route path="/Student" element={<div className="ThePage"> <LogInStudent/> </div>} />
+              <Route path="/Teacher" element={<div className="ThePage"> <LogInTeacher/> </div>} /> */}
         <Route path="/*" element={<DashboardLayoutBasic />} />
+        
+        
+        
       </Routes>
     </Router>
   );
