@@ -5,7 +5,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ModelTable from '../Comps/ModuleTable';
+import ModelTable from './ModuleTable';
 import { useState,useEffect} from 'react';
 import { useNavigate } from "react-router-dom";
 import ReturnButton from '../../comps/ReturnButton';
@@ -83,31 +83,12 @@ export default function Modulestest() {
         <div>
 
           <ReturnButton/>
+          
 
           
         </div>
-        {/* <h2>{SpecialityAndYear}</h2> */}
+        <h3>Speciality </h3>
 
-        {/* <FormControl>
-          <InputLabel>Year</InputLabel>
-          <Select name="year"  label="Year"  required sx={{width:100}}>
-            <MenuItem value="L1">L1</MenuItem>
-            <MenuItem value="L2">L2</MenuItem>
-            <MenuItem value="L3">L3</MenuItem>
-            <MenuItem value="M1">M1</MenuItem>
-            <MenuItem value="M2">M2</MenuItem>
-            <MenuItem value="All">All</MenuItem>
-          </Select>
-        </FormControl>
-
-        <FormControl>
-          <InputLabel>Speciality</InputLabel>
-          <Select name="Speciality"  label="Speciality" required sx={{width:180}}>
-            <MenuItem value="L1">Info</MenuItem>
-            <MenuItem value="L2">Bio</MenuItem>
-            <MenuItem value="All">All</MenuItem>
-          </Select>
-        </FormControl> */}
 
         <div className='Buttons-side'>
           <Button variant="contained" startIcon={<AddIcon />}   onClick={() => navigate("AddModules")} >
