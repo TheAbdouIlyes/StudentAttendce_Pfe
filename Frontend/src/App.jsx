@@ -15,12 +15,12 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import SettingsIcon from '@mui/icons-material/Settings';
 import logo from "./Logo.png";
 import "./App.css";
-
+import UserID from"./LogIn/UserID"
 
 
 // Import your pages
 import Dashboard from './Pages/Dashboard';
-import ListStudents from './Pages/ListStudents';
+import ListStudents from './Pages/Students/ListStudents';
 import ListTeachers from './Pages/ListTeachers';
 import ListExams from './Pages/Exams/ListExams';
 
@@ -31,12 +31,15 @@ import ListExamsForm from './StudentPages/ListExamsForm';
 
 import Examan1 from './Pages/Examan1';
 import ModulesMenu from './Pages/Modules/ModulesMenu';
-import UserID from './LogIn/UserID';
+// import UserID from './LogIn/UserID';
 
 import ExamsMenu from './Pages/Exams/ExamsMenu';
 // import ExamanForm from './Pages/Exams/ExamanForm';
 import LogInAdmin from './LogIn/LogInAdmin';
 import { colors } from '@mui/material';
+
+import StudentMenu from './Pages/Students/StudentMenu';
+import AddStudent from './Pages/Students/AddStudent';
 
 
 const NAVIGATION = [
@@ -45,7 +48,7 @@ const NAVIGATION = [
   { kind: 'divider' },
   { kind: 'header', title: 'Lists' },
   { 
-    segment: 'ListStudents', title: 'Students', icon: <SchoolIcon />,
+    segment: 'MenuStudent', title: 'Students', icon: <SchoolIcon />,
   },
   { segment: 'ListTeachers', title: 'Teachers', icon: <PeopleIcon />
   },
@@ -123,13 +126,19 @@ function DashboardLayoutBasic() {
       branding={{ logo: <img src={logo} style={{ width: "40px", height: "50px", borderRadius: "50%" }} /> ,title: <div className='TITLE-ALGER1'><h5 className='ALger1'>FACULTY OF SCIENCE UNIVERSITY OF ALGIERS 1</h5><br /><h5 className='ALger1'>كـلـيـة الـعلوم جـامـعـة الـجـزائـر 1</h5></div> }}
       // sx={{color:"primary"}}
     >
-      {/* FACULTY OF SCIENCE UNIVERSITY OF ALGIERS 1 */}
+    
       <DashboardLayout>
 
         <PageContainer className='MainPage-Conatiner'>
           <Routes>
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="ListStudents" element={<ListStudents />} />
+
+            <Route path="MenuStudent" element={<StudentMenu />} />
+            <Route path="MenuStudent/:speciality/:year" element={<ListStudents />} />
+            <Route path="MenuStudent/:speciality/:year/AddStudent" element={<AddStudent />} />
+
+
+
             <Route path="ListTeachers" element={<ListTeachers />} />
             <Route path="ListExams" element={<ListExams />} />
             <Route path="ExamsForm" element={<ListExamsForm />} />
@@ -169,10 +178,18 @@ function DashboardLayoutBasic() {
 export default function App() {
   return (
     <Router>
+      
+      
       <Routes>
-        <Route path="/" element={<UserID />} />
-        <Route path="/Admin" element={<LogInAdmin />} />
+       <Route path="/" element={<div className="ThePage"> <UserID/> </div>} />
+      
+              {/* <Route path="/Admin" element={<div className="ThePage"> <LogInAdmin/> </div>} />
+              <Route path="/Student" element={<div className="ThePage"> <LogInStudent/> </div>} />
+              <Route path="/Teacher" element={<div className="ThePage"> <LogInTeacher/> </div>} /> */}
         <Route path="/*" element={<DashboardLayoutBasic />} />
+        
+        
+        
       </Routes>
     </Router>
   );
