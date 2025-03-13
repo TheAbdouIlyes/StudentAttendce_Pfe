@@ -16,17 +16,16 @@ import {
   Radio,
   RadioGroup,
   FormControlLabel,
-  FormLabel
+  FormLabel,
 } from "@mui/material";
 import ReturnButton from "../../comps/ReturnButton";
 
 export default function AddModule() {
   const [moduleData, setModuleData] = useState({
     name: "",
-    year: "",
+    level: "",
     speciality: "",
-    teacher: "",
-    semester: "S1" // Default semester
+    semester: "s1", // Default semester
   });
 
   const [modules, setModules] = useState([]); // Store modules
@@ -37,48 +36,83 @@ export default function AddModule() {
   };
 
   // Handle form submission
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!moduleData.name || !moduleData.year || !moduleData.speciality || !moduleData.teacher || !moduleData.semester) {
+
+    // Validation
+    if (!moduleData.name || !moduleData.level|| !moduleData.speciality || !moduleData.semester) {
       alert("All fields are required!");
       return;
     }
-    setModules([...modules, moduleData]); // Add module to table
-    setModuleData({ name: "", year: "", speciality: "", teacher: "", semester: "S1" }); // Reset form
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/subject/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(moduleData),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        console.error("API Error Response:", responseData);
+        throw new Error(responseData?.detail || "Failed to add subject.");
+      }
+
+      // Update state
+      setModules([...modules, moduleData]);
+      setModuleData({ name: "", level: "", speciality: "", semester: "s1" }); // Reset form
+
+    } catch (error) {
+      console.error("Error:", error);
+      alert(error.message);
+    }
   };
 
   return (
     <div style={{ padding: "20px", maxWidth: "600px", margin: "auto" }}>
-  
-      <h2><ReturnButton/> Add a New Module</h2>
+      <h2>
+        <ReturnButton /> Add a New Module
+      </h2>
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <TextField label="Module Name" name="name" value={moduleData.name} onChange={handleChange} required />
 
         <FormControl>
           <InputLabel>Year</InputLabel>
-          <Select name="year" value={moduleData.year} label="Year" onChange={handleChange} required>
-            <MenuItem value="L1">L1</MenuItem>
-            <MenuItem value="L2">L2</MenuItem>
-            <MenuItem value="L3">L3</MenuItem>
-            <MenuItem value="M1">M1</MenuItem>
-            <MenuItem value="M2">M2</MenuItem>
+          <Select name="level" value={moduleData.level} onChange={handleChange} required>
+            <MenuItem value="l1">L1</MenuItem>
+            <MenuItem value="l2">L2</MenuItem>
+            <MenuItem value="l3">L3</MenuItem>
+            <MenuItem value="m1">M1</MenuItem>
+            <MenuItem value="m2">M2</MenuItem>
           </Select>
         </FormControl>
 
-        <TextField label="Speciality" name="speciality" value={moduleData.speciality} onChange={handleChange} required />
-        <TextField label="Teacher Responsible" name="teacher" value={moduleData.teacher} onChange={handleChange} required />
+        <FormControl>
+          <InputLabel>Speciality</InputLabel>
+          <Select name="speciality" value={moduleData.speciality} onChange={handleChange} required>
+            <MenuItem value="info">Info</MenuItem>
+            <MenuItem value="physic">Physic</MenuItem>
+            <MenuItem value="gestion">Gestion</MenuItem>
+            <MenuItem value="biology">Biology</MenuItem>
+            <MenuItem value="pharmacy">Pharmacy</MenuItem>
+            <MenuItem value="medicine">Medicine</MenuItem>
+          </Select>
+        </FormControl>
 
         {/* Semester Selection (Radio Buttons) */}
         <FormControl component="fieldset">
           <FormLabel component="legend">Semester</FormLabel>
           <RadioGroup row name="semester" value={moduleData.semester} onChange={handleChange}>
-            <FormControlLabel value="S1" control={<Radio />} label="S1" />
-            <FormControlLabel value="S2" control={<Radio />} label="S2" />
+            <FormControlLabel value="s1" control={<Radio />} label="S1" />
+            <FormControlLabel value="s2" control={<Radio />} label="S2" />
           </RadioGroup>
         </FormControl>
 
-        <Button type="submit" variant="contained" color="primary">Add Module</Button>
+        <Button type="submit" variant="contained" color="primary">
+          Add Module
+        </Button>
       </form>
 
       {/* Table to display modules */}
@@ -88,9 +122,8 @@ export default function AddModule() {
             <TableHead>
               <TableRow>
                 <TableCell><b>Name</b></TableCell>
-                <TableCell><b>Year</b></TableCell>
+                <TableCell><b>level</b></TableCell>
                 <TableCell><b>Speciality</b></TableCell>
-                <TableCell><b>Teacher</b></TableCell>
                 <TableCell><b>Semester</b></TableCell>
               </TableRow>
             </TableHead>
@@ -98,9 +131,8 @@ export default function AddModule() {
               {modules.map((module, index) => (
                 <TableRow key={index}>
                   <TableCell>{module.name}</TableCell>
-                  <TableCell>{module.year}</TableCell>
+                  <TableCell>{module.level}</TableCell>
                   <TableCell>{module.speciality}</TableCell>
-                  <TableCell>{module.teacher}</TableCell>
                   <TableCell>{module.semester}</TableCell>
                 </TableRow>
               ))}
