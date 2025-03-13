@@ -90,7 +90,7 @@ class is_presente(generics.UpdateAPIView):
 class subjectCreate(generics.ListCreateAPIView):
     queryset = subject.objects.all()
     serializer_class = subjetSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         """
