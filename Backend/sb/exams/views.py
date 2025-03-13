@@ -487,14 +487,13 @@ class studentListByspesialityandLevel(generics.ListAPIView):
      
 class subjetListByspecialityandlevelandsemester(generics.ListAPIView):
     serializer_class = subjetSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     def get_queryset(self):
         spesiality= self.kwargs.get('spe')  
         level= self.kwargs.get('spe1')
         semester= self.kwargs.get('spe2')
         return subject.objects.filter(speciality=spesiality,level=level,semester=semester)  
     
-
 
 
 from datetime import datetime

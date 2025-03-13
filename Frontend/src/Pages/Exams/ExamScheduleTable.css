@@ -1,0 +1,27 @@
+.TopExamsTable{
+    width: 100%;
+    height: 15%;
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+
+    margin-bottom: 1%;
+    margin-top: 1%;
+
+}
+.Examan-MainTable{
+    width: 100%;
+    /* height: 88%; */
+    /* background-color: lightblue; */
+
+    /* margin-bottom: 10px; */
+}
+.Exams-Buttons{
+    /* width: 0%; */
+    gap: 1px;
+    height: 100%;
+    /* height: 12%; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

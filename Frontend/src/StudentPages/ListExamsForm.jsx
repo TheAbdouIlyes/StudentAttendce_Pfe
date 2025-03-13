@@ -1,5 +1,5 @@
 import React from "react";
-import ExamScheduleTable from "./Comps/TestExams";
+import ExamScheduleTable from "../Pages/Comps/TestExams";
 
 const headers = [
   "Date",

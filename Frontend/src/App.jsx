@@ -13,24 +13,33 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import DescriptionIcon from '@mui/icons-material/Description';
 import SettingsIcon from '@mui/icons-material/Settings';
-import logo from "./toothless.jpg";
+import logo from "./Logo.png";
 import "./App.css";
 import UserID from"./LogIn/UserID"
 
 
 // Import your pages
 import Dashboard from './Pages/Dashboard';
-import ListStudents from './Pages/ListStudents';
+import ListStudents from './Pages/Students/ListStudents';
 import ListTeachers from './Pages/ListTeachers';
-import ListExams from './Pages/ListExams';
-import ListModules from './Pages/Modules/ListModules';
+import ListExams from './Pages/Exams/ListExams';
 
 import AddModule from './Pages/Modules/AddModule';
 
 import ModulesTest from './Pages/Modules/ModulesTest2';
-import ListExamsForm from './Pages/ListExamsForm';
+import ListExamsForm from './StudentPages/ListExamsForm';
 
 import Examan1 from './Pages/Examan1';
+import ModulesMenu from './Pages/Modules/ModulesMenu';
+// import UserID from './LogIn/UserID';
+
+import ExamsMenu from './Pages/Exams/ExamsMenu';
+// import ExamanForm from './Pages/Exams/ExamanForm';
+import LogInAdmin from './LogIn/LogInAdmin';
+import { colors } from '@mui/material';
+
+import StudentMenu from './Pages/Students/StudentMenu';
+import AddStudent from './Pages/Students/AddStudent';
 
 
 const NAVIGATION = [
@@ -39,40 +48,17 @@ const NAVIGATION = [
   { kind: 'divider' },
   { kind: 'header', title: 'Lists' },
   { 
-    segment: 'ListStudents', title: 'Students', icon: <SchoolIcon />,
+    segment: 'MenuStudent', title: 'Students', icon: <SchoolIcon />,
   },
   { segment: 'ListTeachers', title: 'Teachers', icon: <PeopleIcon />
   },
-  { segment: 'ListExams', title: 'Exams', icon: <AssignmentIcon /> 
+  { segment: 'MenuExams', title: 'Exams', icon: <AssignmentIcon /> 
   },
-  { segment: 'Examan1', title: 'Exams12', icon: <AssignmentIcon /> 
+  { segment: 'MenuModules', title: 'Modules', icon: <ClassIcon />, 
   },
-  { segment: 'ExamsForm', title: 'ExamsForm', icon: <AssignmentIcon /> 
-  },
-  // { segment: 'ListModules', title: 'Modules', icon: <ClassIcon /> ,
-    // children: [
-    //   { segment: '', title: 'L1', icon: <DescriptionIcon /> },
-    //   { segment: '', title: 'L2', icon: <DescriptionIcon /> },
-    //   { segment: '', title: 'L3', icon: <DescriptionIcon /> },
-    //   { segment: '', title: 'M1', icon: <DescriptionIcon /> },
-    //   { segment: '', title: 'M2', icon: <DescriptionIcon /> },
-    // ],
-
-  // },
-
-  { segment: 'ModulesTest', title: 'ModulesTest', icon: <ClassIcon />, 
-
-    // children: [
-    //   {segment: 'AddModules', title: 'AddModules', icon: <ClassIcon />},
-  
-    // ],
-  },
-  // { segment: 'AddModules', title: 'AddModules', icon: <ClassIcon /> 
-  // },
-
-  { kind: 'divider' },
-  { kind: 'header', title: 'Settings' },
-  { segment: 'Settings', title: 'Settings', icon: <SettingsIcon /> },
+  // { kind: 'divider' },
+  // { kind: 'header', title: 'Settings' },
+  // { segment: 'Settings', title: 'Settings', icon: <SettingsIcon /> },
   { kind: 'divider' },
   { kind: 'header', title: 'Exit' },
 
@@ -88,7 +74,6 @@ const NAVIGATION = [
 ];
 
 const demoTheme = extendTheme({
-  // colorSchemes: { light: true, dark: true },
   colorSchemes: { 
     light: {
       palette: {
@@ -129,13 +114,17 @@ const Skeleton = styled('div')(({ theme, height }) => ({
 function DashboardLayoutBasic() {
   const navigate = useNavigate();
 
+  const validSpecialities = ["info", "physic", "gestion", "biology", "pharmacy", "medcine"];
+  const validYears = ["L1", "L2", "L3", "M1", "M2"];
+
+
   return (
     <AppProvider 
       navigation={NAVIGATION} 
       router={{ navigate }} 
       theme={demoTheme}  
-      branding={{ logo: <img src={logo} alt="App Logo" style={{ width: "50px", height: "50px", borderRadius: "0.75rem" }} />, appName: "Checkly" ,title: 'Admin' }}
-      
+      branding={{ logo: <img src={logo} style={{ width: "40px", height: "50px", borderRadius: "50%" }} /> ,title: <div className='TITLE-ALGER1'><h5 className='ALger1'>FACULTY OF SCIENCE UNIVERSITY OF ALGIERS 1</h5><br /><h5 className='ALger1'>كـلـيـة الـعلوم جـامـعـة الـجـزائـر 1</h5></div> }}
+      // sx={{color:"primary"}}
     >
     
       <DashboardLayout>
@@ -143,14 +132,29 @@ function DashboardLayoutBasic() {
         <PageContainer className='MainPage-Conatiner'>
           <Routes>
             <Route path="dashboard" element={<Dashboard />} />
-            <Route path="ListStudents" element={<ListStudents />} />
+
+            <Route path="MenuStudent" element={<StudentMenu />} />
+            <Route path="MenuStudent/:speciality/:year" element={<ListStudents />} />
+            <Route path="MenuStudent/:speciality/:year/AddStudent" element={<AddStudent />} />
+
+
+
             <Route path="ListTeachers" element={<ListTeachers />} />
             <Route path="ListExams" element={<ListExams />} />
             <Route path="ExamsForm" element={<ListExamsForm />} />
-            <Route path="ListModules" element={<ListModules />} />
-            <Route path="ModulesTest/AddModules" element={<AddModule />} />
-            <Route path="ModulesTest" element={<ModulesTest />} />
-            <Route path="Examan1" element={<Examan1 />} />
+            {/* <Route path="ListModules" element={<ListModules />} /> */}
+            
+            {/* <Route path="ModulesTest" element={<ModulesTest />} /> */}
+
+            <Route path="MenuModules" element={<ModulesMenu />} />
+            <Route path="MenuModules/:speciality/:year/AddModules" element={<AddModule />} />
+
+
+            <Route path="MenuModules/:speciality/:year" element={<ModulesTest />} />
+            
+            <Route path="MenuExams" element={<ExamsMenu />} />
+            <Route path="MenuExams/:speciality/:year/:semester" element={<ListExams />} />
+
             <Route
               path="*"
               element={
