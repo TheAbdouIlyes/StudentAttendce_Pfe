@@ -620,3 +620,12 @@ class delete_exam(APIView):
        
         return Response(status=status.HTTP_204_NO_CONTENT)
     
+class StudentProfileView(APIView):
+    permission_classes = [IsAuthenticated]  # Seuls les utilisateurs connectés peuvent voir leurs infos
+
+    def get(self, request):
+        # Récupérer l'étudiant à partir de l'utilisateur connecté
+        student_instance = get_object_or_404(Student, Name=request.user)  
+
+        serializer = StudentSerializer(student_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
