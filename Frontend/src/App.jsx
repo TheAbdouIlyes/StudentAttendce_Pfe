@@ -16,8 +16,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import logo from "./Logo.png";
 import "./App.css";
 import UserID from"./LogIn/UserID"
-
-
+import LogInStudent from "./LogIn/LogInStudent"
+import StudentProfile from './StudentPages/espaceetudiant';
 // Import your pages
 import Dashboard from './Pages/Dashboard';
 import ListStudents from './Pages/Students/ListStudents';
@@ -183,9 +183,10 @@ export default function App() {
       <Routes>
        <Route path="/" element={<div className="ThePage"> <UserID/> </div>} />
       
-              {/* <Route path="/Admin" element={<div className="ThePage"> <LogInAdmin/> </div>} />
-              <Route path="/Student" element={<div className="ThePage"> <LogInStudent/> </div>} />
-              <Route path="/Teacher" element={<div className="ThePage"> <LogInTeacher/> </div>} /> */}
+        <Route path="/Admin" element={<div className="ThePage"> <LogInAdmin/> </div>} />
+        <Route path="/Student" element={<div className="ThePage"> <LogInStudent/> </div>} />
+        <Route path='/student/profile' element={<StudentProfile/>}/>
+        {/* <Route path="/Teacher" element={<div className="ThePage"> <LogInTeacher/> </div>} />  */}
         <Route path="/*" element={<DashboardLayoutBasic />} />
         
         

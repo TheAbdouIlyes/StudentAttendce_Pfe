@@ -1,0 +1,144 @@
+/* Main container styles */
+.profile-container {
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #04892c, #d9ded9);
+    padding: 2rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .profile-card {
+    max-width: 48rem;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+  }
+  
+  .profile-header {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .header-icon {
+    width: 4rem;
+    height: 4rem;
+    color: #d9ede1;
+    margin: 0 auto 1rem;
+  }
+  
+  .profile-header h1 {
+    color: white;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  .profile-content {
+    display: grid;
+    grid-template-columns: minmax(auto, 1fr) 2fr;
+    gap: 2rem;
+    padding: 2rem;
+  }
+  
+  @media (max-width: 768px) {
+    .profile-content {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .qr-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .qr-code-container {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .qr-code-container:hover {
+    transform: scale(1.02);
+  }
+  
+  .qr-caption {
+    color: #e1e2e3;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .info-section {
+    display: grid;
+    gap: 1rem;
+  }
+  
+  .info-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .info-item {
+    color: #d9e0e8;
+  }
+  
+  .info-label {
+    color: #f5f9f6;
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  
+  .info-value {
+    color: white;
+    font-size: 1rem;
+  }
+  
+  .matricul-number {
+    font-family: monospace;
+    font-size: 1.25rem;
+    color: #cbd3dc;
+    background-color: rgba(156, 238, 186, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .icon-sm {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  .loading {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom right, #1e3a8a, #3730a3);
+    color: white;
+    font-size: 1.25rem;
+  }

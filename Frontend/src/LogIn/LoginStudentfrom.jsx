@@ -33,7 +33,7 @@ export default function LogInStudentForm() {
       if (response.ok) {
         localStorage.setItem("accessToken", data.access); // Store token
         localStorage.setItem("refreshToken", data.refresh);
-        navigate("/Dashboard"); // Redirect after successful login
+        navigate("/student/profile"); // Redirect after successful login
       } else {
         setError("Invalid credentials. Please try again.");
       }
