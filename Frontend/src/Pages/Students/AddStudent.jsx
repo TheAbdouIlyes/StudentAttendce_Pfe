@@ -23,10 +23,11 @@ export default function AddStudent() {
   const [studentData, setStudentData] = useState({
     first_name: "",
     last_name: "",
+    email:"",
     level: level || "",
     speciality: speciality || "",
     roll_number: "",
-    matricule: ""
+    matricul: ""
   });
 
   const [students, setStudents] = useState([]); // Store students
@@ -39,7 +40,7 @@ export default function AddStudent() {
   // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!studentData.first_name || !studentData.last_name || !studentData.level|| !studentData.speciality || !studentData.roll_number || !studentData.matricule) {
+    if (!studentData.first_name || !studentData.last_name || !studentData.email || !studentData.level|| !studentData.speciality || !studentData.roll_number || !studentData.matricul) {
       alert("All fields are required!");
       return;
     }
@@ -57,7 +58,7 @@ export default function AddStudent() {
         throw new Error(responseData?.detail || "Failed to add student.");
       }
     setStudents([...students, studentData]); // Add student to table
-    setStudentData({ first_name: "", last_name: "", level: level|| "", speciality: speciality || "", roll_number: "", matricule: "" }); // Reset form
+    setStudentData({ first_name: "", last_name: "",email: "", level: level|| "", speciality: speciality || "", roll_number: "", matricul: "" }); // Reset form
   } catch (error) {
     console.error("Error:", error);
     alert(error.message);
@@ -71,7 +72,7 @@ export default function AddStudent() {
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <TextField label="First Name" name="first_name" value={studentData.first_name} onChange={handleChange} required />
         <TextField label="Last Name" name="last_name" value={studentData.last_name} onChange={handleChange} required />
-
+        <TextField label="email" name="email" value={studentData.email} onChange={handleChange} required />
         <FormControl fullWidth required>
   <InputLabel id="year-label">Year</InputLabel>
   <Select
@@ -82,11 +83,11 @@ export default function AddStudent() {
     label="Year"
     onChange={handleChange}
   >
-    <MenuItem value="L1">L1</MenuItem>
-    <MenuItem value="L2">L2</MenuItem>
-    <MenuItem value="L3">L3</MenuItem>
-    <MenuItem value="M1">M1</MenuItem>
-    <MenuItem value="M2">M2</MenuItem>
+    <MenuItem value="l1">L1</MenuItem>
+    <MenuItem value="l2">L2</MenuItem>
+    <MenuItem value="l3">L3</MenuItem>
+    <MenuItem value="m1">M1</MenuItem>
+    <MenuItem value="m2">M2</MenuItem>
   </Select>
 </FormControl>
 
@@ -102,7 +103,7 @@ export default function AddStudent() {
                   </Select>
                 </FormControl>
         <TextField label="Roll Number" name="roll_number" value={studentData.roll_number} onChange={handleChange} required />
-        <TextField label="Matricule" name="matricule" value={studentData.matricule} onChange={handleChange} required />
+        <TextField label="Matricule" name="matricul" value={studentData.matricul} onChange={handleChange} required />
 
         <Button type="submit" variant="contained" color="primary">Add Student</Button>
       </form>
@@ -115,6 +116,7 @@ export default function AddStudent() {
               <TableRow>
                 <TableCell><b>First Name</b></TableCell>
                 <TableCell><b>Last Name</b></TableCell>
+                <TableCell><b>Email</b></TableCell>
                 <TableCell><b>Year</b></TableCell>
                 <TableCell><b>Speciality</b></TableCell>
                 <TableCell><b>Roll Number</b></TableCell>
@@ -126,10 +128,11 @@ export default function AddStudent() {
                 <TableRow key={index}>
                   <TableCell>{student.first_name}</TableCell>
                   <TableCell>{student.last_name}</TableCell>
+                  <TableCell>{student.email}</TableCell>
                   <TableCell>{student.level}</TableCell>
                   <TableCell>{student.speciality}</TableCell>
                   <TableCell>{student.roll_number}</TableCell>
-                  <TableCell>{student.matricule}</TableCell>
+                  <TableCell>{student.matricul}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
