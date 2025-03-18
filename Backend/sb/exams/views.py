@@ -2,11 +2,11 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import viewsets
-from .models import Student, Exam, Attendance,AuthTable,subject,surveillance,teacher
+from .models import Student, Exam, Attendance,subject,surveillance,teacher
 from .serializers import StudentSerializer, ExamSerializer, AttendanceSerializer,subjetSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import generics
-
+from rest_framework.pagination import PageNumberPagination
 
 
 
@@ -209,7 +209,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
-from .models import AuthTable,teacher,teach
+from .models import teacher,teach
 from .serializers import teacherSerializer,teachSerializer,surveillanceSerializer
 from rest_framework.permissions import IsAuthenticated
 
@@ -440,12 +440,15 @@ class ListStudentView(generics.ListAPIView):
     def get_queryset(self):
         return Student.objects.select_related('Name').all() 
        
-
+class teacherPagination(PageNumberPagination):
+    page_size = 5  # Number of items per page
+    page_size_query_param = 'page_size'
+    max_page_size = 100  # Optional limit
 class ListTeacherView(generics.ListAPIView):
     queryset = teacher.objects.all()
     serializer_class = teacherSerializer
     permission_classes = [AllowAny] # Only authenticated users can view the list
-
+    pagination_class = teacherPagination  
     def get_queryset(self):
         return teacher.objects.select_related('user').all() 
        
@@ -468,11 +471,15 @@ class ListSurveillanceView(generics.ListAPIView):
         return teacher.objects.filter(id__in=modules)
 
 
-
+class StudentPagination(PageNumberPagination):
+    page_size = 5 # Number of items per page
+    page_size_query_param = 'page_size'
+    max_page_size = 100  # Optional limit
 
 class studentListByspesialityandLevel(generics.ListAPIView):
      serializer_class = StudentSerializer
      permission_classes = [AllowAny]
+     pagination_class = StudentPagination  
      def get_queryset(self):
         spesiality= self.kwargs.get('spe')  
         level= self.kwargs.get('level')

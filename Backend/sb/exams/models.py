@@ -10,14 +10,8 @@ from django.db import models
 from django.utils import timezone
 
 
-class AuthTable(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Links to auth_user
-    phone_number = models.CharField(max_length=15, unique=True, null=True, blank=True)
-    address = models.TextField(null=True, blank=True,unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.user.username} - {self.phone_number}"
+
 
 
 level_CHOICES=[
