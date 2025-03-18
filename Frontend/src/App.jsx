@@ -21,9 +21,10 @@ import StudentProfile from './StudentPages/espaceetudiant';
 // Import your pages
 import Dashboard from './Pages/Dashboard';
 import ListStudents from './Pages/Students/ListStudents';
-import ListTeachers from './Pages/ListTeachers';
+import ListTeachers from './Pages/Teacher/ListTeachers';
 import EditStudent from './Pages/Students/EditStudent';
-import AddTeacher from './Pages/addTeacher';
+import AddTeacher from './Pages/Teacher/AddTeacher';
+import EditTeacher from './Pages/Teacher/EditTeacher';
 import ListExams from './Pages/Exams/ListExams';
 
 import AddModule from './Pages/Modules/AddModule';
@@ -65,7 +66,7 @@ const NAVIGATION = [
   { kind: 'header', title: 'Exit' },
 
   { 
-    segment: 'logout', 
+    segment: './', 
     title: 'Logout', 
     icon: <ExitToAppIcon />, 
     // onClick: () => {
@@ -143,6 +144,8 @@ function DashboardLayoutBasic() {
 
             <Route path="ListTeachers/addTeacher" element={<AddTeacher/>} />
             <Route path="ListTeachers" element={<ListTeachers />} />
+            <Route path="ListTeachers/editTeacher/:id" element={<EditTeacher />} />
+
             <Route path="ListExams" element={<ListExams />} />
             <Route path="ExamsForm" element={<ListExamsForm />} />
             {/* <Route path="ListModules" element={<ListModules />} /> */}
