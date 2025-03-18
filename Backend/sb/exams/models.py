@@ -80,6 +80,7 @@ class Student(models.Model):
     roll_number = models.CharField(max_length=20, unique=True)
     level= models.CharField(max_length=20, choices=level_CHOICES,default="l1")
     speciality= models.CharField(max_length=100,choices=speciality_choices, default="info")
+    
    
 
 class surveillance(models.Model):

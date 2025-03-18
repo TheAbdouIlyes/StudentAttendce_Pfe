@@ -7,22 +7,15 @@ from .serializers import StudentSerializer, ExamSerializer, AttendanceSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework import generics
 
-class Examadd(generics.CreateAPIView):
-    queryset = Exam.objects.all()
-    serializer_class = ExamSerializer
-    permission_classes = [IsAuthenticated]
+
 
 
 class ExamUpdate(generics.UpdateAPIView):
     queryset = Exam.objects.all()
     serializer_class = ExamSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
-# ✅ Delete View (DELETE)
-class ExamDelete(generics.DestroyAPIView):
-    queryset = Exam.objects.all()
-    serializer_class = ExamSerializer
-    permission_classes = [IsAuthenticated]
+
 
 # class is_presente(generics.UpdateAPIView):
 #        serializer_class = AttendanceSerializer
@@ -90,7 +83,7 @@ class is_presente(generics.UpdateAPIView):
 class subjectCreate(generics.ListCreateAPIView):
     queryset = subject.objects.all()
     serializer_class = subjetSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
         """
@@ -224,7 +217,7 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class CreateteacherView(APIView):
-    permission_classes = [IsAuthenticated]  # Only authenticated users with AuthTable can create new ones
+    permission_classes = [AllowAny]  # Only authenticated users with AuthTable can create new ones
 
     def post(self, request):
         # Ensure the requesting user already has an AuthTable
@@ -263,7 +256,7 @@ class CreateteacherView(APIView):
 
 
 class CreatestudView(APIView):
-    permission_classes = [IsAuthenticated]  # Only authenticated users with AuthTable can create new ones
+    permission_classes = [AllowAny]  # Only authenticated users with AuthTable can create new ones
 
     def post(self, request):
         # Ensure the requesting user already has an AuthTable
@@ -304,7 +297,7 @@ class CreatestudView(APIView):
     
     
 class UpdateTeacherView(APIView):
-    permission_classes = [IsAuthenticated]  # Only authenticated users can update a teacher
+    permission_classes = [AllowAny]  # Only authenticated users can update a teacher
 
     def put(self, request, teacher_id):
         try:
@@ -337,7 +330,7 @@ class UpdateTeacherView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 class UpdateStudentView(APIView):
-    permission_classes = [IsAuthenticated]  # Only authenticated users can update a student
+    permission_classes = [AllowAny]  # Only authenticated users can update a student
 
     def put(self, request, student_id):
         try:
@@ -442,7 +435,7 @@ class  teacher_present(generics.UpdateAPIView):
 class ListStudentView(generics.ListAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
-    permission_classes = [IsAuthenticated]  # Only authenticated users can view the list
+    permission_classes = [AllowAny]  # Only authenticated users can view the list
 
     def get_queryset(self):
         return Student.objects.select_related('Name').all() 
@@ -451,14 +444,14 @@ class ListStudentView(generics.ListAPIView):
 class ListTeacherView(generics.ListAPIView):
     queryset = teacher.objects.all()
     serializer_class = teacherSerializer
-    permission_classes = [IsAuthenticated]  # Only authenticated users can view the list
+    permission_classes = [AllowAny] # Only authenticated users can view the list
 
     def get_queryset(self):
         return teacher.objects.select_related('user').all() 
        
 class ListTeachView(generics.ListAPIView):
     serializer_class = subjetSerializer
-    permission_classes = [IsAuthenticated]         
+    permission_classes = [AllowAny]    
 
     def get_queryset(self):
         id = self.kwargs['pk']  # Get teacher ID
@@ -468,7 +461,7 @@ class ListTeachView(generics.ListAPIView):
 
 class ListSurveillanceView(generics.ListAPIView):
      serializer_class = teacherSerializer
-     permission_classes = [IsAuthenticated] 
+     permission_classes = [AllowAny]
      def get_queryset(self):
         id = self.kwargs['pk']  # Get teacher ID
         modules = surveillance.objects.filter(exam__id=id, is_present=True).values_list('teacher', flat=True)
@@ -559,3 +552,80 @@ class ExamListByLevelAndSpeciality(generics.ListAPIView):
         speciality = self.kwargs.get('speciality')
 
         return Exam.objects.filter(subject__level=level, subject__speciality=speciality).select_related("subject")
+    
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from rest_framework import status
+from django.shortcuts import get_object_or_404
+from .models import subject, Exam, surveillance, teach  # Import your models here
+
+class delete_subject(APIView):
+    permission_classes = [AllowAny]
+
+    def delete(self, request, *args, **kwargs):
+        # Retrieve the subject name from the URL kwargs
+        name1 = self.kwargs.get("name")
+
+        # Get the subject instance or return a 404 response if not found
+        subject_instance = get_object_or_404(subject, name=name1)
+
+        # Delete related objects
+        try:
+            # Delete all related exams
+            exam_instance = Exam.objects.filter(subject=subject_instance)
+            exam_ids = exam_instance.values_list('id', flat=True)  # Get IDs of related exams
+
+            # Delete related surveillance objects
+            surveillance.objects.filter(exam__in=exam_ids).delete()
+
+            # Delete related teach objects
+            teach.objects.filter(subject=subject_instance).delete()
+
+            # Delete the exams
+            exam_instance.delete()
+
+            # Finally, delete the subject itself
+            
+            subject_instance.delete()
+
+            # Return a success response
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        except Exception as e:
+            # Handle unexpected errors gracefully
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    
+
+
+
+class delete_exam(APIView):
+   
+    permission_classes = [AllowAny]
+ 
+ 
+    def delete(self ,request, *args, **kwargs):
+     
+        exam_id= self.kwargs.get('pk') 
+        exam_instance=Exam.objects.filter(subject=exam_id)
+        attendance_instance=surveillance.objects.filter(exam__in=exam_instance)
+        attendance_instance.delete()
+       
+        exam_instance.delete()
+        
+       
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class StudentProfileView(APIView):
+    permission_classes = [IsAuthenticated]  # Seuls les utilisateurs connectés peuvent voir leurs infos
+
+    def get(self, request):
+        # Récupérer l'étudiant à partir de l'utilisateur connecté
+        student_instance = get_object_or_404(Student, Name=request.user)  
+
+        serializer = StudentSerializer(student_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)

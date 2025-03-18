@@ -20,7 +20,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from exams import views
 from exams.views import GenerateQRCode
-from exams.views import ExamListByLevelAndSpeciality,CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView,ExamUpdate,UpdateTeacherView,UpdateStudentView,teaching,teacher_present,ListStudentView,ListTeacherView,ListTeachView,ListSurveillanceView,studentListByspesialityandLevel,subjetListByspecialityandlevelandsemester,CheckTokenView,LogoutView
+from exams.views import StudentProfileView,delete_subject,delete_exam,ExamListByLevelAndSpeciality,CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView,ExamUpdate,UpdateTeacherView,UpdateStudentView,teaching,teacher_present,ListStudentView,ListTeacherView,ListTeachView,ListSurveillanceView,studentListByspesialityandLevel,subjetListByspecialityandlevelandsemester,CheckTokenView,LogoutView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
@@ -36,9 +36,9 @@ urlpatterns = [
     path('stud_l/',login_with_matricul_roll,name='s_login'),
     path('teacher/', CreateteacherView.as_view(), name='create-teacher'),
     path('t/', TokenObtainPairView.as_view(), name="get_token"),
-    path('s/', subjectCreate.as_view(), name="subject_create"),
+    path('subject/', subjectCreate.as_view(), name="subject_create"),
     path('etu/<matricul>/exa/<exam_name>/', is_presente.as_view(), name="present"),
-   # path('',.as_view,name=),
+   # path('',.as_view(),name=),
     path('u_teacher/<int:teacher_id>',UpdateTeacherView.as_view(),name="update_teacher"),
     path('u_student/<int:student_id>',UpdateStudentView.as_view(),name="update_student"),
     path('tea/<matricul>/sub/<subject_name>/',teaching.as_view(),name="t_teaching"),
@@ -54,7 +54,9 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('exam_list/<level>/<speciality>',ExamListByLevelAndSpeciality.as_view(),name="exam_list"),
-
+    path('delete_subject/<name>', delete_subject.as_view(), name='delete_subject'),
+    path('delete_exam/<int:pk>', delete_exam.as_view(), name='delete_exam'),
+    path('student/profile/',StudentProfileView.as_view(),name="student_profile"),
 
    ]
 
