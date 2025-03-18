@@ -89,7 +89,7 @@ export default function AddTeacher() {
                 <TableCell><b>First Name</b></TableCell>
                 <TableCell><b>Last Name</b></TableCell>
                 <TableCell><b>Email</b></TableCell>
-               
+
                 <TableCell><b>secret number</b></TableCell>
                 <TableCell><b>Matricule</b></TableCell>
               </TableRow>
@@ -100,7 +100,6 @@ export default function AddTeacher() {
                   <TableCell>{teacher.first_name}</TableCell>
                   <TableCell>{teacher.last_name}</TableCell>
                   <TableCell>{teacher.email}</TableCell>
-                 
                   <TableCell>{teacher.secret_number}</TableCell>
                   <TableCell>{teacher.matricul}</TableCell>
                 </TableRow>

@@ -1,14 +1,14 @@
-import * as React from "react"; // Import React library
-import Table from "@mui/material/Table"; // Import Table component from Material-UI
-import TableBody from "@mui/material/TableBody"; // Import TableBody component from Material-UI
-import TableCell from "@mui/material/TableCell"; // Import TableCell component from Material-UI
-import TableContainer from "@mui/material/TableContainer"; // Import TableContainer component from Material-UI
-import TableHead from "@mui/material/TableHead"; // Import TableHead component from Material-UI
-import TableRow from "@mui/material/TableRow"; // Import TableRow component from Material-UI
-import Paper from "@mui/material/Paper"; // Import Paper component from Material-UI
-import { TableVirtuoso } from "react-virtuoso"; // Import TableVirtuoso component for virtualized tables
-import { IconButton, TextField } from "@mui/material"; // Import IconButton and TextField components from Material-UI
-import EditIcon from "@mui/icons-material/Edit"; // Import EditIcon from Material-UI icons
+import React, { useState, useEffect } from "react";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { TableVirtuoso } from "react-virtuoso";
+import { IconButton, TextField } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 
 // Define custom components for TableVirtuoso with virtualized scrolling
 const VirtuosoTableComponents = {
@@ -23,11 +23,15 @@ const VirtuosoTableComponents = {
   TableBody: React.forwardRef((props, ref) => <TableBody {...props} ref={ref} />),
 };
 
-// Define the main ModulelTable component
-export default function ModulelTable({ isEditing, columns = [], initialRows = [] }) {
-  const [rows, setRows] = React.useState(initialRows); // State to manage table rows
-  const [editingCell, setEditingCell] = React.useState(null); // Track the currently edited cell
-  const [editValue, setEditValue] = React.useState(""); // Store the value of the cell being edited
+export default function ModuleTable({ isEditing, columns = [], initialRows = [] }) {
+  const [rows, setRows] = useState(initialRows);
+  const [editingCell, setEditingCell] = useState(null);
+  const [editValue, setEditValue] = useState("");
+
+  // 🔹 Ensure rows update when initialRows change
+  useEffect(() => {
+    setRows(initialRows);
+  }, [initialRows]);
 
   // Function to handle the edit button click
   const handleEditClick = (rowIndex, columnKey, value) => {
@@ -70,50 +74,40 @@ export default function ModulelTable({ isEditing, columns = [], initialRows = []
 
   // Function to render the content of each row
   function rowContent(index, row) {
-    return (
-      <React.Fragment>
-        {columns.map((column) => (
-          <TableCell key={`${index}-${column.dataKey}`} align="left">
-            {editingCell &&
-            editingCell.rowIndex === index &&
-            editingCell.columnKey === column.dataKey ? (
-              <TextField
-                value={editValue} // Current value of the input field
-                onChange={handleEditChange} // Handle input change
-                onBlur={handleEditSave} // Save on blur
-                onKeyDown={(e) => e.key === "Enter" && handleEditSave()} // Save on Enter key press
-                autoFocus // Auto-focus the input field
-                size="small" // Small input field
-                variant="standard" // Standard input field
-              />
-            ) : (
-              <>
-                {row[column.dataKey]} {/* Display cell value */}
-                {isEditing && column.dataKey !== "id" && (
-                  // Show edit button if editing is enabled and column is not "id"
-                  <IconButton
-                    sx={{ margin: "8px" }}
-                    onClick={() => handleEditClick(index, column.dataKey, row[column.dataKey])}
-                  >
-                    <EditIcon fontSize="small" /> {/* Edit icon */}
-                  </IconButton>
-                )}
-              </>
+    return columns.map((column) => (
+      <TableCell key={`${index}-${column.dataKey}`} align="left">
+        {editingCell && editingCell.rowIndex === index && editingCell.columnKey === column.dataKey ? (
+          <TextField
+            value={editValue}
+            onChange={handleEditChange}
+            onBlur={handleEditSave}
+            onKeyDown={(e) => e.key === "Enter" && handleEditSave()}
+            autoFocus
+            size="small"
+            variant="standard"
+          />
+        ) : (
+          <>
+            {row[column.dataKey]}
+            {isEditing && column.dataKey !== "id" && (
+              <IconButton sx={{ margin: "8px" }} onClick={() => handleEditClick(index, column.dataKey, row[column.dataKey])}>
+                <EditIcon fontSize="small" />
+              </IconButton>
             )}
-          </TableCell>
-        ))}
-      </React.Fragment>
-    );
+          </>
+        )}
+      </TableCell>
+    ));
   }
 
   // Render the table component
   return (
     <Paper style={{ height: "100%", width: "100%", borderRadius: 0 }}>
       <TableVirtuoso
-        data={rows} // Pass rows data
-        components={VirtuosoTableComponents} // Use custom components
-        fixedHeaderContent={fixedHeaderContent} // Render fixed header
-        itemContent={rowContent} // Render each row's content
+        data={rows}
+        components={VirtuosoTableComponents}
+        fixedHeaderContent={fixedHeaderContent}
+        itemContent={rowContent} // 🔹 Now correctly returning an array of TableCells
       />
     </Paper>
   );
