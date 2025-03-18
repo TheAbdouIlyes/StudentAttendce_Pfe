@@ -66,7 +66,7 @@ const NAVIGATION = [
   { kind: 'header', title: 'Exit' },
 
   { 
-    segment: 'logout', 
+    segment: './', 
     title: 'Logout', 
     icon: <ExitToAppIcon />, 
     // onClick: () => {
