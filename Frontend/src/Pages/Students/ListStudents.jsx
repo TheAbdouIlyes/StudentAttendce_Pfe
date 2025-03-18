@@ -23,7 +23,7 @@ export default function ListStudents() {
       <div className="MainSection-Top">
         <h1 className="StudentListTitle">Student List</h1>
         <div style={{ display: "flex", gap: "10px" }}>
-          <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate("/AddStudent")}>
+          <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate("AddStudent")}>
             Add
           </Button>
           <Button

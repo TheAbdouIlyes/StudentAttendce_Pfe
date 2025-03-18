@@ -15,7 +15,7 @@ import {
   FormControl,
   InputLabel
 } from "@mui/material";
-import ReturnButton from "./../comps/ReturnButton";
+import ReturnButton from "../../comps/ReturnButton";
 
 export default function AddTeacher() {
 //   const { speciality, level } = useParams();
