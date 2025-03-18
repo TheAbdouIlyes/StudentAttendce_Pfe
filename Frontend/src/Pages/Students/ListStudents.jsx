@@ -18,7 +18,10 @@ export default function ListStudents() {
     { id: 2, firstName: "Bob", lastName: "Smith", email: "bob@example.com", speciality: "Biology", yearOfStudy: "L2" },
     { id: 3, firstName: "Charlie", lastName: "Brown", email: "charlie@example.com", speciality: "Medicine", yearOfStudy: "L3" },
     { id: 4, firstName: "David", lastName: "Williams", email: "david@example.com", speciality: "Informatics", yearOfStudy: "M1" },
-    { id: 5, firstName: "Emma", lastName: "Davis", email: "emma@example.com", speciality: "Biology", yearOfStudy: "M2" }
+    { id: 5, firstName: "Emma", lastName: "Davis", email: "emma@example.com", speciality: "Biology", yearOfStudy: "M2" },
+    { id: 5, firstName: "Emma", lastName: "Davis", email: "emma@example.com", speciality: "Biology", yearOfStudy: "M2" },
+    { id: 5, firstName: "Emma", lastName: "Davis", email: "emma@example.com", speciality: "Biology", yearOfStudy: "M2" },
+    { id: 5, firstName: "Emma", lastName: "Davis", email: "emma@example.com", speciality: "Biology", yearOfStudy: "M2" },
   ]);
 
   const [selectedStudentId, setSelectedStudentId] = useState(null);

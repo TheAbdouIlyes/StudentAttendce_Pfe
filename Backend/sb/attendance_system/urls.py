@@ -29,7 +29,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 urlpatterns = [
 
     path('admin/', admin.site.urls),
-    
+
     path('generate-qr/', GenerateQRCode.as_view(), name='generate-qr'),
     path("exam/update/<int:pk>/",ExamUpdate.as_view(),name='exam_update'),
     path('teacher_l/',login_with_matricul_secret,name='t_login'),

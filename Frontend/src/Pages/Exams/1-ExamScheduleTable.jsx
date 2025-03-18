@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import "./ExamScheduleTable.css";
+import React, { useState, useEffect } from "react";  // Import React and necessary hooks
+import { useParams } from "react-router-dom";  // Import useParams to get URL parameters
+import "./ExamScheduleTable.css";  // Import CSS file for styling
 import {
   Table,
   TableBody,
@@ -8,158 +9,142 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Menu,
-  MenuItem,
   Button,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  TextField
-} from "@mui/material";
+  TextField,
+} from "@mui/material";  // Import Material UI components for styling
 
-const modules = ["Math", "Physics", "Chemistry", "Biology", "English", "History", "Geography", "Computer Science", "Economics", "Law", "Philosophy", "Psychology"];
-const places = ["Amphi A", "Amphi B", "Amphi C"];
-
+// Define the ExamScheduleTable component
 const ExamScheduleTable = () => {
-  const [year, setYear] = useState("L1");
+  // Get the speciality, year, and semester from the URL using useParams
+  const { speciality, year, semester } = useParams();
 
-  const [newDate, setNewDate] = useState("");
+  // State variables
+  const [examData, setExamData] = useState([]); // Stores fetched exam data
+  const [editing, setEditing] = useState(false); // Toggle between edit and view mode
+  const [editedData, setEditedData] = useState([]); // Stores modified exam data
 
-  const headers = [
-    "Date",
-    "8:00-9:30",
-    "9:30-10:00",
-    "10:00-11:30",
-    "11:30-12:00",
-    "12:00-13:30",
-    "13:30-14:00",
-    "14:00-15:30",
-    "15:30-16:00",
-  ];
+  // Fetch exam data from the backend when the component mounts or URL parameters change
+  useEffect(() => {
+    fetch(`http://127.0.0.1:8000/exam_list/${year}/${speciality}`)
+      .then((response) => response.json()) // Convert response to JSON
+      .then((data) => {
+        setExamData(data); // Store the fetched data
+        setEditedData(data); // Initialize edited data with fetched data
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, [year, speciality, semester]); // Dependencies ensure re-fetching when these values change
 
-  const [examData, setExamData] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedCell, setSelectedCell] = useState(null);
-  const [selectingPlace, setSelectingPlace] = useState(false);
-
-  const handleClick = (event, rowIndex, slotIndex) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedCell({ rowIndex, slotIndex });
+  // Function to enable edit mode
+  const handleEdit = () => {
+    setEditing(true);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-    setSelectedCell(null);
-    setSelectingPlace(false);
+  console.log("exams data", examData);
+
+  // Function to save edited data and send updates to the backend
+  const handleSave = () => {
+    editedData.forEach((exam) => {
+      fetch(`http://127.0.0.1:8000/exam/update/${exam.id}/`, {
+        method: "PUT", // Use PUT to update data
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subject: exam.subject, // Keep the same subject
+          date: exam.date, // Updated date
+          amphi: exam.amphi, // Updated place
+          time: exam.time, // Updated time
+        }),
+      })
+        .then((response) => response.json()) // Convert response to JSON
+        .catch((error) => console.error("Error updating data:", error));
+    });
+
+    setExamData(editedData); // Update exam data with modified values
+    setEditing(false); // Exit edit mode
   };
 
-  const handleSelectModule = (module) => {
-    setSelectingPlace(module);
+  // Function to handle input changes while editing
+  const handleChange = (index, field, value) => {
+    const updatedExams = [...editedData]; // Create a copy of the edited data
+    updatedExams[index][field] = value; // Update the specific field in the selected exam
+    setEditedData(updatedExams); // Update the state with modified data
   };
 
-  const handleSelectPlace = (place) => {
-    if (!selectedCell || !selectingPlace) return;
-    const { rowIndex, slotIndex } = selectedCell;
-    const updatedData = [...examData];
-    updatedData[rowIndex].slots[slotIndex] = { module: selectingPlace, place };
-    setExamData(updatedData);
-    handleClose();
-  };
-
-  const handleRemoveModule = (rowIndex, slotIndex) => {
-    const updatedData = [...examData];
-    updatedData[rowIndex].slots[slotIndex] = { module: "", place: "" };
-    setExamData(updatedData);
-  };
-
-  const handleResetTable = () => {
-    if (window.confirm("Are you sure you want to clear the schedule?")) {
-      setExamData([]);
-    }
-  };
-
-  const handleAddDate = () => {
-    if (!newDate) return;
-    setExamData([...examData, { date: newDate, slots: Array(8).fill({ module: "", place: "" }) }]);
-    setNewDate("");
+  // Function to format time as hh:mm
+  const formatTime = (timeString) => {
+    if (!timeString) return "";
+    const [hours, minutes] = timeString.split(":"); // Extract hours and minutes
+    return `${hours}:${minutes}`; // Ensure hh:mm format
   };
 
   return (
     <>
-      <div className="TopExamsTable">
-       
+      {/* Button to toggle between Edit and Save modes */}
+      <Button
+        variant="contained"
+        color={editing ? "primary" : "secondary"}
+        onClick={editing ? handleSave : handleEdit}
+      >
+        {editing ? "Save" : "Edit"}
+      </Button>
 
-        <TextField 
-          label="Add Date" 
-          type="date" 
-          InputLabelProps={{ shrink: true }} 
-          value={newDate} 
-          onChange={(e) => setNewDate(e.target.value)}
-          sx={{height:5,padding:2}}
-        />
-
-        <div className="Exams-Buttons"> 
-          <Button variant="contained" color="primary" onClick={()=>console.log("ultimate Test :",examData)}>test</Button>
-          <Button variant="contained" color="primary" onClick={handleAddDate}>Add Date</Button>
-          <Button variant="contained" color="secondary" onClick={handleResetTable}>Reset Schedule</Button>
-        </div>
-        
-      </div>
-
+      {/* Table Container with Material UI styles */}
       <TableContainer component={Paper} className="Examan-MainTable">
         <Table>
           <TableHead>
             <TableRow>
-              {headers.map((header, index) => (
-                <TableCell key={index} align="center">{header}</TableCell>
-              ))}
+              <TableCell align="center">Date</TableCell>
+              <TableCell align="center">Exam</TableCell>
+              <TableCell align="center">Place</TableCell>
+              <TableCell align="center">Time</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {examData.map((row, rowIndex) => (
-              <TableRow key={rowIndex}>
-                <TableCell align="center">{row.date}</TableCell>
-                {row.slots.map((slot, slotIndex) => (
-                  <TableCell
-                    key={slotIndex}
-                    align="center"
-                    onClick={(event) => handleClick(event, rowIndex, slotIndex)}
-                  >
-                    {slot.module ? `${slot.module} (${slot.place})` : "-"}
-                    {slot.module && (
-                      <span
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRemoveModule(rowIndex, slotIndex);
-                        }}
-                        style={{ marginLeft: "5px", color: "red", cursor: "pointer" }}
-                      >
-                        ✖
-                      </span>
-                    )}
-                  </TableCell>
-                ))}
+            {examData.map((row, index) => (
+              <TableRow key={index}>
+                {/* Date Column: Editable when in edit mode */}
+                <TableCell align="center">
+                  {editing ? (
+                    <TextField
+                      type="date"
+                      value={editedData[index].date}
+                      onChange={(e) => handleChange(index, "date", e.target.value)}
+                    />
+                  ) : (
+                    row.date
+                  )}
+                </TableCell>
+
+                {/* Exam Column: Displays subject name */}
+                <TableCell align="center">{row.subject_name}</TableCell>
+
+                {/* Place Column: Editable when in edit mode */}
+                <TableCell align="center">
+                  {editing ? (
+                    <TextField
+                      value={editedData[index].amphi}
+                      onChange={(e) => handleChange(index, "amphi", e.target.value)}
+                    />
+                  ) : (
+                    row.amphi
+                  )}
+                </TableCell>
+
+                {/* Time Column: Editable when in edit mode */}
+                <TableCell align="center">
+                  {editing ? (
+                    <TextField
+                      type="time"
+                      value={editedData[index].time}
+                      onChange={(e) => handleChange(index, "time", e.target.value)}
+                    />
+                  ) : (
+                    formatTime(row.time) // Ensure hh:mm format when displaying
+                  )}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-          {!selectingPlace ? (
-            modules.map((module, index) => (
-              <MenuItem key={index} onClick={() => handleSelectModule(module)}>
-                {module}
-              </MenuItem>
-            ))
-          ) : (
-            places.map((place, index) => (
-              <MenuItem key={index} onClick={() => handleSelectPlace(place)}>
-                {place}
-              </MenuItem>
-            ))
-          )}
-        </Menu>
       </TableContainer>
     </>
   );
