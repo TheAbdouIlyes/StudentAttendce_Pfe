@@ -25,7 +25,7 @@ const ExamScheduleTable = () => {
 
   // Fetch exam data from the backend when the component mounts or URL parameters change
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/exam_list/${year}/${speciality}`)
+    fetch(`http://127.0.0.1:8000/exam_list/${year}/${speciality}/${semester}`)
       .then((response) => response.json()) // Convert response to JSON
       .then((data) => {
         setExamData(data); // Store the fetched data

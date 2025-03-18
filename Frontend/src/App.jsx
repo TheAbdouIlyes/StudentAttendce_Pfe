@@ -22,7 +22,7 @@ import StudentProfile from './StudentPages/espaceetudiant';
 import Dashboard from './Pages/Dashboard';
 import ListStudents from './Pages/Students/ListStudents';
 import ListTeachers from './Pages/ListTeachers';
-
+import EditStudent from './Pages/Students/EditStudent';
 import AddTeacher from './Pages/addTeacher';
 import ListExams from './Pages/Exams/ListExams';
 
@@ -138,6 +138,7 @@ function DashboardLayoutBasic() {
             <Route path="MenuStudent" element={<StudentMenu />} />
             <Route path="MenuStudent/:speciality/:year" element={<ListStudents />} />
             <Route path="MenuStudent/:speciality/:year/AddStudent" element={<AddStudent />} />
+            <Route path="MenuStudent/:speciality/:year/edit-student/:id" element={<EditStudent />} />
 
 
             <Route path="ListTeachers/addTeacher" element={<AddTeacher/>} />
