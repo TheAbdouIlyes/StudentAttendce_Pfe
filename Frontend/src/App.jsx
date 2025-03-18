@@ -117,7 +117,7 @@ function DashboardLayoutBasic() {
   const navigate = useNavigate();
 
   const validSpecialities = ["info", "physic", "gestion", "biology", "pharmacy", "medcine"];
-  const validYears = ["L1", "L2", "L3", "M1", "M2"];
+  const validYears = ["l1", "l2", "l3", "m1", "m2"];
 
 
   return (

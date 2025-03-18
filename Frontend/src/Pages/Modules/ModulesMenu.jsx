@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import "./ModulesMenu.css"; // Keep your CSS
 
 const modules = [
-  { id: 1, title: "L1", path: "/l1" },
-  { id: 2, title: "L2", path: "/l2" },
-  { id: 3, title: "L3", path: "/l3" },
-  { id: 4, title: "M1", path: "/m1" },
-  { id: 5, title: "M2", path: "/m2" },
+  { id: 1, title: "l1", path: "/l1" },
+  { id: 2, title: "l2", path: "/l2" },
+  { id: 3, title: "l3", path: "/l3" },
+  { id: 4, title: "m1", path: "/m1" },
+  { id: 5, title: "m2", path: "/m2" },
 ];
 
 export default function ModulesMenu() {

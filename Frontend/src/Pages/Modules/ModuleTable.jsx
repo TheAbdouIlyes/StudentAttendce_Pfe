@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -18,10 +18,15 @@ const VirtuosoTableComponents = {
   TableBody: React.forwardRef((props, ref) => <TableBody {...props} ref={ref} />),
 };
 
-export default function ModulelTable({ isEditing, columns=[], initialRows=[] }) {
-  const [rows, setRows] = React.useState(initialRows);
-  const [editingCell, setEditingCell] = React.useState(null);
-  const [editValue, setEditValue] = React.useState("");
+export default function ModuleTable({ isEditing, columns = [], initialRows = [] }) {
+  const [rows, setRows] = useState(initialRows);
+  const [editingCell, setEditingCell] = useState(null);
+  const [editValue, setEditValue] = useState("");
+
+  // 🔹 Ensure rows update when initialRows change
+  useEffect(() => {
+    setRows(initialRows);
+  }, [initialRows]);
 
   const handleEditClick = (rowIndex, columnKey, value) => {
     setEditingCell({ rowIndex, columnKey });
@@ -53,34 +58,30 @@ export default function ModulelTable({ isEditing, columns=[], initialRows=[] }) 
   }
 
   function rowContent(index, row) {
-    return (
-      <React.Fragment>
-        {columns.map((column) => (
-          <TableCell key={`${index}-${column.dataKey}`} align="left">
-            {editingCell && editingCell.rowIndex === index && editingCell.columnKey === column.dataKey ? (
-              <TextField
-                value={editValue}
-                onChange={handleEditChange}
-                onBlur={handleEditSave}
-                onKeyDown={(e) => e.key === "Enter" && handleEditSave()}
-                autoFocus
-                size="small"
-                variant="standard"
-              />
-            ) : (
-              <>
-                {row[column.dataKey]}
-                {isEditing && column.dataKey !== "id" && (
-                  <IconButton sx={{ margin: "8px" }} onClick={() => handleEditClick(index, column.dataKey, row[column.dataKey])}>
-                    <EditIcon fontSize="small" />
-                  </IconButton>
-                )}
-              </>
+    return columns.map((column) => (
+      <TableCell key={`${index}-${column.dataKey}`} align="left">
+        {editingCell && editingCell.rowIndex === index && editingCell.columnKey === column.dataKey ? (
+          <TextField
+            value={editValue}
+            onChange={handleEditChange}
+            onBlur={handleEditSave}
+            onKeyDown={(e) => e.key === "Enter" && handleEditSave()}
+            autoFocus
+            size="small"
+            variant="standard"
+          />
+        ) : (
+          <>
+            {row[column.dataKey]}
+            {isEditing && column.dataKey !== "id" && (
+              <IconButton sx={{ margin: "8px" }} onClick={() => handleEditClick(index, column.dataKey, row[column.dataKey])}>
+                <EditIcon fontSize="small" />
+              </IconButton>
             )}
-          </TableCell>
-        ))}
-      </React.Fragment>
-    );
+          </>
+        )}
+      </TableCell>
+    ));
   }
 
   return (
@@ -89,7 +90,7 @@ export default function ModulelTable({ isEditing, columns=[], initialRows=[] }) 
         data={rows}
         components={VirtuosoTableComponents}
         fixedHeaderContent={fixedHeaderContent}
-        itemContent={rowContent}
+        itemContent={rowContent} // 🔹 Now correctly returning an array of TableCells
       />
     </Paper>
   );

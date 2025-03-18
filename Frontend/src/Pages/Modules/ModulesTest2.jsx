@@ -1,124 +1,77 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ModelTable from "./ModuleTable";
+import ReturnButton from "../../comps/ReturnButton";
 import "./ModulesTest.css";
-import { Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ModelTable from './ModuleTable';
-import { useState,useEffect} from 'react';
-import { useNavigate } from "react-router-dom";
-import ReturnButton from '../../comps/ReturnButton';
-
-
-const modules1 = ["System d'exploitation 2", "Algo", "Mathématiques"];
-const modules2 = ["Physique", "Programmation", "Base de données", "Base de données", "Base de données", "Base de données", "Base de données", "Base de données", "Base de données", "Base de données", "Base de données"];
 
 export default function Modulestest() {
-
   const navigate = useNavigate();
+  const { speciality, year } = useParams();
 
+  const [modules1, setModules1] = useState([]); // Semester 1
+  const [modules2, setModules2] = useState([]); // Semester 2
+  const [isEditing, setIsEditing] = useState(false);
 
-    const columns2 = [
-        { width: 50, label: "ID", dataKey: "id" },
-        { width: 100, label: "Modules S2", dataKey: "name" },
-        { width: 50, label: "Coef", dataKey: "coef" },
-      
-      ];
+  useEffect(() => {
+    const fetchModules = async () => {
+      try {
+        const [response1, response2] = await Promise.all([
+          fetch(`http://127.0.0.1:8000/subject/${speciality}/${year}/s1/`),
+          fetch(`http://127.0.0.1:8000/subject/${speciality}/${year}/s2/`),
+        ]);
 
-      const columns1 = [
-        { width: 50, label: "ID", dataKey: "id" },
-        { width: 100, label: "Modules S1", dataKey: "name" },
-        { width: 50, label: "Coef", dataKey: "coef" },
-      
-      ];
-      
-      const initialRows = [
-        {id: 1, name: "tdg",coef:5 },
-        { id: 2, name: "asd2",coef:5 },
-        { id: 3, name: "logic",coef:5 },
-        { id: 4, name: "maths" ,coef:5},
-        { id: 5, name: "biology",coef:5 },
-        { id: 6, name: "chemistry",coef:5 },
-        { id: 7, name: "physics",coef:5 },
-        { id: 8, name: "history",coef:5 },
-        { id: 9, name: "english" ,coef:5},
-        { id: 10, name: "french" ,coef:5},
-        { id: 11, name: "spanish" ,coef:5},
-        
-      
-      ];
-      
+        const data1 = response1.ok ? await response1.json() : [];
+        const data2 = response2.ok ? await response2.json() : [];
 
-  
-    const [isEditing, setIsEditing] = useState(false);
-  
-    const handleClick = (event) => {
-      setAnchorEl(event.currentTarget);
+        setModules1(data1);
+        setModules2(data2);
+      } catch (error) {
+        console.error("Error fetching modules:", error);
+      }
     };
-    
-  
-    //Add ---------\
-    const handleAddStudent = () => {
-      // Implement your add student logic here
-      console.log("Add Model button clicked");
-    };
-  
-  
-    const handleEditStudent = () => {
-      console.log("Edit Model button clicked");
-      setIsEditing(prev=>!prev);
-    };
-  
-    const handleDeleteStudent = () => {
-      console.log("Delete Model button clicked");
-    };
-  
-  
-  
+
+    fetchModules();
+  }, [speciality, year]);
+
+  const columns = [
+
+    { width: 50, label: "ID", dataKey: "id" },
+    { width: 100, label: "Module", dataKey: "name" },
+  ];
+console.log(modules1,modules2);
+  const handleEdit = () => setIsEditing((prev) => !prev);
+  const handleDelete = () => console.log("Delete Module button clicked");
 
   return (
-    <div className='AllModules-Container'>
-      <div className='ModulesAll-TOP'>
-        <div>
+    <div className="AllModules-Container">
+      <div className="ModulesAll-TOP">
+        <ReturnButton />
+        <h3>Speciality: {speciality} | Level: {year}</h3>
 
-          <ReturnButton/>
-          
-
-          
-        </div>
-        <h3>Speciality </h3>
-
-
-        <div className='Buttons-side'>
-          <Button variant="contained" startIcon={<AddIcon />}   onClick={() => navigate("AddModules")} >
+        <div className="Buttons-side">
+          <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate("AddModules")}>
             Add
           </Button>
-
-          <Button variant="contained" startIcon={<EditIcon />} onClick={handleEditStudent}>
+          <Button variant="contained" startIcon={<EditIcon />} onClick={handleEdit}>
             Edit
           </Button>
-
-          <Button variant="contained" startIcon={<DeleteIcon />} onClick={handleDeleteStudent}>
+          <Button variant="contained" startIcon={<DeleteIcon />} onClick={handleDelete}>
             Delete
           </Button>
         </div>
       </div>
 
-      <div className='ModulesAll-Main'>
-          <div className='ModulesCard-Div'>
-             <ModelTable isEditing={isEditing} setIsEditing={setIsEditing} columns={columns1} initialRows={initialRows}  />
-
-
-          </div>
-          
-          <div className='ModulesCard-Div'>
-             {/* <ModelTable isEditing={isEditing} setIsEditing={setIsEditing} /> */}
-             <ModelTable isEditing={isEditing} setIsEditing={setIsEditing} columns={columns2} initialRows={initialRows}  />
-
-
-          </div>
-       
+      <div className="ModulesAll-Main">
+        <div className="ModulesCard-Div">
+          <ModelTable isEditing={isEditing} setIsEditing={setIsEditing} columns={columns} initialRows={modules1} />
+        </div>
+        <div className="ModulesCard-Div">
+          <ModelTable isEditing={isEditing} setIsEditing={setIsEditing} columns={columns} initialRows={modules2} />
+        </div>
       </div>
     </div>
   );
