@@ -21,7 +21,7 @@ const VirtuosoTableComponents = {
   TableHead: React.forwardRef((props, ref) => <TableHead {...props} ref={ref} />),
   TableRow, // Default TableRow component
   TableBody: React.forwardRef((props, ref) => <TableBody {...props} ref={ref} />),
-};
+}; 
 
 export default function ModuleTable({ isEditing, columns = [], initialRows = [] }) {
   const [rows, setRows] = useState(initialRows);

@@ -10,6 +10,7 @@ const ReturnButton = () => {
       variant="contained"
       startIcon={<ExitToAppIcon />}
       onClick={() => navigate(-1)} // Navigate back
+      sx={{height:40}}
     >
       Return
     </Button>
