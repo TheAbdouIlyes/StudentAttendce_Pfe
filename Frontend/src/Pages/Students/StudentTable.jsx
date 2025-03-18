@@ -21,11 +21,11 @@ export default function StudentTable({ students, navigate, onDelete ,showActions
           {students.map((student) => (
             <TableRow key={student.id}>
               <TableCell>{student.id}</TableCell>
-              <TableCell>{student.firstName}</TableCell>
-              <TableCell>{student.lastName}</TableCell>
+              <TableCell>{student.first_name}</TableCell>
+              <TableCell>{student.last_name}</TableCell>
               <TableCell>{student.email}</TableCell>
               <TableCell>{student.speciality}</TableCell>
-              <TableCell>{student.yearOfStudy}</TableCell>
+              <TableCell>{student.level}</TableCell>
               {showActions && (
                 <TableCell>
                   <Button variant="contained" color="primary" onClick={() => navigate(`./edit-student/${student.id}`)}>
