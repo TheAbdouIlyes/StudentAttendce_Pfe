@@ -22,6 +22,8 @@ import StudentProfile from './StudentPages/espaceetudiant';
 import Dashboard from './Pages/Dashboard';
 import ListStudents from './Pages/Students/ListStudents';
 import ListTeachers from './Pages/ListTeachers';
+
+import AddTeacher from './Pages/addTeacher';
 import ListExams from './Pages/Exams/ListExams';
 
 import AddModule from './Pages/Modules/AddModule';
@@ -138,7 +140,7 @@ function DashboardLayoutBasic() {
             <Route path="MenuStudent/:speciality/:year/AddStudent" element={<AddStudent />} />
 
 
-
+            <Route path="ListTeachers/addTeacher" element={<AddTeacher/>} />
             <Route path="ListTeachers" element={<ListTeachers />} />
             <Route path="ListExams" element={<ListExams />} />
             <Route path="ExamsForm" element={<ListExamsForm />} />

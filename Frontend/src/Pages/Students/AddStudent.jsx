@@ -18,15 +18,16 @@ import {
 import ReturnButton from "../../comps/ReturnButton";
 
 export default function AddStudent() {
-  const { speciality, year } = useParams();
+  const { speciality, level } = useParams();
   
   const [studentData, setStudentData] = useState({
-    firstName: "",
-    lastName: "",
-    year: year || "",
+    first_name: "",
+    last_name: "",
+    email:"",
+    level: level || "",
     speciality: speciality || "",
-    rollNumber: "",
-    matricule: ""
+    roll_number: "",
+    matricul: ""
   });
 
   const [students, setStudents] = useState([]); // Store students
@@ -37,14 +38,31 @@ export default function AddStudent() {
   };
 
   // Handle form submission
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!studentData.firstName || !studentData.lastName || !studentData.year || !studentData.speciality || !studentData.rollNumber || !studentData.matricule) {
+    if (!studentData.first_name || !studentData.last_name || !studentData.email || !studentData.level|| !studentData.speciality || !studentData.roll_number || !studentData.matricul) {
       alert("All fields are required!");
       return;
     }
+    try {
+      const response = await fetch("http://127.0.0.1:8000/stud/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(studentData),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        console.error("API Error Response:", responseData);
+        throw new Error(responseData?.detail || "Failed to add student.");
+      }
     setStudents([...students, studentData]); // Add student to table
-    setStudentData({ firstName: "", lastName: "", year: year || "", speciality: speciality || "", rollNumber: "", matricule: "" }); // Reset form
+    setStudentData({ first_name: "", last_name: "",email: "", level: level|| "", speciality: speciality || "", roll_number: "", matricul: "" }); // Reset form
+  } catch (error) {
+    console.error("Error:", error);
+    alert(error.message);
+  }
   };
 
   return (
@@ -52,23 +70,40 @@ export default function AddStudent() {
       <h2><ReturnButton/> Add a New Student</h2>
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-        <TextField label="First Name" name="firstName" value={studentData.firstName} onChange={handleChange} required />
-        <TextField label="Last Name" name="lastName" value={studentData.lastName} onChange={handleChange} required />
+        <TextField label="First Name" name="first_name" value={studentData.first_name} onChange={handleChange} required />
+        <TextField label="Last Name" name="last_name" value={studentData.last_name} onChange={handleChange} required />
+        <TextField label="email" name="email" value={studentData.email} onChange={handleChange} required />
+        <FormControl fullWidth required>
+  <InputLabel id="year-label">Year</InputLabel>
+  <Select
+    labelId="year-label"
+    id="year-select"
+    name="level"
+    value={studentData.level} // Ensure consistency between name and value binding
+    label="Year"
+    onChange={handleChange}
+  >
+    <MenuItem value="l1">L1</MenuItem>
+    <MenuItem value="l2">L2</MenuItem>
+    <MenuItem value="l3">L3</MenuItem>
+    <MenuItem value="m1">M1</MenuItem>
+    <MenuItem value="m2">M2</MenuItem>
+  </Select>
+</FormControl>
 
         <FormControl>
-          <InputLabel>Year</InputLabel>
-          <Select name="year" value={studentData.year} label="Year" onChange={handleChange} required disabled>
-            <MenuItem value="L1">L1</MenuItem>
-            <MenuItem value="L2">L2</MenuItem>
-            <MenuItem value="L3">L3</MenuItem>
-            <MenuItem value="M1">M1</MenuItem>
-            <MenuItem value="M2">M2</MenuItem>
-          </Select>
-        </FormControl>
-
-        <TextField label="Speciality" name="speciality" value={studentData.speciality} onChange={handleChange} required disabled />
-        <TextField label="Roll Number" name="rollNumber" value={studentData.rollNumber} onChange={handleChange} required />
-        <TextField label="Matricule" name="matricule" value={studentData.matricule} onChange={handleChange} required />
+                  <InputLabel>Speciality</InputLabel>
+                  <Select name="speciality" value={studentData.speciality} onChange={handleChange} required>
+                    <MenuItem value="info">Info</MenuItem>
+                    <MenuItem value="physic">Physic</MenuItem>
+                    <MenuItem value="gestion">Gestion</MenuItem>
+                    <MenuItem value="biology">Biology</MenuItem>
+                    <MenuItem value="pharmacy">Pharmacy</MenuItem>
+                    <MenuItem value="medicine">Medicine</MenuItem>
+                  </Select>
+                </FormControl>
+        <TextField label="Roll Number" name="roll_number" value={studentData.roll_number} onChange={handleChange} required />
+        <TextField label="Matricule" name="matricul" value={studentData.matricul} onChange={handleChange} required />
 
         <Button type="submit" variant="contained" color="primary">Add Student</Button>
       </form>
@@ -81,6 +116,7 @@ export default function AddStudent() {
               <TableRow>
                 <TableCell><b>First Name</b></TableCell>
                 <TableCell><b>Last Name</b></TableCell>
+                <TableCell><b>Email</b></TableCell>
                 <TableCell><b>Year</b></TableCell>
                 <TableCell><b>Speciality</b></TableCell>
                 <TableCell><b>Roll Number</b></TableCell>
@@ -90,12 +126,13 @@ export default function AddStudent() {
             <TableBody>
               {students.map((student, index) => (
                 <TableRow key={index}>
-                  <TableCell>{student.firstName}</TableCell>
-                  <TableCell>{student.lastName}</TableCell>
-                  <TableCell>{student.year}</TableCell>
+                  <TableCell>{student.first_name}</TableCell>
+                  <TableCell>{student.last_name}</TableCell>
+                  <TableCell>{student.email}</TableCell>
+                  <TableCell>{student.level}</TableCell>
                   <TableCell>{student.speciality}</TableCell>
-                  <TableCell>{student.rollNumber}</TableCell>
-                  <TableCell>{student.matricule}</TableCell>
+                  <TableCell>{student.roll_number}</TableCell>
+                  <TableCell>{student.matricul}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

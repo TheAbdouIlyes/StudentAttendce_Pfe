@@ -42,7 +42,7 @@ function espaceetudiant() {
     <div className="profile-container">
       <div className="profile-card">
         <div className="profile-header">
-          <GraduationCap className="header-icon" />
+         <BookOpen className="role-card-icon" />
           <h1>Student Profile</h1>
           <div className="matricul-number">{student.matricul}</div>
         </div>

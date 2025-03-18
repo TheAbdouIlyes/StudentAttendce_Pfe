@@ -12,10 +12,10 @@ import EditIcon from '@mui/icons-material/Edit'
 
 import DeleteIcon from '@mui/icons-material/Delete'
 import FilterIcon from '@mui/icons-material/FilterList'
-
+import { useNavigate } from "react-router-dom";
 
 export default function ListTeachers() {
-
+  const navigate = useNavigate();
    const [isEditing, setIsEditing] = useState(false);
   
   
@@ -58,7 +58,7 @@ export default function ListTeachers() {
         </div>
         
         <div className='Buttons-side'>
-          <Button variant="contained" startIcon={<AddIcon />}  onClick={handleAddTeacher} >
+        <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate("addTeacher")}>
             Add
           </Button>
 
