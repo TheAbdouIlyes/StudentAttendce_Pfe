@@ -20,7 +20,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from exams import views
 from exams.views import GenerateQRCode
-from exams.views import StudentProfileView,delete_subject,delete_exam,ExamListByLevelAndSpeciality,CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView,ExamUpdate,UpdateTeacherView,UpdateStudentView,teaching,teacher_present,ListStudentView,ListTeacherView,ListTeachView,ListSurveillanceView,studentListByspesialityandLevel,subjetListByspecialityandlevelandsemester,CheckTokenView,LogoutView
+from exams.views import subjectlist,Examlist,StudentProfileView,delete_subject,delete_exam,ExamListByLevelAndSpeciality,CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView,ExamUpdate,UpdateTeacherView,UpdateStudentView,teaching,teacher_present,ListStudentView,ListTeacherView,ListTeachView,ListSurveillanceView,studentListByspesialityandLevel,subjetListByspecialityandlevelandsemester,CheckTokenView,LogoutView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
@@ -53,10 +53,14 @@ urlpatterns = [
     path('check-token/', CheckTokenView.as_view(), name='check-token'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('exam_list/<level>/<speciality>',ExamListByLevelAndSpeciality.as_view(),name="exam_list"),
+    path('exam_list/<level>/<speciality>/<semester>',ExamListByLevelAndSpeciality.as_view(),name="exam_list"),
+
     path('delete_subject/<name>', delete_subject.as_view(), name='delete_subject'),
     path('delete_exam/<int:pk>', delete_exam.as_view(), name='delete_exam'),
     path('student/profile/',StudentProfileView.as_view(),name="student_profile"),
-
+    
+    path('exams/', Examlist.as_view(), name='exam-list'),
+    path('subjects/', subjectlist.as_view(), name='subject-list'),
+    
    ]
 

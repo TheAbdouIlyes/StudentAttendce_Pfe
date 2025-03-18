@@ -550,8 +550,8 @@ class ExamListByLevelAndSpeciality(generics.ListAPIView):
     def get_queryset(self):
         level = self.kwargs.get('level')  
         speciality = self.kwargs.get('speciality')
-
-        return Exam.objects.filter(subject__level=level, subject__speciality=speciality).select_related("subject")
+        semester=self.kwargs.get('semester')
+        return Exam.objects.filter(subject__level=level, subject__speciality=speciality,subject__semester=semester).select_related("subject")
     
 
 from rest_framework.views import APIView
@@ -629,3 +629,21 @@ class StudentProfileView(APIView):
 
         serializer = StudentSerializer(student_instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+class Examlist(APIView):
+
+    permission_classes = [AllowAny]
+    def get(self, request, *args, **kwargs):
+
+        exams = Exam.objects.all()
+        serializer = ExamSerializer(exams, many=True)
+        return Response(serializer.data)
+class subjectlist(APIView):
+
+    permission_classes = [AllowAny]
+    def get(self, request, *args, **kwargs):
+
+        subjects = subject.objects.all()
+        serializer = subjetSerializer(subjects, many=True)
+        return Response(serializer.data)
