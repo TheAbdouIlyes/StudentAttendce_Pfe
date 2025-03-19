@@ -70,15 +70,17 @@ const NAVIGATION = [
     title: 'Logout', 
     icon: <ExitToAppIcon />, 
      onClick: () => {
-        // Remove authentication data from localStorage
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("role");
+      console.log("Logout button clicked");
 
-    // Dispatch a custom event to notify other parts of the app
-    window.dispatchEvent(new Event("storage"));
-
-    // Optionally, navigate to the login page programmatically
-    window.location.href = "/"; // Replace with your router navigation logic if needed
+      // Remove authentication data from localStorage
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("role");
+    
+      // Dispatch a custom event to notify other parts of the app
+      window.dispatchEvent(new Event("storage"));
+    
+      // Optionally, navigate to the login page programmatically
+      window.location.href = "/";
     }
   },
 ];
