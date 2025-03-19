@@ -28,8 +28,8 @@ const ExamScheduleTable = () => {
     fetch(`http://127.0.0.1:8000/exam_list/${year}/${speciality}/${semester}`)
       .then((response) => response.json()) // Convert response to JSON
       .then((data) => {
-        setExamData(data); // Store the fetched data
-        setEditedData(data); // Initialize edited data with fetched data
+        setExamData(data.results); // Store the fetched data
+        setEditedData(data.results); // Initialize edited data with fetched data
       })
       .catch((error) => console.error("Error fetching data:", error));
   }, [year, speciality, semester]); // Dependencies ensure re-fetching when these values change
