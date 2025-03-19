@@ -654,3 +654,12 @@ class subjectlist(APIView):
         subjects = subject.objects.all()
         serializer = subjetSerializer(subjects, many=True)
         return Response(serializer.data)
+
+class teacherinfo(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        id = self.kwargs['pk']
+        teacher1 = get_object_or_404(teacher, id=id)
+        serializer = teacherSerializer(teacher1)
+        return Response(serializer.data,status=status.HTTP_200_OK)

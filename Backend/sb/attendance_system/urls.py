@@ -20,7 +20,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from exams import views
 from exams.views import GenerateQRCode
-from exams.views import subjectlist,Examlist,StudentProfileView,delete_subject,delete_exam,ExamListByLevelAndSpeciality,CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView,ExamUpdate,UpdateTeacherView,UpdateStudentView,teaching,teacher_present,ListStudentView,ListTeacherView,ListTeachView,ListSurveillanceView,studentListByspesialityandLevel,subjetListByspecialityandlevelandsemester,CheckTokenView,LogoutView
+from exams.views import teacherinfo,subjectlist,Examlist,StudentProfileView,delete_subject,delete_exam,ExamListByLevelAndSpeciality,CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView,ExamUpdate,UpdateTeacherView,UpdateStudentView,teaching,teacher_present,ListStudentView,ListTeacherView,ListTeachView,ListSurveillanceView,studentListByspesialityandLevel,subjetListByspecialityandlevelandsemester,CheckTokenView,LogoutView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
@@ -36,7 +36,7 @@ urlpatterns = [
     path('stud_l/',login_with_matricul_roll,name='s_login'),
     path('teacher/', CreateteacherView.as_view(), name='create-teacher'),
     path('t/', TokenObtainPairView.as_view(), name="get_token"),
-    path('subject/', subjectCreate.as_view(), name="subject_create"),
+    path('subject/',subjectCreate.as_view(), name="subject_create"),
     path('etu/<matricul>/exa/<exam_name>/', is_presente.as_view(), name="present"),
    # path('',.as_view(),name=),
     path('u_teacher/<int:teacher_id>',UpdateTeacherView.as_view(),name="update_teacher"),
@@ -61,6 +61,7 @@ urlpatterns = [
     
     path('exams/', Examlist.as_view(), name='exam-list'),
     path('subjects/', subjectlist.as_view(), name='subject-list'),
-    
+   
+   path('teacher/info/<int:pk>',teacherinfo.as_view(),name="teacherinfo"),
    ]
 
