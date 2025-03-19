@@ -23,7 +23,7 @@ function UserID() {
         {/* Role selection cards */}
         <div className="role-cards">
           {/* Admin Card */}
-          <button className="role-card" onClick={() => navigate("/Dashboard")}>
+          <button className="role-card" onClick={() => navigate("/Admin")}>
             <div className="role-card-content">
               <Users className="role-card-icon" />
               <h2>Admin</h2>
