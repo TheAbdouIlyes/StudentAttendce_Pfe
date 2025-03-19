@@ -77,7 +77,7 @@ export default function AddTeacher() {
         <TextField label="secret number" name="secret_number" value={teacherData.secret_number} onChange={handleChange} required />
         <TextField label="Matricule" name="matricul" value={teacherData.matricul} onChange={handleChange} required />
 
-        <Button type="submit" variant="contained" color="primary">Add Student</Button>
+        <Button type="submit" variant="contained" color="primary">Add Teacher</Button>
       </form>
 
       {/* Table to display students */}

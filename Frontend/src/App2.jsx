@@ -21,9 +21,10 @@ import StudentProfile from './StudentPages/espaceetudiant';
 // Import your pages
 import Dashboard from './Pages/Dashboard';
 import ListStudents from './Pages/Students/ListStudents';
-import ListTeachers from './Pages/ListTeachers';
-
-import AddTeacher from './Pages/addTeacher';
+import ListTeachers from './Pages/Teacher/ListTeachers';
+import EditStudent from './Pages/Students/EditStudent';
+import AddTeacher from './Pages/Teacher/AddTeacher';
+import EditTeacher from './Pages/Teacher/EditTeacher';
 import ListExams from './Pages/Exams/ListExams';
 
 import AddModule from './Pages/Modules/AddModule';
@@ -65,7 +66,7 @@ const NAVIGATION = [
   { kind: 'header', title: 'Exit' },
 
   { 
-    segment: 'logout', 
+    segment: './', 
     title: 'Logout', 
     icon: <ExitToAppIcon />, 
     // onClick: () => {
@@ -116,7 +117,7 @@ const Skeleton = styled('div')(({ theme, height }) => ({
 function DashboardLayoutBasic() {
   const navigate = useNavigate();
 
-  const validSpecialities = ["info", "physic", "gestion", "biology", "pharmacy", "medcine"];
+  const validSpecialities = ["info", "physic", "gestion", "biology", "pharmacy", "medicine"];
   const validYears = ["l1", "l2", "l3", "m1", "m2"];
 
 
@@ -133,12 +134,30 @@ function DashboardLayoutBasic() {
 
         <PageContainer className='MainPage-Conatiner'>
           <Routes>
-    
+            <Route path="dashboard" element={<Dashboard />} />
+
+            <Route path="MenuStudent" element={<StudentMenu />} />
+            <Route path="MenuStudent/:speciality/:year" element={<ListStudents />} />
+            <Route path="MenuStudent/:speciality/:year/AddStudent" element={<AddStudent />} />
+            <Route path="MenuStudent/:speciality/:year/edit-student/:id" element={<EditStudent />} />
+
+
+            <Route path="ListTeachers/addTeacher" element={<AddTeacher/>} />
+            <Route path="ListTeachers" element={<ListTeachers />} />
+            <Route path="ListTeachers/editTeacher/:id" element={<EditTeacher />} />
+
             <Route path="ListExams" element={<ListExams />} />
             <Route path="ExamsForm" element={<ListExamsForm />} />
+            {/* <Route path="ListModules" element={<ListModules />} /> */}
+            
+            {/* <Route path="ModulesTest" element={<ModulesTest />} /> */}
 
             <Route path="MenuModules" element={<ModulesMenu />} />
+            <Route path="MenuModules/:speciality/:year/AddModules" element={<AddModule />} />
 
+
+            <Route path="MenuModules/:speciality/:year" element={<ModulesTest />} />
+            
             <Route path="MenuExams" element={<ExamsMenu />} />
             <Route path="MenuExams/:speciality/:year/:semester" element={<ListExams />} />
 

@@ -81,8 +81,9 @@ const demoTheme = extendTheme({
     light: {
       palette: {
         primary: { main: '#01875f' }, // Light mode primary color (Green)
-        // background: { default: '#f5f5f5', 
-        //   // paper: '#f5f5f5' 
+        // background: { 
+          // default: '#f5f5f5', 
+          // paper: '#f5f5f5' 
         // },
         text: { primary: '#000000' }
       }
@@ -90,7 +91,10 @@ const demoTheme = extendTheme({
     dark: {
       palette: {
         primary: { main: '#01875f' }, // Dark Green
-        background: { default: '#000d09', paper: '#000d09' }, // Dark Green Background
+        background: { 
+          default: '#000d09', 
+          paper: '#000d09' 
+        }, // Dark Green Background
         text: { primary: '#ffffff' }
       }
     }
@@ -117,7 +121,7 @@ const Skeleton = styled('div')(({ theme, height }) => ({
 function DashboardLayoutBasic() {
   const navigate = useNavigate();
 
-  const validSpecialities = ["info", "physic", "gestion", "biology", "pharmacy", "medcine"];
+  const validSpecialities = ["info", "physic", "gestion", "biology", "pharmacy", "medicine"];
   const validYears = ["l1", "l2", "l3", "m1", "m2"];
 
 
@@ -192,6 +196,8 @@ export default function App() {
         <Route path="/Admin" element={<div className="ThePage"> <LogInAdmin/> </div>} />
         <Route path="/Student" element={<div className="ThePage"> <LogInStudent/> </div>} />
         <Route path='/student/profile' element={<StudentProfile/>}/>
+
+        
         {/* <Route path="/Teacher" element={<div className="ThePage"> <LogInTeacher/> </div>} />  */}
         <Route path="/*" element={<DashboardLayoutBasic />} />
         

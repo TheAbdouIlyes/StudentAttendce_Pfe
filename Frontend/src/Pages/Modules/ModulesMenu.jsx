@@ -3,40 +3,32 @@ import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import "./ModulesMenu.css"; // Keep your CSS
 
-const modules = [
-  { id: 1, title: "l1", path: "/l1" },
-  { id: 2, title: "l2", path: "/l2" },
-  { id: 3, title: "l3", path: "/l3" },
-  { id: 4, title: "m1", path: "/m1" },
-  { id: 5, title: "m2", path: "/m2" },
-];
+const modules = ["l1", "l2", "l3", "m1", "m2"];
+const categories = ["Info", "Physic", "Gestion", "Biology", "Pharmacy", "Medcine"];
 
 export default function ModulesMenu() {
   const navigate = useNavigate();
   const theme = useTheme(); // Detects dark or light mode
+  const isDarkMode = theme.palette.mode === "dark";
 
   return (
-    <div>
-        <h3>Modules</h3>
+    <div className={`menu-container ${isDarkMode ? "dark-mode" : "light-mode"}`}>
+      <h2 className="menu-title">Choose Your Specialty & Level</h2>
 
-    
-        <div className={`container ${theme.palette.mode === "dark" ? "dark-mode" : "light-mode"}`}>
-
-            
-        {["info", "physic", "gestion", "biology", "pharmacy", "medcine"].map((category, index) => (
-            <div key={index} className="spec">
-            <h2>{category}</h2>
-            <div className="contener">
-                {modules.map((module) => (
-                <div key={module.id} className="spec" onClick={() => navigate(`/MenuModules/${category}/${module.title}`)}>
-                  
-                    <h2>{module.title}</h2>
+      <div className="categories-grid">
+        {categories.map((category, index) => (
+          <div key={index} className="category-card">
+            <h3 className="category-title">{category}</h3>
+            <div className="modules-grid">
+              {modules.map((module, idx) => (
+                <div key={idx} className="module-card" onClick={() => navigate(`/MenuModules/${category.toLowerCase()}/${module}`)}>
+                  <h4>{module}</h4>
                 </div>
-                ))}
+              ))}
             </div>
-            </div>
+          </div>
         ))}
-        </div>
+      </div>
     </div>
   );
 }

@@ -3,7 +3,10 @@ import { TextField, Button, Paper } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import ReturnButton from "../../comps/ReturnButton";
 
+
 export default function EditTeacher() {
+
+
   const navigate = useNavigate();
   const { id } = useParams(); // Extract ID from URL
   const [formData, setFormData] = useState({
@@ -25,7 +28,7 @@ export default function EditTeacher() {
       }
 
       try {
-        const response = await fetch(`http://127.0.0.1:8000/teacher/${id}/`, {
+        const response = await fetch(`http://127.0.0.1:8000/teacher/info/${id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -59,7 +62,7 @@ export default function EditTeacher() {
 
   const handleSave = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/teacher/${id}/`, {
+      const response = await fetch(`http://127.0.0.1:8000/u_teacher/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +75,7 @@ export default function EditTeacher() {
         throw new Error("Failed to update teacher");
       }
 
-      navigate("/teachers"); // Redirect after saving
+      navigate(-1); // Redirect after saving
     } catch (err) {
       console.error("Error updating teacher:", err);
       setError("Failed to update teacher");

@@ -339,8 +339,8 @@ class UpdateStudentView(APIView):
             return Response({"error": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
 
         # Ensure the user updating is the owner OR an admin (optional check)
-        if request.user != student_instance.Name and not request.user.is_staff:
-            return Response({"error": "You do not have permission to update this student."}, status=status.HTTP_403_FORBIDDEN)
+        # if request.user != student_instance.Name and not request.user.is_staff:
+            # return Response({"error": "You do not have permission to update this student."}, status=status.HTTP_403_FORBIDDEN)
 
         # Get updated fields from request
         first_name = request.data.get("first_name", student_instance.Name.first_name)
@@ -655,5 +655,21 @@ class subjectlist(APIView):
         serializer = subjetSerializer(subjects, many=True)
         return Response(serializer.data)
 
+class teacherinfo(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        id = self.kwargs['pk']
+        teacher1 = get_object_or_404(teacher, id=id)
+        serializer = teacherSerializer(teacher1)
+        return Response(serializer.data,status=status.HTTP_200_OK)
 
 
+class studentinfo(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        id = self.kwargs['pk']
+        student1 = get_object_or_404(Student, id=id)
+        serializer = StudentSerializer(student1)
+        return Response(serializer.data,status=status.HTTP_200_OK)
