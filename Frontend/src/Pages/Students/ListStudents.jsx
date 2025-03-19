@@ -18,7 +18,7 @@ export default function ListStudents() {
         }
         return response.json();
       })
-      .then((data) => setStudents(data))
+      .then((data) => setStudents(data.results))
       .catch((error) => console.error("Error fetching students:", error));
   }, []);
 

@@ -24,8 +24,6 @@ from exams.views import subjectlist,Examlist,StudentProfileView,delete_subject,d
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
-
-
 urlpatterns = [
 
     path('admin/', admin.site.urls),
@@ -61,6 +59,7 @@ urlpatterns = [
     
     path('exams/', Examlist.as_view(), name='exam-list'),
     path('subjects/', subjectlist.as_view(), name='subject-list'),
-    
+
+
    ]
 

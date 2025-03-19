@@ -27,8 +27,8 @@ export default function Modulestest() {
         const data1 = response1.ok ? await response1.json() : [];
         const data2 = response2.ok ? await response2.json() : [];
 
-        setModules1(data1);
-        setModules2(data2);
+        setModules1(data1.results);
+        setModules2(data2.results);
       } catch (error) {
         console.error("Error fetching modules:", error);
       }

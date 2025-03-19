@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Student, Exam, Attendance,AuthTable,teacher,teach,subject,surveillance
+from .models import Student, Exam, Attendance,teacher,teach,subject,surveillance
 
 class StudentSerializer(serializers.ModelSerializer):
 

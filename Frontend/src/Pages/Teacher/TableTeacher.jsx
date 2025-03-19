@@ -16,19 +16,10 @@ import { useNavigate } from "react-router-dom";
 
 const baseColumns = [
   { width: 50, label: "ID", dataKey: "id" },
-  { width: 100, label: "First Name", dataKey: "firstName" },
-  { width: 150, label: "Last Name", dataKey: "lastName" },
+  { width: 100, label: "First Name", dataKey: "first_name" },
+  { width: 150, label: "Last Name", dataKey: "last_name" },
   { width: 220, label: "Email", dataKey: "email" },
-  { width: 200, label: "Modules", dataKey: "modules" }
 ];
-
-const initialRows = Array.from({ length: 10 }, (_, i) => ({
-  id: i + 1,
-  firstName: `Teacher ${String.fromCharCode(65 + (i % 5))}`,
-  lastName: `Last ${i + 1}`,
-  email: `teacher${i + 1}@example.com`,
-  modules: ["Math", "Science", "History"][i % 3]
-}));
 
 export default function TableTeacher({ showActions, setRows, rows }) {
   const navigate = useNavigate();

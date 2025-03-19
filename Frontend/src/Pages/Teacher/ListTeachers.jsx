@@ -13,19 +13,27 @@ export default function ListTeachers() {
   const [showActions, setShowActions] = useState(false);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/teacher_list/") // Ensure the endpoint is correct
+    fetch("http://127.0.0.1:8000/Teacher_list/") // Ensure the endpoint is correct
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch teachers");
         }
         return response.json();
       })
-      .then((data) => setRows(data))
+      .then((data) => {
+        // Handle API response format
+        if (Array.isArray(data)) {
+          setRows(data); // If it's a list
+        } else if (data.results) {
+          setRows(data.results); // If wrapped in an object
+        } else {
+          console.error("Unexpected API response format:", data);
+        }
+      })
       .catch((error) => console.error("Error fetching teachers:", error));
   }, []);
 
-
-  console.log("rows",rows)
+  console.log("Fetched Teachers:", rows);
 
   return (
     <div className="Teachers-Container">
