@@ -180,7 +180,8 @@ def login_with_matricul_secret(request):
             # Logs the user in
             return JsonResponse({
                 "access": str(refresh.access_token),
-                "refresh": str(refresh)
+                "refresh": str(refresh),
+               "role": "teacher"
             }, status=status.HTTP_200_OK)
         else:
             return JsonResponse({"error": "Invalid matricul or secret number"}, status=401)       
@@ -198,7 +199,8 @@ def login_with_matricul_roll(request):
             # Logs the user in
             return JsonResponse({
                 "access": str(refresh.access_token),
-                "refresh": str(refresh)
+                "refresh": str(refresh),
+                "role": "student"
             }, status=status.HTTP_200_OK)
         else:
             return JsonResponse({"error": "Invalid matricul or roll number"}, status=401)       
@@ -250,6 +252,15 @@ class CreateteacherView(APIView):
 
         # Create the AuthTable entry for the new user
         auth_table_entry = teacher.objects.create(user=new_user, secret_number=secret_number,  matricul= matricul)
+        subjects= subject.objects.all()  
+        presences = [teach(teacher= auth_table_entry, subject=subject1) for subject1 in subjects]
+        teach.objects.bulk_create(presences)  
+        
+
+        exams = Exam.objects.all()  
+        surveillances = [surveillance(teacher=auth_table_entry, exam=exam1) for exam1 in exams]
+        surveillance.objects.bulk_create(surveillances) 
+
         serializer =  teacherSerializer(auth_table_entry) 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -292,6 +303,9 @@ class CreatestudView(APIView):
 
         # Create the AuthTable entry for the new user
         auth_table_entry = Student.objects.create(Name=new_user, roll_number=roll_number,  matricul= matricul, level= level,speciality=speciality)
+        exams=Exam.objects.all()
+        presences = [Attendance(student=auth_table_entry, exam=exam1) for exam1 in exams]
+        Attendance.objects.bulk_create(presences)  
         serializer =  StudentSerializer(auth_table_entry) 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     

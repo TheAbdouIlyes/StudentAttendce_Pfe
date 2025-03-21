@@ -63,5 +63,6 @@ urlpatterns = [
     path('subjects/', subjectlist.as_view(), name='subject-list'),
    
    path('teacher/info/<int:pk>',teacherinfo.as_view(),name="teacherinfo"),
+   
    ]
 
