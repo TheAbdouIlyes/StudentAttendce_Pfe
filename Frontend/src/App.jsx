@@ -18,6 +18,7 @@ import "./App.css";
 import UserID from"./LogIn/UserID"
 import LogInStudent from "./LogIn/LogInStudent"
 import StudentProfile from './StudentPages/espaceetudiant';
+import AttendanceList from './StudentPages/AttendanceList';
 // Import your pages
 import Dashboard from './Pages/Dashboard';
 import ListStudents from './Pages/Students/ListStudents';
@@ -207,6 +208,8 @@ export default function App() {
         {/* Protected Routes for Students */}
         <Route element={<ProtectedRoute requiredRole="student" />}>
           <Route path="/student/profile" element={<StudentProfile />} />
+          <Route path="/student/exams" element={<ExamsMenu />} />
+          <Route path="/student/Attendance" element={<AttendanceList />} />
         </Route>
 
         {/* Redirect unknown routes to home */}

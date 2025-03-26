@@ -1,0 +1,106 @@
+/* Main container styles */
+.profile-container {
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #04892c, #d9ded9);
+    padding: 2rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .profile-card {
+    max-width: 64rem;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    padding: 2rem;
+  }
+  
+  .profile-header {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .profile-header h1 {
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+
+  /* Multi-Element Grid Layout */
+  .info-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  /* Individual Attendance Item */
+  .info-group {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .info-group:hover {
+    transform: scale(1.02);
+  }
+
+  .info-label {
+    font-weight: bold;
+    font-size: 0.9rem;
+    color: #f5f9f6;
+  }
+
+  .info-value {
+    color: white;
+    font-size: 1rem;
+  }
+
+  /* Attendance Chip */
+  .attendance-chip {
+    font-weight: bold;
+    padding: 0.3rem 0.8rem;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .present {
+    background-color: #04892c;
+    color: white;
+  }
+
+  .absent {
+    background-color: #d9534f;
+    color: white;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .info-section {
+      grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    }
+  }
+
+  /* Loading Screen */
+  .loading {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom right, #3263c7, #5c5cd5);
+    color: white;
+    font-size: 1.25rem;
+  }

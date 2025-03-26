@@ -677,3 +677,88 @@ class teacherinfo(APIView):
         teacher1 = get_object_or_404(teacher, id=id)
         serializer = teacherSerializer(teacher1)
         return Response(serializer.data,status=status.HTTP_200_OK)
+    
+
+
+
+
+
+
+from django.shortcuts import render, get_object_or_404
+
+
+from django.http import JsonResponse
+
+
+from django.http import JsonResponse
+
+
+def teacher_subjects(request):
+    teachers = teacher.objects.all()  # Fetch all teachers
+    teacher_list = []
+
+    for teacher1 in teachers:
+        # Make sure teacher.user exists and is a valid User instance
+        user = getattr(teacher1, "user", None)  # Fetch user safely
+        if not user:
+            continue  # Skip this teacher if user doesn't exist
+
+        teachings = teach.objects.filter(teacher=teacher1, teaching=True)
+        subjects = [teach.subject for teach in teachings]
+
+        teacher_data = {
+            "id": teacher1.id,
+            "first_name": user.first_name,  # Now it should work
+            "last_name": user.last_name,
+            "email": user.email,
+            "matricul": teacher1.matricul,
+            "secret_number": teacher1.secret_number,
+            "subjects": [
+                {
+                    "id": subject.id,
+                    "name": subject.name,
+                    "level": subject.level,
+                    "speciality": subject.speciality,
+                    "semester": subject.semester,
+                } for subject in subjects
+            ]
+        }
+        teacher_list.append(teacher_data)
+
+    return JsonResponse({"teachers": teacher_list})
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+
+
+
+class castomExam(APIView):
+   permission_classes = [IsAuthenticated]  # Only authenticated users can access
+
+   def get(self, request):
+        # Retrieve student based on the authenticated user
+        student_instance = get_object_or_404(Student, Name=request.user)  
+
+        # Get level and speciality
+        level1 = student_instance.level
+        speciality1 = student_instance.speciality
+
+        # Get subjects and exams
+        subject1 = subject.objects.filter(level=level1, speciality=speciality1)
+        exams = Exam.objects.filter(subject__in=subject1)
+
+        # Prepare exam data with attendance status
+        exam_data = []
+        for exam in exams:
+            attendance = Attendance.objects.filter(student=student_instance, exam=exam).first()
+            exam_data.append({
+                "exam": ExamSerializer(exam).data,
+                "is_present": attendance.is_present if attendance else False  # Default to False if no record exists
+            })
+
+        return Response(exam_data, status=status.HTTP_200_OK)
+
