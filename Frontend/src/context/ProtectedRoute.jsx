@@ -1,24 +1,45 @@
+import React, { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { getAccessToken } from "./authCheck"; 
 
-const ProtectedRoute = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [checkingAuth, setCheckingAuth] = useState(true);
+// Helper functions to retrieve auth data
+const getAccessToken = () => localStorage.getItem("accessToken");
+const getUserRole = () => localStorage.getItem("role")?.toLowerCase();
 
+const ProtectedRoute = ({ requiredRole }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(!!getAccessToken());
+  const [userRole, setUserRole] = useState(getUserRole());
+
+  // Function to check authentication and role
+  const checkAuth = () => {
+    setIsAuthenticated(!!getAccessToken());
+    setUserRole(getUserRole());
+  };
+
+  // Listen for storage changes across tabs
   useEffect(() => {
-    const checkAuth = async () => {
-      const token = await getAccessToken();
-      setIsAuthenticated(!!token);
-      setCheckingAuth(false);
+    window.addEventListener("storage", checkAuth);
+
+    return () => {
+      window.removeEventListener("storage", checkAuth);
     };
-    
+  }, []);
+
+  // Re-check authentication on component mount
+  useEffect(() => {
     checkAuth();
   }, []);
 
-  if (checkingAuth) return <div>Loading...</div>; // Show loading while checking authentication
+  // Redirect if NOT authenticated
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
 
-  return isAuthenticated ? children : <Navigate to="/admin" />;
+  // Redirect if role is incorrect
+  if (userRole !== requiredRole.toLowerCase()) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

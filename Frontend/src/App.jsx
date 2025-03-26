@@ -28,7 +28,7 @@ import EditTeacher from './Pages/Teacher/EditTeacher';
 import ListExams from './Pages/Exams/ListExams';
 
 import AddModule from './Pages/Modules/AddModule';
-
+import ProtectedRoute from './context/ProtectedRoute';
 import ModulesTest from './Pages/Modules/ModulesTest2';
 import ListExamsForm from './StudentPages/ListExamsForm';
 
@@ -69,10 +69,17 @@ const NAVIGATION = [
     segment: './', 
     title: 'Logout', 
     icon: <ExitToAppIcon />, 
-    // onClick: () => {
-    //   localStorage.removeItem('authToken'); // Clear authentication
-    //   window.location.href = '/login'; // Redirect to login page
-    // },
+     onClick: () => {
+        // Remove authentication data from localStorage
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("role");
+
+    // Dispatch a custom event to notify other parts of the app
+    window.dispatchEvent(new Event("storage"));
+
+    // Optionally, navigate to the login page programmatically
+    window.location.href = "/"; // Replace with your router navigation logic if needed
+    }
   },
 ];
 
@@ -137,7 +144,7 @@ function DashboardLayoutBasic() {
       <DashboardLayout>
 
         <PageContainer className='MainPage-Conatiner'>
-          <Routes>
+          <Routes >
             <Route path="dashboard" element={<Dashboard />} />
 
             <Route path="MenuStudent" element={<StudentMenu />} />
@@ -188,21 +195,24 @@ function DashboardLayoutBasic() {
 export default function App() {
   return (
     <Router>
-      
-      
       <Routes>
-       <Route path="/" element={<div className="ThePage"> <UserID/> </div>} />
-      
-        <Route path="/Admin" element={<div className="ThePage"> <LogInAdmin/> </div>} />
-        <Route path="/Student" element={<div className="ThePage"> <LogInStudent/> </div>} />
-        <Route path='/student/profile' element={<StudentProfile/>}/>
+        {/* Public Routes */}
+        <Route path="/" element={<div className="ThePage"> <UserID /> </div>} />
+        <Route path="/Admin" element={<div className="ThePage"> <LogInAdmin /> </div>} />
+        <Route path="/Student" element={<div className="ThePage"> <LogInStudent /> </div>} />
 
-        
-        {/* <Route path="/Teacher" element={<div className="ThePage"> <LogInTeacher/> </div>} />  */}
-        <Route path="/*" element={<DashboardLayoutBasic />} />
-        
-        
-        
+        {/* Protected Routes for Admin */}
+        <Route element={<ProtectedRoute requiredRole="admin" />}>
+          <Route path="/*" element={<DashboardLayoutBasic />} />
+        </Route>
+
+        {/* Protected Routes for Students */}
+        <Route element={<ProtectedRoute requiredRole="student" />}>
+          <Route path="/student/profile" element={<StudentProfile />} />
+        </Route>
+
+        {/* Redirect unknown routes to home */}
+        {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
       </Routes>
     </Router>
   );
