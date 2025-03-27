@@ -17,6 +17,10 @@ import logo from "./Logo.png";
 import "./App.css";
 import UserID from"./LogIn/UserID"
 import LogInStudent from "./LogIn/LogInStudent"
+
+////////////////////////////////
+import LogInTeacher from "./LogIn/LogInTeacher"
+
 import StudentProfile from './StudentPages/Espaceetudiant';
 import AttendanceList from './StudentPages/AttendanceList';
 // Import your pages
@@ -24,7 +28,7 @@ import Dashboard from './Pages/Dashboard';
 import ListStudents from './Pages/Students/ListStudents';
 import ListTeachers from './Pages/Teacher/ListTeachers';
 import EditStudent from './Pages/Students/EditStudent';
-import AddTeacher from './Pages/Teacher/AddTeacher';
+import AddTeacher from "./Pages/Teacher/AddTheTeacher";
 import EditTeacher from './Pages/Teacher/EditTeacher';
 import ListExams from './Pages/Exams/ListExams';
 
@@ -49,7 +53,7 @@ import PlanningExams from './StudentPages/PlanningExams';
 
 import QRCOde from "./Pages/QR-CodeTest/QRCOde";
 
-
+import The_API from "./HostingPhone";
 
 
 const NAVIGATION = [
@@ -91,6 +95,39 @@ const NAVIGATION = [
     }
   },
 ];
+
+
+
+const NAVIGATION_Teacher = [
+  { kind: 'header', title: 'Stats' },
+  { segment: 'Teacher/Dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
+  { kind: 'divider' },
+  { kind: 'header', title: 'Lists' },
+  
+
+  { kind: 'divider' },
+  { kind: 'header', title: 'Exit' },
+
+  { 
+    segment: './', 
+    title: 'Logout', 
+    icon: <ExitToAppIcon />, 
+     onClick: () => {
+      console.log("Logout button clicked");
+
+      // Remove authentication data from localStorage
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("role");
+    
+      // Dispatch a custom event to notify other parts of the app
+      window.dispatchEvent(new Event("storage"));
+    
+      // Optionally, navigate to the login page programmatically
+      window.location.href = "/";
+    }
+  },
+];
+
 
 const demoTheme = extendTheme({
   colorSchemes: { 
@@ -134,7 +171,7 @@ const Skeleton = styled('div')(({ theme, height }) => ({
 }));
 
 
-function DashboardLayoutBasic() {
+function AdminLayouts() {
   const navigate = useNavigate();
 
   const validSpecialities = ["info", "physic", "gestion", "biology", "pharmacy", "medicine"];
@@ -210,6 +247,37 @@ function DashboardLayoutBasic() {
 }
 
 
+function TeacherLayouts() {
+  const navigate = useNavigate();
+
+  const validSpecialities = ["info", "physic", "gestion", "biology", "pharmacy", "medicine"];
+  const validYears = ["l1", "l2", "l3", "m1", "m2"];
+
+
+  return (
+    <AppProvider 
+      navigation={NAVIGATION_Teacher} 
+      router={{ navigate }} 
+      theme={demoTheme}  
+      branding={{ logo: <img src={logo} style={{ width: "40px", height: "50px", borderRadius: "50%" }} /> ,title: <div className='TITLE-ALGER1'><h5 className='ALger1'>FACULTY OF SCIENCE UNIVERSITY OF ALGIERS 1</h5><br /><h5 className='ALger1'>كـلـيـة الـعلوم جـامـعـة الـجـزائـر 1</h5></div> }}
+      // sx={{color:"primary"}}
+    >
+    
+      <DashboardLayout>
+
+        <PageContainer className='MainPage-Conatiner'>
+          <Routes >
+            <Route path="dashboard" element={<Dashboard />} />
+
+           
+          </Routes>
+        </PageContainer>
+        
+      </DashboardLayout>
+    </AppProvider>
+  );
+}
+
 
 
 
@@ -221,10 +289,11 @@ export default function App() {
         <Route path="/" element={<div className="ThePage"> <UserID /> </div>} />
         <Route path="/Admin" element={<div className="ThePage"> <LogInAdmin /> </div>} />
         <Route path="/Student" element={<div className="ThePage"> <LogInStudent /> </div>} />
+        <Route path="/Teacher" element={<div className="ThePage"> <LogInTeacher /> </div>} />
 
         {/* Protected Routes for Admin */}
         <Route element={<ProtectedRoute requiredRole="admin" />}>
-          <Route path="/*" element={<DashboardLayoutBasic />} />
+          <Route path="/*" element={<AdminLayouts />} />
         </Route>
 
         {/* Protected Routes for Students */}
@@ -234,6 +303,13 @@ export default function App() {
           <Route path="/student/Attendance" element={<AttendanceList />} />
           <Route path="/student/planning" element={<PlanningExams/>} />
         </Route>
+
+
+         {/* Protected Routes for Teacher */}
+         <Route element={<ProtectedRoute requiredRole="teacher" />}>
+          <Route path="/teacher/*" element={<TeacherLayouts />} />
+        </Route>
+
 
         {/* Redirect unknown routes to home */}
         {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
