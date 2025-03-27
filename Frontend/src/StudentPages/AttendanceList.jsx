@@ -47,7 +47,7 @@ function ExamAttendance() {
                 <div key={index} className="info-group">
                   <div className="info-item">
                     <p className="info-label">📚 Subject</p>
-                    <p className="info-value">{item.exam.subject}</p>
+                    <p className="info-value">{item.exam.subject_name}</p>
                   </div>
 
                   <div className="info-item">

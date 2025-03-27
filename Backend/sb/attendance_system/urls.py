@@ -20,7 +20,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from exams import views
 from exams.views import GenerateQRCode
-from exams.views import TeacherDeleteAPIView,StudentDeleteAPIView,castomExam,teacher_subjects,teacherinfo,subjectlist,Examlist,StudentProfileView,delete_subject,delete_exam,ExamListByLevelAndSpeciality,CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView,ExamUpdate,UpdateTeacherView,UpdateStudentView,teaching,teacher_present,ListStudentView,ListTeacherView,ListTeachView,ListSurveillanceView,studentListByspesialityandLevel,subjetListByspecialityandlevelandsemester,CheckTokenView,LogoutView
+from exams.views import SubjectUpdateView,studentinfo,TeacherDeleteAPIView,StudentDeleteAPIView,castomExam,teacher_subjects,teacherinfo,subjectlist,Examlist,StudentProfileView,delete_subject,delete_exam,ExamListByLevelAndSpeciality,CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView,ExamUpdate,UpdateTeacherView,UpdateStudentView,teaching,teacher_present,ListStudentView,ListTeacherView,ListTeachView,ListSurveillanceView,studentListByspesialityandLevel,subjetListByspecialityandlevelandsemester,CheckTokenView,LogoutView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
@@ -59,12 +59,13 @@ urlpatterns = [
     
     path('exams/', Examlist.as_view(), name='exam-list'),
     path('subjects/', subjectlist.as_view(), name='subject-list'),
-   
+    path('student/info/<int:pk>',studentinfo.as_view(),name="studentinfo"),
    path('teacher/info/<int:pk>',teacherinfo.as_view(),name="teacherinfo"),
    path('teacher/subject',teacher_subjects,name="teacher_subjects"),
    path('student/exam',castomExam.as_view(),name='student_exam'),
 
    path('student/delete/<int:pk>/', StudentDeleteAPIView.as_view(), name='student_delete_api'),
    path('teacher/delete/<int:pk>/', TeacherDeleteAPIView.as_view(), name='teacher_delete_api'),
+   path("subject/update/<int:pk>/", SubjectUpdateView.as_view(), name="subject-update"),
    ]
 

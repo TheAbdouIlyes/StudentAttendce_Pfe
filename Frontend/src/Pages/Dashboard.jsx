@@ -2,9 +2,26 @@ import React from 'react'
 import "./Dashboard.css"
 
 export default function Dashboard() {
+async () => {
   
+    const response = await fetch("http://127.0.0.1:8000/check-token/", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+
+    if (data.expired) {
+      console.log("expired token")
+    } 
+  
+}
   return (
     <div className='Dashboard'>
+      <script></script>
       <button onClick={()=>{console.log("Logout button clicked");
 
 // Remove authentication data from localStorage
