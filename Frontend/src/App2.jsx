@@ -17,7 +17,7 @@ import logo from "./Logo.png";
 import "./App.css";
 import UserID from"./LogIn/UserID"
 import LogInStudent from "./LogIn/LogInStudent"
-import StudentProfile from './StudentPages/espaceetudiant';
+// import StudentProfile from './StudentPages/espaceetudiant';
 // Import your pages
 import Dashboard from './Pages/Dashboard';
 import ListStudents from './Pages/Students/ListStudents';
