@@ -25,7 +25,10 @@ function QRCOde({ onScan }) {
         onScan(result);
       }
     }
-
+    // handelscan(scanResult){
+    //    fetch()
+  
+    // }
     function error(err) {
       console.warn(err);
     }
@@ -36,7 +39,9 @@ function QRCOde({ onScan }) {
   return (
     <div className="App">
       <h1>QR Scanning for {speciality} {year} {semester} - {finalModule}</h1>
-      {scanResult ? <p>Scanned: {scanResult}</p> : <div id="reader">Waiting for scan...</div>}
+      {scanResult ?
+      
+      <p>Scanned: {scanResult}</p> : <div id="reader">Waiting for scan...</div>}
     </div>
   );
 }
