@@ -762,3 +762,35 @@ class castomExam(APIView):
 
         return Response(exam_data, status=status.HTTP_200_OK)
 
+from django.http import JsonResponse
+from django.views import View
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+
+from .models import Student, Attendance
+
+class StudentDeleteAPIView(APIView):
+    permission_classes = [AllowAny]
+    def delete(self, request, *args, **kwargs):
+        id1 = self.kwargs['pk']
+        student1 = get_object_or_404(Student, id=id1)
+        user = student1.Name
+        Attendance.objects.filter(student=student1).delete()  # Delete related attendance records
+        student1.delete()
+        user.delete()  # Delete the associated User instance
+        return JsonResponse({"message": "Student deleted successfully."}, status=200)
+
+class TeacherDeleteAPIView(APIView):
+    permission_classes = [AllowAny]
+    def delete(self, request, *args, **kwargs):
+        id1 = self.kwargs['pk']
+        teacher1 = get_object_or_404(teacher, id=id1)
+        user = teacher1.user
+        teach.objects.filter(teacher=teacher1).delete()  # Delete related attendance records
+        surveillance.objects.filter(teacher=teacher1).delete()
+        teacher1.delete()
+        user.delete()  # Delete the associated User instance
+        return JsonResponse({"message": "teacher deleted successfully."}, status=200)
+
+    
+
