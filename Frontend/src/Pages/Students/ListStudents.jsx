@@ -3,31 +3,45 @@ import "./ListStudents.css";
 import StudentTable from "./StudentTable";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
 
 export default function ListStudents() {
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
-  const [showActions, setShowActions] = useState(true);
+  const [showActions, setShowActions] = useState(false);
+  const [page, setPage] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
+  const rowsPerPage = 5;
 
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/student_list/") // Adjust the URL if necessary
+  const fetchStudents = (pageNumber = 1) => {
+    fetch(`http://127.0.0.1:8000/student_list/?page=${pageNumber}&page_size=${rowsPerPage}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch students");
         }
         return response.json();
       })
-      .then((data) => setStudents(data.results))
+      .then((data) => {
+        if (data.results) {
+          setStudents(data.results);
+          setTotalCount(data.count || 0);
+        } else {
+          console.error("Unexpected API response format:", data);
+        }
+      })
       .catch((error) => console.error("Error fetching students:", error));
-  }, []);
+  };
+
+  useEffect(() => {
+    fetchStudents(page + 1);
+  }, [page]);
 
   const handleDelete = (id) => {
     setStudents((prevStudents) => prevStudents.filter((student) => student.id !== id));
   };
 
-
-  console.log (students);
   return (
     <div className="Student-Container">
       <div className="MainSection-Top">
@@ -36,11 +50,27 @@ export default function ListStudents() {
           <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate("AddStudent")}>
             Add
           </Button>
+          <Button
+            variant="contained"
+            startIcon={showActions ? <VisibilityOffIcon /> : <VisibilityIcon />}
+            onClick={() => setShowActions((prev) => !prev)}
+          >
+            {showActions ? "Hide Actions" : "Show Actions"}
+          </Button>
         </div>
       </div>
 
       <div className="MainSection-Bottom">
-        <StudentTable students={students} navigate={navigate} onDelete={handleDelete} showActions={showActions} />
+        <StudentTable 
+          students={students} 
+          navigate={navigate} 
+          onDelete={handleDelete} 
+          showActions={showActions} 
+          page={page} 
+          setPage={setPage} 
+          totalCount={totalCount} 
+          rowsPerPage={rowsPerPage} 
+        />
       </div>
     </div>
   );

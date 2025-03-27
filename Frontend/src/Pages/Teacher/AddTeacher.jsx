@@ -1,9 +1,6 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import {
   TextField,
-  Select,
-  MenuItem,
   Button,
   Table,
   TableBody,
@@ -13,74 +10,91 @@ import {
   TableRow,
   Paper,
   FormControl,
-  InputLabel
+  InputLabel,
+  Select,
+  MenuItem
 } from "@mui/material";
 import ReturnButton from "../../comps/ReturnButton";
 
 export default function AddTeacher() {
-//   const { speciality, level } = useParams();
-  
-  const [teacherData, setteacherData] = useState({
+  const [teacherData, setTeacherData] = useState({
     first_name: "",
     last_name: "",
     email: "",
     secret_number: "",
     matricul: ""
   });
+  
+  const [teachers, setTeachers] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState("");
+  const [selectedTeacher, setSelectedTeacher] = useState("");
 
-  const [teachers, setteachers] = useState([]); // Store students
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/subjects/")
+      .then((res) => res.json())
+      .then((data) => setSubjects(data))
+      .catch((err) => console.error("Error fetching subjects:", err));
+  }, []);
 
-  // Handle input changes
   const handleChange = (event) => {
-    setteacherData({ ...teacherData, [event.target.name]: event.target.value });
+    setTeacherData({ ...teacherData, [event.target.name]: event.target.value });
   };
 
-  // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!teacherData.first_name || !teacherData.last_name || !teacherData.email || !teacherData.secret_number || !teacherData.matricul) {
-      alert("All fields are required!");
-      return;
-    }
     try {
       const response = await fetch("http://127.0.0.1:8000/teacher/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(teacherData),
+        body: JSON.stringify(teacherData)
       });
 
-      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error("Failed to add teacher");
+      }
+      setTeachers([...teachers, teacherData]);
+      setTeacherData({ first_name: "", last_name: "", email: "", secret_number: "", matricul: "" });
+    } catch (error) {
+      console.error("Error:", error);
+      alert(error.message);
+    }
+  };
+
+  const assignSubject = async () => {
+    if (!selectedTeacher || !selectedSubject) {
+      alert("Please select a teacher and a subject");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/tea/${selectedTeacher}/sub/${selectedSubject}/`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" }
+      });
 
       if (!response.ok) {
-        console.error("API Error Response:", responseData);
-        throw new Error(responseData?.detail || "Failed to add teacher.");
+        throw new Error("Failed to assign subject");
       }
-    setteachers([...teachers, teacherData]); // Add student to table
-    setteacherData({ first_name: "", last_name: "",email: "", secret_number: "", matricul: "" }); // Reset form
-  } catch (error) {
-    console.error("Error:", error);
-    alert(error.message);
-  }
+      alert("Subject assigned successfully");
+    } catch (error) {
+      console.error("Error:", error);
+      alert(error.message);
+    }
   };
 
   return (
     <div style={{ padding: "20px", maxWidth: "600px", margin: "auto" }}>
-      <h2><ReturnButton/> Add a New Teacher</h2>
-
+      <h2><ReturnButton /> Add a New Teacher</h2>
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <TextField label="First Name" name="first_name" value={teacherData.first_name} onChange={handleChange} required />
         <TextField label="Last Name" name="last_name" value={teacherData.last_name} onChange={handleChange} required />
-        <TextField label="email" name="email" value={teacherData.email} onChange={handleChange} required />
-      
-
-      
-        <TextField label="secret number" name="secret_number" value={teacherData.secret_number} onChange={handleChange} required />
+        <TextField label="Email" name="email" value={teacherData.email} onChange={handleChange} required />
+        <TextField label="Secret Number" name="secret_number" value={teacherData.secret_number} onChange={handleChange} required />
         <TextField label="Matricule" name="matricul" value={teacherData.matricul} onChange={handleChange} required />
-
         <Button type="submit" variant="contained" color="primary">Add Teacher</Button>
       </form>
-
-      {/* Table to display students */}
+      
       {teachers.length > 0 && (
         <TableContainer component={Paper} style={{ marginTop: "20px" }}>
           <Table>
@@ -89,8 +103,6 @@ export default function AddTeacher() {
                 <TableCell><b>First Name</b></TableCell>
                 <TableCell><b>Last Name</b></TableCell>
                 <TableCell><b>Email</b></TableCell>
-
-                <TableCell><b>secret number</b></TableCell>
                 <TableCell><b>Matricule</b></TableCell>
               </TableRow>
             </TableHead>
@@ -100,7 +112,6 @@ export default function AddTeacher() {
                   <TableCell>{teacher.first_name}</TableCell>
                   <TableCell>{teacher.last_name}</TableCell>
                   <TableCell>{teacher.email}</TableCell>
-                  <TableCell>{teacher.secret_number}</TableCell>
                   <TableCell>{teacher.matricul}</TableCell>
                 </TableRow>
               ))}
@@ -108,6 +119,29 @@ export default function AddTeacher() {
           </Table>
         </TableContainer>
       )}
+      
+      <h3>Assign Subject to Teacher</h3>
+      <FormControl fullWidth>
+        <InputLabel>Teacher Matricule</InputLabel>
+        <Select value={selectedTeacher} onChange={(e) => setSelectedTeacher(e.target.value)}>
+          {teachers.map((teacher, index) => (
+            <MenuItem key={index} value={teacher.matricul}>{teacher.matricul}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      
+      <FormControl fullWidth style={{ marginTop: "10px" }}>
+        <InputLabel>Subject</InputLabel>
+        <Select value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)}>
+          {subjects.map((subject, index) => (
+            <MenuItem key={index} value={subject.name}>{subject.name}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      
+      <Button onClick={assignSubject} variant="contained" color="secondary" style={{ marginTop: "10px" }}>
+        Assign Subject
+      </Button>
     </div>
   );
 }

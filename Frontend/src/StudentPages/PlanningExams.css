@@ -1,0 +1,12 @@
+
+  /* Loading Screen */
+  .loading {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(to bottom right, #3263c7, #5c5cd5);
+    color: white;
+    font-size: 1.25rem;
+  }
+  

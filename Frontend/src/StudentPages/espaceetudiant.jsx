@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { GraduationCap, Download, User, Mail, Hash, BookOpen, Building2 } from 'lucide-react';
-import './espaceetudiant.css';
-
-function espaceetudiant() {
+import './Espaceetudiant.css';
+import Navbar from "./Navbar";
+function Espaceetudiant() {
   const [student, setStudent] = useState(null);
   const qrRef = useRef(null);
   const token = localStorage.getItem("accessToken");
@@ -39,8 +39,12 @@ function espaceetudiant() {
   }
 
   return (
+<div>
+  <Navbar />
     <div className="profile-container">
+    
       <div className="profile-card">
+      
         <div className="profile-header">
          <BookOpen className="role-card-icon" />
           <h1>Student Profile</h1>
@@ -112,7 +116,8 @@ function espaceetudiant() {
         </div>
       </div>
     </div>
+    </div>
   );
 }
 
-export default espaceetudiant;
+export default Espaceetudiant;

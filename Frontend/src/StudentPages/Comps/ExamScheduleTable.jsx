@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./ExamScheduleTable.css"
 import {
   Table,
   TableBody,

@@ -11,9 +11,12 @@ export default function ListTeachers() {
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);
   const [showActions, setShowActions] = useState(false);
+  const [page, setPage] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
+  const rowsPerPage = 5;
 
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/Teacher_list/") // Ensure the endpoint is correct
+  const fetchTeachers = (pageNumber = 1) => {
+    fetch(`http://127.0.0.1:8000/Teacher_list/?page=${pageNumber}&page_size=${rowsPerPage}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch teachers");
@@ -21,19 +24,19 @@ export default function ListTeachers() {
         return response.json();
       })
       .then((data) => {
-        // Handle API response format
-        if (Array.isArray(data)) {
-          setRows(data); // If it's a list
-        } else if (data.results) {
-          setRows(data.results); // If wrapped in an object
+        if (data.results) {
+          setRows(data.results);
+          setTotalCount(data.count || 0);
         } else {
           console.error("Unexpected API response format:", data);
         }
       })
       .catch((error) => console.error("Error fetching teachers:", error));
-  }, []);
+  };
 
-  console.log("Fetched Teachers:", rows);
+  useEffect(() => {
+    fetchTeachers(page + 1);
+  }, [page]);
 
   return (
     <div className="Teachers-Container">
@@ -53,7 +56,15 @@ export default function ListTeachers() {
         </div>
       </div>
       <div className="ListTeacher-Main">
-        <TableTeacher showActions={showActions} setRows={setRows} rows={rows} />
+        <TableTeacher 
+          showActions={showActions} 
+          setRows={setRows} 
+          rows={rows} 
+          page={page} 
+          setPage={setPage} 
+          totalCount={totalCount} 
+          rowsPerPage={rowsPerPage} 
+        />
       </div>
     </div>
   );

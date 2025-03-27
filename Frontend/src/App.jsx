@@ -17,7 +17,8 @@ import logo from "./Logo.png";
 import "./App.css";
 import UserID from"./LogIn/UserID"
 import LogInStudent from "./LogIn/LogInStudent"
-import StudentProfile from './StudentPages/espaceetudiant';
+import StudentProfile from './StudentPages/Espaceetudiant';
+import AttendanceList from './StudentPages/AttendanceList';
 // Import your pages
 import Dashboard from './Pages/Dashboard';
 import ListStudents from './Pages/Students/ListStudents';
@@ -43,6 +44,12 @@ import { colors } from '@mui/material';
 
 import StudentMenu from './Pages/Students/StudentMenu';
 import AddStudent from './Pages/Students/AddStudent';
+
+import PlanningExams from './StudentPages/PlanningExams';
+
+import QRCOde from "./Pages/QR-CodeTest/QRCOde";
+
+
 
 
 const NAVIGATION = [
@@ -70,15 +77,17 @@ const NAVIGATION = [
     title: 'Logout', 
     icon: <ExitToAppIcon />, 
      onClick: () => {
-        // Remove authentication data from localStorage
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("role");
+      console.log("Logout button clicked");
 
-    // Dispatch a custom event to notify other parts of the app
-    window.dispatchEvent(new Event("storage"));
-
-    // Optionally, navigate to the login page programmatically
-    window.location.href = "/"; // Replace with your router navigation logic if needed
+      // Remove authentication data from localStorage
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("role");
+    
+      // Dispatch a custom event to notify other parts of the app
+      window.dispatchEvent(new Event("storage"));
+    
+      // Optionally, navigate to the login page programmatically
+      window.location.href = "/";
     }
   },
 ];
@@ -172,6 +181,14 @@ function DashboardLayoutBasic() {
             <Route path="MenuExams" element={<ExamsMenu />} />
             <Route path="MenuExams/:speciality/:year/:semester" element={<ListExams />} />
 
+            {/* <Route path="MenuExams/:speciality/:year/:semester/qr-scanner" element={<QRCOde />} /> */}
+            <Route path="MenuExams/:speciality/:year/:semester/:module/qr-scanner" element={<QRCOde />} />
+
+
+
+
+
+
             <Route
               path="*"
               element={
@@ -192,6 +209,10 @@ function DashboardLayoutBasic() {
   );
 }
 
+
+
+
+
 export default function App() {
   return (
     <Router>
@@ -209,6 +230,9 @@ export default function App() {
         {/* Protected Routes for Students */}
         <Route element={<ProtectedRoute requiredRole="student" />}>
           <Route path="/student/profile" element={<StudentProfile />} />
+          <Route path="/student/exams" element={<ExamsMenu />} />
+          <Route path="/student/Attendance" element={<AttendanceList />} />
+          <Route path="/student/planning" element={<PlanningExams/>} />
         </Route>
 
         {/* Redirect unknown routes to home */}

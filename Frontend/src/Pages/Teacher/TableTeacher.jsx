@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -21,13 +21,13 @@ const baseColumns = [
   { width: 220, label: "Email", dataKey: "email" },
 ];
 
-export default function TableTeacher({ showActions, setRows, rows }) {
+export default function TableTeacher({ showActions, setRows, rows, page, setPage, totalCount, rowsPerPage }) {
   const navigate = useNavigate();
-  const [page, setPage] = useState(0);
-  const rowsPerPage = 5;
 
-  const paginatedRows = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-  const handlePageChange = (_, newPage) => setPage(newPage);
+  const handlePageChange = (_, newPage) => {
+    setPage(newPage);
+  };
+
   const handleDelete = (id) => setRows(rows.filter((row) => row.id !== id));
 
   const columns = showActions
@@ -48,7 +48,7 @@ export default function TableTeacher({ showActions, setRows, rows }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {paginatedRows.map((row) => (
+            {rows.map((row) => (
               <TableRow key={row.id}>
                 {columns.map((column) => (
                   <TableCell key={column.dataKey} align="left">
@@ -71,7 +71,7 @@ export default function TableTeacher({ showActions, setRows, rows }) {
       </TableContainer>
       <TablePagination
         component="div"
-        count={rows.length}
+        count={totalCount}
         page={page}
         rowsPerPage={rowsPerPage}
         onPageChange={handlePageChange}

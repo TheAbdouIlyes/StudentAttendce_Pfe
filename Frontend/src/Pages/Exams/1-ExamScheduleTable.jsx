@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";  // Import React and necessary hooks
-import { useParams } from "react-router-dom";  // Import useParams to get URL parameters
-import "./ExamScheduleTable.css";  // Import CSS file for styling
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
+import "./ExamScheduleTable.css";
 import {
   Table,
   TableBody,
@@ -11,83 +12,88 @@ import {
   Paper,
   Button,
   TextField,
-} from "@mui/material";  // Import Material UI components for styling
+} from "@mui/material";
 
-// Define the ExamScheduleTable component
 const ExamScheduleTable = () => {
-  // Get the speciality, year, and semester from the URL using useParams
+
+  const navigate = useNavigate(); 
+
+
   const { speciality, year, semester } = useParams();
+  const [examData, setExamData] = useState([]);
+  const [editing, setEditing] = useState(false);
+  const [editedData, setEditedData] = useState([]);
+  const [showQrColumn, setShowQrColumn] = useState(false); // NEW: Toggle QR column
 
-  // State variables
-  const [examData, setExamData] = useState([]); // Stores fetched exam data
-  const [editing, setEditing] = useState(false); // Toggle between edit and view mode
-  const [editedData, setEditedData] = useState([]); // Stores modified exam data
-
-  // Fetch exam data from the backend when the component mounts or URL parameters change
   useEffect(() => {
     fetch(`http://127.0.0.1:8000/exam_list/${year}/${speciality}/${semester}`)
-      .then((response) => response.json()) // Convert response to JSON
+      .then((response) => response.json())
       .then((data) => {
-        setExamData(data.results); // Store the fetched data
-        setEditedData(data.results); // Initialize edited data with fetched data
+        setExamData(data.results);
+        setEditedData(data.results);
       })
       .catch((error) => console.error("Error fetching data:", error));
-  }, [year, speciality, semester]); // Dependencies ensure re-fetching when these values change
+  }, [year, speciality, semester]);
 
-  // Function to enable edit mode
   const handleEdit = () => {
     setEditing(true);
   };
 
-  console.log("exams data", examData);
-
-  // Function to save edited data and send updates to the backend
   const handleSave = () => {
     editedData.forEach((exam) => {
       fetch(`http://127.0.0.1:8000/exam/update/${exam.id}/`, {
-        method: "PUT", // Use PUT to update data
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          subject: exam.subject, // Keep the same subject
-          date: exam.date, // Updated date
-          amphi: exam.amphi, // Updated place
-          time: exam.time, // Updated time
+          subject: exam.subject,
+          date: exam.date,
+          amphi: exam.amphi,
+          time: exam.time,
         }),
       })
-        .then((response) => response.json()) // Convert response to JSON
+        .then((response) => response.json())
         .catch((error) => console.error("Error updating data:", error));
     });
 
-    setExamData(editedData); // Update exam data with modified values
-    setEditing(false); // Exit edit mode
+    setExamData(editedData);
+    setEditing(false);
   };
 
-  // Function to handle input changes while editing
   const handleChange = (index, field, value) => {
-    const updatedExams = [...editedData]; // Create a copy of the edited data
-    updatedExams[index][field] = value; // Update the specific field in the selected exam
-    setEditedData(updatedExams); // Update the state with modified data
+    const updatedExams = [...editedData];
+    updatedExams[index][field] = value;
+    setEditedData(updatedExams);
   };
 
-  // Function to format time as hh:mm
   const formatTime = (timeString) => {
     if (!timeString) return "";
-    const [hours, minutes] = timeString.split(":"); // Extract hours and minutes
-    return `${hours}:${minutes}`; // Ensure hh:mm format
+    const [hours, minutes] = timeString.split(":");
+    return `${hours}:${minutes}`;
   };
 
   return (
     <>
-      {/* Button to toggle between Edit and Save modes */}
-      <Button
-        variant="contained"
-        color={editing ? "primary" : "secondary"}
-        onClick={editing ? handleSave : handleEdit}
-      >
-        {editing ? "Save" : "Edit"}
-      </Button>
+      {/* Buttons to toggle edit mode and QR column */}
+      <div style={{ marginBottom: "10px" }}>
+        <Button
+          variant="contained"
+          color={editing ? "primary" : "secondary"}
+          onClick={editing ? handleSave : handleEdit}
+          style={{ marginRight: "10px" }}
+        >
+          {editing ? "Save" : "Edit"}
+        </Button>
 
-      {/* Table Container with Material UI styles */}
+        <Button
+          variant="contained"
+          color="info"
+          onClick={() => setShowQrColumn(!showQrColumn)}
+        >
+          {showQrColumn ? "Hide QR Scanner" : "Show QR Scanner"}
+        </Button>
+      </div>
+
+      {/* Exam Table */}
       <TableContainer component={Paper} className="Examan-MainTable">
         <Table>
           <TableHead>
@@ -96,12 +102,12 @@ const ExamScheduleTable = () => {
               <TableCell align="center">Exam</TableCell>
               <TableCell align="center">Place</TableCell>
               <TableCell align="center">Time</TableCell>
+              {showQrColumn && <TableCell align="center">QR Scan</TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
             {examData.map((row, index) => (
               <TableRow key={index}>
-                {/* Date Column: Editable when in edit mode */}
                 <TableCell align="center">
                   {editing ? (
                     <TextField
@@ -114,10 +120,8 @@ const ExamScheduleTable = () => {
                   )}
                 </TableCell>
 
-                {/* Exam Column: Displays subject name */}
                 <TableCell align="center">{row.subject_name}</TableCell>
 
-                {/* Place Column: Editable when in edit mode */}
                 <TableCell align="center">
                   {editing ? (
                     <TextField
@@ -129,7 +133,6 @@ const ExamScheduleTable = () => {
                   )}
                 </TableCell>
 
-                {/* Time Column: Editable when in edit mode */}
                 <TableCell align="center">
                   {editing ? (
                     <TextField
@@ -138,9 +141,24 @@ const ExamScheduleTable = () => {
                       onChange={(e) => handleChange(index, "time", e.target.value)}
                     />
                   ) : (
-                    formatTime(row.time) // Ensure hh:mm format when displaying
+                    formatTime(row.time)
                   )}
                 </TableCell>
+
+                {/* QR Code Scanner Link Column */}
+                {showQrColumn && (
+                  <TableCell align="center">
+                  <Button
+                    // variant="contained"
+                    color="primary"
+                    onClick={() =>
+                      navigate(`${row.subject_name}/qr-scanner`, { state: { module: row.subject_name } })
+                    }
+                  >
+                    Scan QR
+                  </Button>
+                </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>
