@@ -694,8 +694,6 @@ class studentinfo(APIView):
 
 
 
-from django.shortcuts import render, get_object_or_404
-
 
 from django.http import JsonResponse
 
@@ -825,4 +823,52 @@ class SubjectUpdateView(RetrieveUpdateAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+from django.shortcuts import get_object_or_404
+from django.db.models import OuterRef, Subquery, BooleanField
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
+from rest_framework.pagination import PageNumberPagination
+from .models import Student, Exam, Attendance
 
+
+# ✅ Pagination Class
+class StudentPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param = "page_size"
+    max_page_size = 100
+
+# ✅ Corrected View
+class students_by_exam(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = StudentSerializer # ✅ Uses the correct serializer
+    pagination_class = StudentPagination  
+
+    def get_queryset(self):
+        """Retrieve students by exam's level and speciality, including attendance status."""
+        exam_id = self.kwargs.get("exam_id")
+        exam = get_object_or_404(Exam, id=exam_id)
+
+        # ✅ Subquery to check if student attended the exam
+        attendance_subquery = Attendance.objects.filter(
+            exam=exam,
+            student=OuterRef("id")
+        ).values("is_present")[:1]  # Returns True/False if present
+
+        # ✅ Query students with attendance status
+        students = Student.objects.filter(
+            level=exam.subject.level,
+            speciality=exam.subject.speciality
+        ).annotate(
+            is_present=Subquery(attendance_subquery, output_field=BooleanField())
+        ).select_related("Name")  # ✅ Ensure user data is loaded efficiently
+
+        return students  # ✅ Must return a QuerySet, NOT serializer.data
+
+
+
+
+
+
+    
+         

@@ -106,62 +106,73 @@ const ExamScheduleTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {examData.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell align="center">
-                  {editing ? (
-                    <TextField
-                      type="date"
-                      value={editedData[index].date}
-                      onChange={(e) => handleChange(index, "date", e.target.value)}
-                    />
-                  ) : (
-                    row.date
-                  )}
-                </TableCell>
+  {examData.map((row, index) => (
+    <TableRow key={index}>
+      <TableCell align="center">
+        {editing ? (
+          <TextField
+            type="date"
+            value={editedData[index].date}
+            onChange={(e) => handleChange(index, "date", e.target.value)}
+          />
+        ) : (
+          row.date
+        )}
+      </TableCell>
 
-                <TableCell align="center">{row.subject_name}</TableCell>
+      <TableCell align="center">{row.subject_name}</TableCell>
 
-                <TableCell align="center">
-                  {editing ? (
-                    <TextField
-                      value={editedData[index].amphi}
-                      onChange={(e) => handleChange(index, "amphi", e.target.value)}
-                    />
-                  ) : (
-                    row.amphi
-                  )}
-                </TableCell>
+      <TableCell align="center">
+        {editing ? (
+          <TextField
+            value={editedData[index].amphi}
+            onChange={(e) => handleChange(index, "amphi", e.target.value)}
+          />
+        ) : (
+          row.amphi
+        )}
+      </TableCell>
 
-                <TableCell align="center">
-                  {editing ? (
-                    <TextField
-                      type="time"
-                      value={editedData[index].time}
-                      onChange={(e) => handleChange(index, "time", e.target.value)}
-                    />
-                  ) : (
-                    formatTime(row.time)
-                  )}
-                </TableCell>
+      <TableCell align="center">
+        {editing ? (
+          <TextField
+            type="time"
+            value={editedData[index].time}
+            onChange={(e) => handleChange(index, "time", e.target.value)}
+          />
+        ) : (
+          formatTime(row.time)
+        )}
+      </TableCell>
+{/* QR Code Scanner Link Column */}
+{showQrColumn && (
+        <TableCell align="center">
+          <Button
+            color="primary"
+            onClick={() =>
+              navigate(`${row.subject_name}/qr-scanner`, { state: { module: row.subject_name } })
+            }
+          >
+            Scan QR
+          </Button>
+        </TableCell>
+      )}
+      {/* Add View Exam Button */}
+      <TableCell align="center">
+        <Button
+          variant="contained"
+          color="success"
+          onClick={() => navigate(`${row.id}/presence`)}
+        >
+          View Exam
+        </Button>
+      </TableCell>
 
-                {/* QR Code Scanner Link Column */}
-                {showQrColumn && (
-                  <TableCell align="center">
-                  <Button
-                    // variant="contained"
-                    color="primary"
-                    onClick={() =>
-                      navigate(`${row.subject_name}/qr-scanner`, { state: { module: row.subject_name } })
-                    }
-                  >
-                    Scan QR
-                  </Button>
-                </TableCell>
-                )}
-              </TableRow>
-            ))}
-          </TableBody>
+      
+    </TableRow>
+  ))}
+</TableBody>
+
         </Table>
       </TableContainer>
     </>

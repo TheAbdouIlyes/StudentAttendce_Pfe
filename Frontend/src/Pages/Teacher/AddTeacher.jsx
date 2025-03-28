@@ -49,17 +49,28 @@ export default function AddTeacher() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(teacherData)
       });
-
+  
+      const result = await response.json(); // Get backend response
+  
       if (!response.ok) {
-        throw new Error("Failed to add teacher");
+        if (response.status === 400 && result?.error?.includes("already exists")) {
+          alert("Error: A teacher with this email or matricule already exists.");
+        } else {
+          alert("Failed to add teacher: " + result.error);
+        }
+        return;
       }
-      setTeachers([...teachers, teacherData]);
+  
+      // If successful, add teacher to state
+      setTeachers([...teachers, result]);
       setTeacherData({ first_name: "", last_name: "", email: "", secret_number: "", matricul: "" });
+  
     } catch (error) {
       console.error("Error:", error);
-      alert(error.message);
+      alert("Something went wrong. Please try again.");
     }
   };
+  
 
   const assignSubject = async () => {
     if (!selectedTeacher || !selectedSubject) {

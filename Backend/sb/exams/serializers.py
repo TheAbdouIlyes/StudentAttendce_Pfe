@@ -6,10 +6,10 @@ class StudentSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source="Name.first_name", read_only=True)
     last_name = serializers.CharField(source="Name.last_name", read_only=True)
     email = serializers.EmailField(source="Name.email", read_only=True)
-
+    is_present=serializers.BooleanField(read_only=True)
     class Meta:
         model = Student
-        fields = ["id", "first_name", "last_name", "email", "roll_number", "matricul", "level", "speciality"]
+        fields = ["id", "first_name", "last_name", "email", "roll_number", "matricul", "level", "speciality","is_present"]
 
 class ExamSerializer(serializers.ModelSerializer):
 
@@ -54,4 +54,6 @@ class surveillanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = surveillance
         fields = '__all__'
+
+
 

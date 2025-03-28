@@ -49,7 +49,7 @@ import PlanningExams from './StudentPages/PlanningExams';
 
 import QRCOde from "./Pages/QR-CodeTest/QRCOde";
 
-
+import Presence from "./pages/Presence";
 
 
 const NAVIGATION = [
@@ -183,7 +183,7 @@ function DashboardLayoutBasic() {
 
             {/* <Route path="MenuExams/:speciality/:year/:semester/qr-scanner" element={<QRCOde />} /> */}
             <Route path="MenuExams/:speciality/:year/:semester/:module/qr-scanner" element={<QRCOde />} />
-
+           <Route path="MenuExams/:speciality/:year/:semester/:id/presence" element={<Presence/>} />
 
 
 
