@@ -86,33 +86,40 @@ class subjectCreate(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
-        """
-        Méthode appelée lors de la création d'un sujet.
-        Elle sauvegarde le sujet, crée un examen associé et ajoute les enseignants.
-        """
-        # 1️⃣ Sauvegarde le nouveau sujet
-        subject_instance = serializer.save()  
-
-        # 2️⃣ Créer un examen pour ce sujet avec les valeurs par défaut
-        exam_instance = Exam.objects.create(subject=subject_instance)
-        etudiants = Student.objects.all()  # Récupère tous les étudiants
-
-        # Créer une présence pour chaque étudiant
-        presences = [Attendance(student=etu, exam=exam_instance) for etu in etudiants]
-        Attendance.objects.bulk_create(presences)  
-
-        # 3️⃣ Ajouter les enseignants liés au sujet dans la table teach
-        teachers = teacher.objects.all()  
-        presences = [teach(teacher=etu, subject=subject_instance) for etu in teachers]
-        teach.objects.bulk_create(presences)  
+        print("Creating a new subject...")
         
+        # 1️⃣ Save the new subject
+        subject_instance = serializer.save()
+        print(f"Subject created: {subject_instance}")
 
-        teachers = teacher.objects.all()  
-        surveillances = [surveillance(teacher=etu, exam=exam_instance) for etu in teachers]
-        surveillance.objects.bulk_create(surveillances)  
+        # 2️⃣ Create an exam associated with the subject
+        exam_instance = Exam.objects.create(subject=subject_instance)
+        print(f"Exam created: {exam_instance}")
 
-        return subject_instance  # ✅ Retourne le sujet avec l'examen lié
- 
+        # 3️⃣ Add students to Attendance
+        students = Student.objects.all()
+        print(f"Total students found: {students.count()}")
+
+        if students.exists():
+            for student1 in students:
+                Attendance.objects.create(student=student1, exam=exam_instance)
+            print(f"Attendance records created: {students.count()}")
+
+        # 4️⃣ Add teachers to Teach
+        teachers = teacher.objects.all()
+        print(f"Total teachers found: {teachers.count()}")
+
+        if teachers.exists():
+            for teacher1 in teachers:
+                teach.objects.create(teacher=teacher1, subject=subject_instance)
+            print(f"Teach records created: {teachers.count()}")
+
+            for teacher1 in teachers:
+                surveillance.objects.create(teacher=teacher1, exam=exam_instance)
+            print(f"Surveillance records created: {teachers.count()}")
+
+        return subject_instance
+
    
 
 import qrcode
@@ -865,10 +872,90 @@ class students_by_exam(generics.ListAPIView):
 
         return students  # ✅ Must return a QuerySet, NOT serializer.data
 
+from django.shortcuts import get_object_or_404
+from django.db.models import OuterRef, Subquery, BooleanField
+from rest_framework import generics
+from rest_framework.permissions import AllowAny
+from .models import Student, subject, Attendance
+from .serializers import StudentSerializer
+
+
+class students_by_subject(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = StudentSerializer  
+    pagination_class = StudentPagination  
+
+    def get_queryset(self):
+        """Retrieve students by subject's level and speciality, including attendance status."""
+        subject_id = self.kwargs.get("subject_id")  # Get subject ID from URL
+        subject_instance = get_object_or_404(subject, id=subject_id)
+
+        # ✅ Subquery to check if the student has attended any exam of this subject
+        attendance_subquery = Attendance.objects.filter(
+            exam__subject=subject_instance,
+            student=OuterRef("id")
+        ).values("is_present")[:1]  # Returns True/False if present
+
+        # ✅ Query students with attendance status
+        students = Student.objects.filter(
+            level=subject_instance.level,
+            speciality=subject_instance.speciality
+        ).annotate(
+            is_present=Subquery(attendance_subquery, output_field=BooleanField())
+        ).select_related("Name")  # ✅ Ensure user data is loaded efficiently
+
+        return students  # ✅ Must return a QuerySet, NOT serializer.data
 
 
 
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .models import teach, subject  # Import your models
+from .serializers import subjetSerializer  # Import the subject serializer
 
 
-    
+
+class TeacherSubjectsView(APIView):
+   from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+from .models import teacher, teach, subject
+from .serializers import subjetSerializer
+
+class TeacherSubjectsView(APIView):
+    permission_classes = [IsAuthenticated]  # Require authentication
+
+    def get(self, request):
+        """Retrieve all subjects that the authenticated teacher actively teaches (teaching=True)."""
+        # ✅ Get the authenticated teacher (assuming one teacher per user)
+        teacher_instance = get_object_or_404(teacher, user=request.user)
+
+        # ✅ Retrieve subjects where the teacher has `teaching=True`
+        subjects = subject.objects.filter(teach__teacher=teacher_instance, teach__teaching=True)
+
+        # ✅ Serialize the subjects
+        serializer = subjetSerializer(subjects, many=True)
+
+        return Response(serializer.data)
+
+ 
+
+
+class TeacherexamsView(APIView):
+    permission_classes = [IsAuthenticated]  # Require authentication
+
+    def get(self, request):
+        """Retrieve all subjects that the authenticated teacher actively teaches (teaching=True)."""
+        # ✅ Get the authenticated teacher (assuming one teacher per user)
+        teacher_instance = get_object_or_404(teacher, user=request.user)
+
+        # ✅ Retrieve subjects where the teacher has `teaching=True`
+        Exams = Exam.objects.filter(surveillance__teacher=teacher_instance, surveillance__is_present=True)
+
+        # ✅ Serialize the subjects
+        serializer = ExamSerializer(Exams, many=True)
+
+        return Response(serializer.data)
          

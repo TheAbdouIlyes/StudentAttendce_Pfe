@@ -20,7 +20,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from exams import views
 from exams.views import GenerateQRCode
-from exams.views import  students_by_exam,SubjectUpdateView,studentinfo,TeacherDeleteAPIView,StudentDeleteAPIView,castomExam,teacher_subjects,teacherinfo,subjectlist,Examlist,StudentProfileView,delete_subject,delete_exam,ExamListByLevelAndSpeciality,CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView,ExamUpdate,UpdateTeacherView,UpdateStudentView,teaching,teacher_present,ListStudentView,ListTeacherView,ListTeachView,ListSurveillanceView,studentListByspesialityandLevel,subjetListByspecialityandlevelandsemester,CheckTokenView,LogoutView
+from exams.views import  TeacherexamsView,TeacherSubjectsView,students_by_subject,students_by_exam,SubjectUpdateView,studentinfo,TeacherDeleteAPIView,StudentDeleteAPIView,castomExam,teacher_subjects,teacherinfo,subjectlist,Examlist,StudentProfileView,delete_subject,delete_exam,ExamListByLevelAndSpeciality,CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView,ExamUpdate,UpdateTeacherView,UpdateStudentView,teaching,teacher_present,ListStudentView,ListTeacherView,ListTeachView,ListSurveillanceView,studentListByspesialityandLevel,subjetListByspecialityandlevelandsemester,CheckTokenView,LogoutView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
@@ -68,5 +68,9 @@ urlpatterns = [
    path('teacher/delete/<int:pk>/', TeacherDeleteAPIView.as_view(), name='teacher_delete_api'),
    path("subject/update/<int:pk>/", SubjectUpdateView.as_view(), name="subject-update"),
    path('student/exams/<int:exam_id>', students_by_exam.as_view(),name=" get_students_by_exam"),
+   path('student/subject/<int:subject_id>', students_by_subject.as_view(),name=" get_students_by_subject"),
+
+   path('teacher_subjects/', TeacherSubjectsView.as_view(), name='teacher_subjects'),
+   path('teacher_exams/', TeacherexamsView.as_view(), name='teacher_exams'),
    ]
 
