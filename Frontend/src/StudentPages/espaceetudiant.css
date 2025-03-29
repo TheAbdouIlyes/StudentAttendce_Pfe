@@ -1,8 +1,7 @@
 /* Main container styles */
 .profile-container {
-    min-height: 100vh;
+    max-height: 100%;
     background: linear-gradient(to bottom right, #04892c, #d9ded9);
-    padding: 2rem 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,7 +20,6 @@
   
   .profile-header {
     background-color: rgba(255, 255, 255, 0.05);
-    padding: 2rem;
     text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
@@ -42,7 +40,9 @@
   
   .profile-content {
     display: grid;
-    grid-template-columns: minmax(auto, 1fr) 2fr;
+    display: flex;
+    justify-content: space-evenly;
+    
     gap: 2rem;
     padding: 2rem;
   }

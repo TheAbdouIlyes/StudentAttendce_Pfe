@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 
 export default function ListStudents() {
   const navigate = useNavigate();
@@ -14,9 +14,9 @@ export default function ListStudents() {
   const [page, setPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const rowsPerPage = 5;
-
+  const { speciality, year} = useParams();
   const fetchStudents = (pageNumber = 1) => {
-    fetch(`http://127.0.0.1:8000/student_list/?page=${pageNumber}&page_size=${rowsPerPage}`)
+    fetch(`http://127.0.0.1:8000/student_par_specialitylevel/${speciality}/${year}?page=${pageNumber}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Failed to fetch students");

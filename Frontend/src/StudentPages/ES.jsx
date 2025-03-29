@@ -1,0 +1,154 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { QRCodeCanvas } from 'qrcode.react';
+import { GraduationCap, Download, User, Mail, Hash, BookOpen, Building2 } from 'lucide-react';
+import { AppBar, Toolbar, Typography, Paper, Grid, Box, Card, CardContent, Avatar, Button } from '@mui/material';
+import { useTheme, useColorScheme } from '@mui/material/styles';
+
+export default function ES() {
+  const { mode } = useColorScheme(); // Detect light/dark mode
+  const theme = useTheme(); // Access the theme colors
+
+  const [student, setStudent] = useState(null);
+  const qrRef = useRef(null);
+  const token = localStorage.getItem("accessToken");
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:8000/student/profile/", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => setStudent(data))
+      .catch((error) => console.error("Error fetching student data:", error));
+  }, [token]);
+
+  const downloadQRCode = () => {
+    if (!qrRef.current) return;
+    const canvas = qrRef.current.querySelector("canvas");
+    if (!canvas) return;
+    
+    const pngUrl = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    const downloadLink = document.createElement("a");
+    downloadLink.href = pngUrl;
+    downloadLink.download = `${student?.matricul}_qrcode.png`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  };
+
+  if (!student) {
+    return <Typography variant="h5" align="center" sx={{ mt: 4, color: theme.palette.text.primary }}>Loading...</Typography>;
+  }
+
+  // Adjust QR code colors based on dark/light mode
+  const qrColor = theme.palette.text.primary;
+  const qrBgColor = theme.palette.background.default;
+
+  return (
+    <Box>
+      <Paper
+        elevation={3}
+        sx={{
+          p: 2,
+          mb: 2,
+          textAlign: 'center',
+          bgcolor: theme.palette.background.paper,
+          color: theme.palette.text.primary,
+          borderRadius: 2,
+          width: '80%',
+          margin: '0 auto',
+        }}
+      >
+        <Typography variant="h6">
+            Welcome, <b>{student.first_name} {student.last_name}</b> To Your Student Space
+        </Typography>
+      </Paper>
+
+      <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }}>
+        <Paper
+          elevation={4}
+          sx={{
+            width: '80%',
+            p: 3,
+            borderRadius: 3,
+            bgcolor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
+          }}
+        >
+          <Typography variant="h4" align="center" sx={{ mb: 2, fontWeight: 'bold' }}>
+            Student Card
+          </Typography>
+
+          <Grid container spacing={3} alignItems="center">
+            <Grid item xs={12} md={5}>
+              <Card
+                sx={{
+                  textAlign: 'center',
+                  p: 2,
+                  borderRadius: 3,
+                  bgcolor: theme.palette.background.default,
+                  color: theme.palette.text.primary,
+                }}
+              >
+                <Box ref={qrRef} onClick={downloadQRCode} sx={{ cursor: 'pointer' }}>
+                  <QRCodeCanvas
+                    value={student.matricul}
+                    size={200}
+                    level="H"
+                    fgColor={qrColor}
+                    bgColor={qrBgColor}
+                  />
+                </Box>
+                <Typography variant="body1" sx={{ mt: 1 }}>
+                  <Download size={18} /> Click to download your QR Code
+                </Typography>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={7}>
+              <Card
+                sx={{
+                  p: 3,
+                  borderRadius: 3,
+                  bgcolor: theme.palette.background.default,
+                  color: theme.palette.text.primary,
+                }}
+              >
+                <CardContent>
+                  <Grid container spacing={2} textAlign="center">
+                    <Grid item xs={12}>
+                      <Typography variant="body1" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                        <User size={18} style={{ marginRight: 8 }} />Full Name: {student.first_name} {student.last_name}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Mail size={18} style={{ marginRight: 8 }} /> Email: {student.email}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Hash size={18} style={{ marginRight: 8 }} /> Matricule: {student.matricul}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                        <BookOpen size={18} style={{ marginRight: 8 }} /> Level: {student.level}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Building2 size={18} style={{ marginRight: 8 }} /> Speciality: {student.speciality}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Box>
+    </Box>
+  );
+}

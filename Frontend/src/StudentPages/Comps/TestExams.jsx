@@ -9,8 +9,10 @@ import {
   Paper,
   useMediaQuery
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 
 const TestExams = ({ examData, headers }) => {
+  const theme = useTheme();
   const timeSlots = [
     "8:00-9:30",
     "9:30-10:00",
@@ -40,6 +42,7 @@ const TestExams = ({ examData, headers }) => {
         overflowX: "auto",
         boxShadow: "none",
         borderRadius: "8px",
+        backgroundColor: theme.palette.background.paper,
       }}
     >
       <Table sx={{ width: isMobile ? "max-content" : "100%", tableLayout: "auto" }}>
@@ -54,6 +57,7 @@ const TestExams = ({ examData, headers }) => {
                   fontSize: isMobile ? "0.8rem" : "1rem",
                   padding: isMobile ? "6px" : "12px",
                   whiteSpace: "nowrap",
+                  color: theme.palette.text.primary,
                 }}
               >
                 {header}
@@ -71,6 +75,7 @@ const TestExams = ({ examData, headers }) => {
                   fontSize: isMobile ? "0.8rem" : "1rem",
                   padding: isMobile ? "6px" : "12px",
                   whiteSpace: "nowrap",
+                  color: theme.palette.text.primary,
                 }}
               >
                 {date}
@@ -84,9 +89,10 @@ const TestExams = ({ examData, headers }) => {
                     sx={{
                       fontSize: isMobile ? "0.7rem" : "0.9rem",
                       padding: isMobile ? "8px" : "12px",
-                      backgroundColor: exam ? "#e3f2fd" : "inherit",
+                      backgroundColor: exam ? theme.palette.primary.main : "inherit",
                       minHeight: "50px",
                       wordBreak: "break-word",
+                      color: theme.palette.text.primary,
                     }}
                   >
                     {exam ? `${exam.module} (${exam.place})` : "-"}

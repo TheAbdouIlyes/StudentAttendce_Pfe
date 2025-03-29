@@ -54,7 +54,13 @@ import PlanningExams from './StudentPages/PlanningExams';
 import QRCOde from "./Pages/QR-CodeTest/QRCOde";
 
 import The_API from "./HostingPhone";
+import Presence from "./pages/Presence";
+import ExamsAttendanceMenu from './TeacherPages/ExamsAttendanceMenu';
 
+
+import StudentsAttendances from "./TeacherPages/StudentsAttendance";
+import Surveillance from './TeacherPages/Surveillance';
+import ES from './StudentPages/ES';
 
 const NAVIGATION = [
   { kind: 'header', title: 'Stats' },
@@ -103,11 +109,12 @@ const NAVIGATION_Teacher = [
   { segment: 'Teacher/Dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
   { kind: 'divider' },
   { kind: 'header', title: 'Lists' },
-  
-
+  { segment: 'Teacher/ExamsAttendance', title: 'ExamsAttendance', icon: <PeopleIcon />
+  },
+  { segment: 'Teacher/Surveillance', title: 'Surveillance', icon: <PeopleIcon />
+  },
   { kind: 'divider' },
   { kind: 'header', title: 'Exit' },
-
   { 
     segment: './', 
     title: 'Logout', 
@@ -129,26 +136,63 @@ const NAVIGATION_Teacher = [
 ];
 
 
+const NAVIGATION_Student = [
+  { kind: 'header', title: 'Main Student Espace' },
+  { segment: 'Student/profile', title: 'Profile', icon: <PeopleIcon />
+  },
+  { segment: 'Student/Attendance', title: 'Attendance', icon: <PeopleIcon />
+  },
+  { segment: 'Student/planning', title: 'planning', icon: <PeopleIcon />
+  },
+
+  { kind: 'divider' },
+  { kind: 'header', title: 'Exit' },
+  { 
+    segment: './', 
+    title: 'Logout', 
+    icon: <ExitToAppIcon />, 
+     onClick: () => {
+      console.log("Logout button clicked");
+
+      // Remove authentication data from localStorage
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("role");
+    
+      // Dispatch a custom event to notify other parts of the app
+      window.dispatchEvent(new Event("storage"));
+    
+      // Optionally, navigate to the login page programmatically
+      window.location.href = "/";
+    }
+  },
+];
+
+
+
 const demoTheme = extendTheme({
   colorSchemes: { 
     light: {
       palette: {
-        primary: { main: '#01875f' }, // Light mode primary color (Green)
-        // background: { 
-          // default: '#f5f5f5', 
-          // paper: '#f5f5f5' 
-        // },
-        text: { primary: '#000000' }
+        primary: { main: '#1ba4f6' }, // Light mode primary color
+        secondary: { main: '#7f74fa' }, // Light mode secondary color
+        accent: { main: '#7c42f8' }, // Light mode accent color
+        background: { 
+          default: '#eff7fe', 
+          paper: '#eff7fe' 
+        },
+        text: { primary: '#011723' }
       }
     },
     dark: {
       palette: {
-        primary: { main: '#01875f' }, // Dark Green
+        primary: { main: '#0992e1' }, // Dark mode primary color
+        secondary: { main: '#10058a' }, // Dark mode secondary color
+        accent: { main: '#4007bb' }, // Dark mode accent color
         background: { 
-          default: '#000d09', 
-          paper: '#000d09' 
-        }, // Dark Green Background
-        text: { primary: '#ffffff' }
+          default: '#01080e', 
+          paper: '#01080e' 
+        },
+        text: { primary: '#dcf2fe' }
       }
     }
   },
@@ -161,7 +205,6 @@ const demoTheme = extendTheme({
       },
     },
   },
-
 });
 
 const Skeleton = styled('div')(({ theme, height }) => ({
@@ -220,7 +263,7 @@ function AdminLayouts() {
 
             {/* <Route path="MenuExams/:speciality/:year/:semester/qr-scanner" element={<QRCOde />} /> */}
             <Route path="MenuExams/:speciality/:year/:semester/:module/qr-scanner" element={<QRCOde />} />
-
+           <Route path="MenuExams/:speciality/:year/:semester/:id/presence" element={<Presence/>} />
 
 
 
@@ -250,10 +293,6 @@ function AdminLayouts() {
 function TeacherLayouts() {
   const navigate = useNavigate();
 
-  const validSpecialities = ["info", "physic", "gestion", "biology", "pharmacy", "medicine"];
-  const validYears = ["l1", "l2", "l3", "m1", "m2"];
-
-
   return (
     <AppProvider 
       navigation={NAVIGATION_Teacher} 
@@ -268,6 +307,42 @@ function TeacherLayouts() {
         <PageContainer className='MainPage-Conatiner'>
           <Routes >
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="ExamsAttendance" element={<ExamsAttendanceMenu />} />
+
+            <Route path="ExamsAttendance/:speciality/:year/:exam" element={<StudentsAttendances/>} />
+
+            <Route path="Surveillance" element={<Surveillance />} />
+
+           
+          </Routes>
+        </PageContainer>
+        
+      </DashboardLayout>
+    </AppProvider>
+  );
+}
+
+
+
+function StudentLayouts() {
+  const navigate = useNavigate();
+
+  return (
+    <AppProvider 
+      navigation={NAVIGATION_Student} 
+      router={{ navigate }} 
+      theme={demoTheme}  
+      branding={{ logo: <img src={logo} style={{ width: "40px", height: "50px", borderRadius: "50%" }} /> ,title: <div className='TITLE-ALGER1'><h5 className='ALger1'>FACULTY OF SCIENCE UNIVERSITY OF ALGIERS 1</h5><br /><h5 className='ALger1'>كـلـيـة الـعلوم جـامـعـة الـجـزائـر 1</h5></div> }}
+      // sx={{color:"primary"}}
+    >
+    
+      <DashboardLayout>
+
+        <PageContainer className='MainPage-Conatiner'>
+          <Routes >
+            <Route path="profile" element={<ES />} />
+            <Route path="Attendance" element={<AttendanceList />} />
+            <Route path="planning" element={<PlanningExams/>} />
 
            
           </Routes>
@@ -298,10 +373,13 @@ export default function App() {
 
         {/* Protected Routes for Students */}
         <Route element={<ProtectedRoute requiredRole="student" />}>
-          <Route path="/student/profile" element={<StudentProfile />} />
+          {/* <Route path="/student/profile" element={<StudentProfile />} />
           <Route path="/student/exams" element={<ExamsMenu />} />
           <Route path="/student/Attendance" element={<AttendanceList />} />
-          <Route path="/student/planning" element={<PlanningExams/>} />
+          <Route path="/student/planning" element={<PlanningExams/>} /> */}
+
+          <Route path="/student/*" element={<StudentLayouts />} />
+
         </Route>
 
 

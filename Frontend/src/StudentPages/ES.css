@@ -1,0 +1,75 @@
+.ES{
+    background-color: rgb(248, 248, 248);
+    border-radius: 1rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.EsMain{
+    width: 96%;
+    height: 90%;
+    background-color: rgb(0, 255, 8);
+    border-radius: 1rem;
+
+
+
+
+}
+.TopES{
+    width: 100%;
+    height: 22%;
+    /* background-color: aqua ; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.HiStudent{
+    font-family: monospace;
+    width: 90%;
+    height: 80%;
+    background-color: white;
+    border-radius: 0.75rem;
+}
+.HiStudent p{
+    padding: 2px;
+    margin: 2px;
+
+}
+
+
+.TheMidES{
+    width: 100%;
+    height: 78%;
+    /* background-color:chartreuse; */
+
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    justify-content: space-evenly;
+    /* flex-wrap: wrap; */
+    padding-bottom: 2%;
+}
+
+.InfosSectionES{
+    background-color: white;
+    border-radius: 1rem;
+    width: 320px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+}
+
+.QRCode-Center{
+    height: 80%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+   
+}

@@ -39,16 +39,18 @@ function Espaceetudiant() {
   }
 
   return (
-<div>
-  <Navbar />
     <div className="profile-container">
-    
       <div className="profile-card">
+    
+  
       
         <div className="profile-header">
          <BookOpen className="role-card-icon" />
           <h1>Student Profile</h1>
-          <div className="matricul-number">{student.matricul}</div>
+          <div className="matricul-number">
+            Welcome Back, {student.first_name} {student.last_name} 
+            .
+            Matricule: {student.matricul}</div>
         </div>
 
         <div className="profile-content">
@@ -63,27 +65,13 @@ function Espaceetudiant() {
             </div>
             <div className="qr-caption">
               <Download className="icon-sm" />
-              Click to download QR Code
+              Your QR Code Click to download 
             </div>
           </div>
 
           <div className="info-section">
             <div className="info-group">
-              <div className="info-item">
-                <div className="info-label">
-                  <User className="icon-sm" /> First Name
-                </div>
-                <div className="info-value">{student.first_name}</div>
-              </div>
-              <div className="info-item">
-                <div className="info-label">
-                  <User className="icon-sm" /> Last Name
-                </div>
-                <div className="info-value">{student.last_name}</div>
-              </div>
-            </div>
 
-            <div className="info-group">
               <div className="info-item">
                 <div className="info-label">
                   <Mail className="icon-sm" /> Email
@@ -96,9 +84,8 @@ function Espaceetudiant() {
                 </div>
                 <div className="info-value">{student.roll_number}</div>
               </div>
-            </div>
 
-            <div className="info-group">
+
               <div className="info-item">
                 <div className="info-label">
                   <BookOpen className="icon-sm" /> Level
@@ -114,9 +101,11 @@ function Espaceetudiant() {
             </div>
           </div>
         </div>
+
+
       </div>
     </div>
-    </div>
+
   );
 }
 

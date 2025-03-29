@@ -45,7 +45,7 @@ export default function ExamsMenu() {
                     <Grid item xs={6} key={level}>
                       <Button
                         variant="contained"
-                        color="success"
+                        color="primary"
                         fullWidth
                         sx={{ fontWeight: "bold", borderRadius: 2 }}
                         onClick={() => navigate(`/MenuExams/${speciality}/${level}/${semester}`)}

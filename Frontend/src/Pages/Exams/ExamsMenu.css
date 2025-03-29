@@ -91,7 +91,7 @@
 .exam-card h3 {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #119720;
+  color: #1ba4f6;
 }
 
 /* 🖥️ Responsive Design */
@@ -131,9 +131,9 @@
 }
 
 .dark-mode .exam-card h3 {
-  color: #8aff8a;
+  color: #1ba4f6;
 }
 
 .dark-mode .exam-category h2 {
-  color: #8aff8a;
+  color: #1ba4f6;
 }
