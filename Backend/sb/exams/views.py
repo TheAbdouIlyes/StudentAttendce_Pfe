@@ -509,35 +509,37 @@ class subjetListByspecialityandlevelandsemester(generics.ListAPIView):
         return subject.objects.filter(speciality=spesiality,level=level,semester=semester)  
     
 
-
-from datetime import datetime
-from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import AccessToken
-from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import AccessToken, TokenError
+from datetime import datetime
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import AccessToken, TokenError
+from datetime import datetime
 
 class CheckTokenView(APIView):
-    permission_classes = [IsAuthenticated]  # Ensures the user is logged in
+    permission_classes = [AllowAny]  # Allow all users to access this view
 
     def get(self, request):
-        token = request.headers.get("Authorization", "").split("Bearer ")[-1]  # Extract token safely
+        token = request.GET.get("token")  # Get token from query parameters
 
-        if not token or token == "Authorization":
-            return Response({"expired": True, "error": "No token provided"}, status=400)
+        if not token:
+            return Response(False, status=400)  # Return False if no token is provided
 
         try:
             access_token = AccessToken(token)  # Decode token
             exp_time = access_token["exp"]  # Get expiration timestamp
             is_expired = datetime.fromtimestamp(exp_time) < datetime.utcnow()  # Compare with current time
 
-            return Response({"expired": is_expired, "error": None})
+            return Response(not is_expired)  # Return True if valid, False if expired
 
-        except (TokenError, InvalidToken) as e:  # Handle expired or invalid tokens
-            return Response({"expired": True, "error": str(e)}, status=401)
+        except (TokenError, Exception):  # Handle expired or invalid tokens
+            return Response(False, status=401)  # Return False if the token is invalid or expired
 
-        except Exception as e:
-            return Response({"expired": True, "error": f"Unexpected error: {str(e)}"}, status=400)
+
 
 
 from rest_framework.views import APIView
@@ -679,7 +681,15 @@ class teacherinfo(APIView):
         return Response(serializer.data,status=status.HTTP_200_OK)
     
 
+class studentinfo(APIView):
+    permission_classes = [AllowAny]
 
+    def get(self, request, *args, **kwargs):
+        id = self.kwargs['pk']
+        teacher1 = get_object_or_404(Student, id=id)
+        serializer = StudentSerializer(teacher1)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    
 
 
 
@@ -793,4 +803,26 @@ class TeacherDeleteAPIView(APIView):
         return JsonResponse({"message": "teacher deleted successfully."}, status=200)
 
     
+from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework import status
+from django.shortcuts import get_object_or_404
+from .models import subject
+from .serializers import subjetSerializer  # Fixed serializer name
+
+class SubjectUpdateView(RetrieveUpdateAPIView):
+    queryset = subject.objects.all()
+    serializer_class = subjetSerializer  # Fixed serializer name
+    permission_classes = [AllowAny]  # Anyone can update
+
+    def put(self, request, pk):
+        instance = get_object_or_404(subject, pk=pk)  # Get subject by ID
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

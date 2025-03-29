@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import { useParams, useLocation } from 'react-router-dom';
 
-function QRCOde({ onScan }) {
-  const { speciality, year, semester, module } = useParams();  // ✅ Get module from URL params
+function QRCode({ onScan }) {
+  const { speciality, year, semester, module } = useParams();
   const location = useLocation();
-  const stateModule = location.state?.module; // Get module from state if available
-  const finalModule = stateModule || module; // Prefer state module but fallback to URL param
+  const stateModule = location.state?.module;
+  const finalModule = stateModule || module;
 
   const [scanResult, setScanResult] = useState(null);
 
@@ -21,8 +21,29 @@ function QRCOde({ onScan }) {
     function success(result) {
       scanner.clear();
       setScanResult(result);
+      
       if (onScan) {
         onScan(result);
+      }
+
+      // ✅ Call handleScan when QR code is successfully scanned
+      handleScan(result, finalModule);
+    }
+
+    async function handleScan(scanResult, module) {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/etu/${scanResult}/exa/${module}/`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" }
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to mark attendance");
+        }
+        alert("Attendance marked successfully!");
+      } catch (error) {
+        console.error("Error:", error);
+        alert(error.message);
       }
     }
 
@@ -31,7 +52,7 @@ function QRCOde({ onScan }) {
     }
 
     return () => scanner.clear(); // Cleanup when component unmounts
-  }, [onScan]);
+  }, [onScan, finalModule]); // ✅ Ensure finalModule is up-to-date
 
   return (
     <div className="App">
@@ -41,4 +62,4 @@ function QRCOde({ onScan }) {
   );
 }
 
-export default QRCOde;
+export default QRCode;
