@@ -38,6 +38,7 @@ import ModulesMenu from './Pages/Modules/ModulesMenu';
 // import UserID from './LogIn/UserID';
 
 import ExamsMenu from './Pages/Exams/ExamsMenu';
+import SerTeacher from './Pages/Exams/SerTeacher';
 // import ExamanForm from './Pages/Exams/ExamanForm';
 import LogInAdmin from './LogIn/LogInAdmin';
 import { colors } from '@mui/material';
@@ -184,7 +185,7 @@ function DashboardLayoutBasic() {
             {/* <Route path="MenuExams/:speciality/:year/:semester/qr-scanner" element={<QRCOde />} /> */}
             <Route path="MenuExams/:speciality/:year/:semester/:module/qr-scanner" element={<QRCOde />} />
            <Route path="MenuExams/:speciality/:year/:semester/:id/presence" element={<Presence/>} />
-
+            <Route path="MenuExams/:speciality/:year/:semester/:exam_name/SerTeacher" element={<SerTeacher/>} /> 
 
 
 

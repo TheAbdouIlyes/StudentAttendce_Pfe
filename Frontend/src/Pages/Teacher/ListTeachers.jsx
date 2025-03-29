@@ -36,6 +36,8 @@ export default function ListTeachers() {
 
   useEffect(() => {
     fetchTeachers(page + 1);
+
+    
   }, [page]);
 
   return (
