@@ -420,6 +420,40 @@ class teaching(generics.UpdateAPIView):
           serializer = self.get_serializer(presence_instance)
           return Response(serializer.data, status=status.HTTP_200_OK)
 
+  
+
+
+class not_teaching(generics.UpdateAPIView):
+       serializer_class =teachSerializer
+       
+       permission_classes = [AllowAny]
+
+       def get_object(self):
+           matricul = self.kwargs['matricul']
+           subject_name = self.kwargs['subject_name']
+
+        # Retrieve student by matricul
+           teacher1 = get_object_or_404(teacher, matricul=matricul)
+
+        # Retrieve exam by subject name
+           subject1 = get_object_or_404(subject, name=subject_name)
+
+        # Get Attendance object
+           return get_object_or_404(teach, teacher=teacher1, subject=subject1)
+
+       def put(self, request, *args, **kwargs):
+        # Get the object using get_object()
+          presence_instance = self.get_object()
+
+        # Update is_present field
+          presence_instance.teaching = False
+          presence_instance.save()
+ 
+        # Serialize and return the updated object
+          serializer = self.get_serializer(presence_instance)
+          return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 
 class  teacher_present(generics.UpdateAPIView):
        
@@ -452,6 +486,39 @@ class  teacher_present(generics.UpdateAPIView):
           return Response(serializer.data, status=status.HTTP_200_OK)
 
  
+
+
+class  teacher_not_present(generics.UpdateAPIView):
+       
+       serializer_class =surveillanceSerializer
+       permission_classes = [AllowAny]
+
+       def get_object(self):
+           matricul = self.kwargs['matricul']
+           exam_name = self.kwargs['exam_name']
+
+        # Retrieve student by matricul
+           teacher1 = get_object_or_404(teacher, matricul=matricul)
+
+        # Retrieve exam by subject name
+           exam = get_object_or_404(Exam, subject__name=exam_name)
+
+        # Get Attendance object
+           return get_object_or_404(surveillance, teacher=teacher1, exam=exam)
+
+       def put(self, request, *args, **kwargs):
+        # Get the object using get_object()
+          presence_instance = self.get_object()
+
+        # Update is_present field
+          presence_instance.is_present = False
+          presence_instance.save()
+ 
+        # Serialize and return the updated object
+          serializer = self.get_serializer(presence_instance)
+          return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 
 class ListStudentView(generics.ListAPIView):
     queryset = Student.objects.all()
@@ -880,15 +947,17 @@ from .models import Student, subject, Attendance
 from .serializers import StudentSerializer
 
 
+
+
 class students_by_subject(generics.ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = StudentSerializer  
     pagination_class = StudentPagination  
 
     def get_queryset(self):
-        """Retrieve students by subject's level and speciality, including attendance status."""
-        subject_id = self.kwargs.get("subject_id")  # Get subject ID from URL
-        subject_instance = get_object_or_404(subject, id=subject_id)
+        """Retrieve students by subject name, including attendance status."""
+        subject_name = self.kwargs.get("subject_name")  # Get subject name from URL
+        subject_instance = get_object_or_404(subject, name=subject_name)
 
         # ✅ Subquery to check if the student has attended any exam of this subject
         attendance_subquery = Attendance.objects.filter(
@@ -905,6 +974,7 @@ class students_by_subject(generics.ListAPIView):
         ).select_related("Name")  # ✅ Ensure user data is loaded efficiently
 
         return students  # ✅ Must return a QuerySet, NOT serializer.data
+
 
 
 
@@ -940,7 +1010,22 @@ class TeacherSubjectsView(APIView):
 
         return Response(serializer.data)
 
- 
+class TeacherSubjectsId(APIView):
+    permission_classes = [AllowAny]  # Require authentication
+
+    def get(self,request,*args, **kwargs):
+        """Retrieve all subjects that the authenticated teacher actively teaches (teaching=True)."""
+        # ✅ Get the authenticated teacher (assuming one teacher per user)
+        id1 = self.kwargs['tea_id']
+        teacher_instance = get_object_or_404(teacher, id=id1)
+
+        # ✅ Retrieve subjects where the teacher has `teaching=True`
+        subjects = subject.objects.filter(teach__teacher=teacher_instance, teach__teaching=True)
+
+        # ✅ Serialize the subjects
+        serializer = subjetSerializer(subjects, many=True)
+
+        return Response(serializer.data)
 
 
 class TeacherexamsView(APIView):

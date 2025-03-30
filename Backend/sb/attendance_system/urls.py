@@ -20,7 +20,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from exams import views
 from exams.views import GenerateQRCode
-from exams.views import  TeacherexamsView,TeacherSubjectsView,students_by_subject,students_by_exam,SubjectUpdateView,studentinfo,TeacherDeleteAPIView,StudentDeleteAPIView,castomExam,teacher_subjects,teacherinfo,subjectlist,Examlist,StudentProfileView,delete_subject,delete_exam,ExamListByLevelAndSpeciality,CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView,ExamUpdate,UpdateTeacherView,UpdateStudentView,teaching,teacher_present,ListStudentView,ListTeacherView,ListTeachView,ListSurveillanceView,studentListByspesialityandLevel,subjetListByspecialityandlevelandsemester,CheckTokenView,LogoutView
+from exams.views import   TeacherSubjectsId,not_teaching,teacher_not_present,TeacherexamsView,TeacherSubjectsView,students_by_subject,students_by_exam,SubjectUpdateView,studentinfo,TeacherDeleteAPIView,StudentDeleteAPIView,castomExam,teacher_subjects,teacherinfo,subjectlist,Examlist,StudentProfileView,delete_subject,delete_exam,ExamListByLevelAndSpeciality,CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView,ExamUpdate,UpdateTeacherView,UpdateStudentView,teaching,teacher_present,ListStudentView,ListTeacherView,ListTeachView,ListSurveillanceView,studentListByspesialityandLevel,subjetListByspecialityandlevelandsemester,CheckTokenView,LogoutView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
@@ -41,6 +41,8 @@ urlpatterns = [
     path('u_student/<int:student_id>',UpdateStudentView.as_view(),name="update_student"),
     path('tea/<matricul>/sub/<subject_name>/',teaching.as_view(),name="t_teaching"),
     path('tea/<matricul>/exa/<exam_name>/',teacher_present.as_view(),name="t_present"),
+    path('tea/<matricul>/sub/<subject_name>/not',not_teaching.as_view(),name="not_t_teaching"),
+    path('tea/<matricul>/exa/<exam_name>/not',teacher_not_present.as_view(),name="not_t_present"),
     path('student_list/',ListStudentView.as_view(),name="student_list"),
     path('Teacher_list/',ListTeacherView.as_view(),name="Teacher_list"),
     path('stud/',CreatestudView.as_view(),name='c_stud'),
@@ -68,9 +70,10 @@ urlpatterns = [
    path('teacher/delete/<int:pk>/', TeacherDeleteAPIView.as_view(), name='teacher_delete_api'),
    path("subject/update/<int:pk>/", SubjectUpdateView.as_view(), name="subject-update"),
    path('student/exams/<int:exam_id>', students_by_exam.as_view(),name=" get_students_by_exam"),
-   path('student/subject/<int:subject_id>', students_by_subject.as_view(),name=" get_students_by_subject"),
+   path('student/subject/<str:subject_name>', students_by_subject.as_view(),name=" get_students_by_subject"),
 
    path('teacher_subjects/', TeacherSubjectsView.as_view(), name='teacher_subjects'),
    path('teacher_exams/', TeacherexamsView.as_view(), name='teacher_exams'),
+    path('teacher_subject/<int:tea_id>', TeacherSubjectsId.as_view(), name='teacher_subjects_b_id'),
    ]
 
