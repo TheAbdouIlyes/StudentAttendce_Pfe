@@ -81,7 +81,7 @@ export default function EditTeacher() {
     if (!subjectToAdd) return;
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/tea/${matricul}/sub/${newSubject}/`, { method: "PUT" });
+      const response = await fetch(`http://127.0.0.1:8000/tea/${matricul}/sub/${newSubject}/`, { method: "POST" });
       if (!response.ok) throw new Error("Failed to assign subject");
 
       setSubjects([...subjects, subjectToAdd]); // Add subject object to state
@@ -94,7 +94,7 @@ export default function EditTeacher() {
   const handleRemoveSubject = async (subjectName) => {
     if (!matricul) return;
     try {
-      const response = await fetch(`http://127.0.0.1:8000/tea/${matricul}/sub/${subjectName}/not`, { method: "PUT" });
+      const response = await fetch(`http://127.0.0.1:8000/tea/${matricul}/sub/${subjectName}/not`, { method: "DELETE" });
       if (!response.ok) throw new Error("Failed to remove subject");
       setSubjects(subjects.filter((sub) => sub.name !== subjectName));
     } catch (err) {

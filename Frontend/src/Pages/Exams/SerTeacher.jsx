@@ -74,7 +74,7 @@ export default function SerTeacher() {
     for (const matricule of selectedMatricules) {
       try {
         const response = await fetch(`http://127.0.0.1:8000/tea/${matricule}/exa/${exam_name}/`, {
-          method: "PUT",
+          method: "POST",
           headers: { "Content-Type": "application/json" },
         });
 

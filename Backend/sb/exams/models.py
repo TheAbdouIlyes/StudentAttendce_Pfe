@@ -65,7 +65,7 @@ class teacher(models.Model):
 class teach(models.Model):
     subject= models.ForeignKey(subject, on_delete=models.CASCADE)
     teacher= models.ForeignKey(teacher, on_delete=models.CASCADE)
-    teaching= models.BooleanField(default=False)
+    
 
 
 class Student(models.Model):
@@ -81,16 +81,14 @@ class surveillance(models.Model):
     teacher = models.ForeignKey(teacher, on_delete=models.CASCADE)
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
     
-    is_present = models.BooleanField(default=False)
-
+   
    
 
 
 class Attendance(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
-    
-    is_present = models.BooleanField(default=False)
+   
 
    
 

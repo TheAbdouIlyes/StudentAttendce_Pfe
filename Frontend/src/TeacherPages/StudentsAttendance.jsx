@@ -70,11 +70,11 @@ export default function StudentsAttendance() {
           <TableBody>
             {students.map((student) => (
               <TableRow key={student.id}>
-                <TableCell align="center">{student.matricule}</TableCell>
+                <TableCell align="center">{student.matricul}</TableCell>
                 <TableCell align="center">{student.first_name}</TableCell>
                 <TableCell align="center">{student.last_name}</TableCell>
-                <TableCell align="center" sx={{ color: student.present ? "green" : "red" }}>
-                  {student.present ? "✔ Present" : "✘ Absent"}
+                <TableCell align="center" sx={{ color: student.is_present ? "green" : "red" }}>
+                  {student.is_present ? "✔ Present" : "✘ Absent"}
                 </TableCell>
               </TableRow>
             ))}

@@ -66,7 +66,7 @@ function ExamAttendance() {
                       <TableCell style={{ color: theme.palette.text.primary }}>{item.exam.amphi}</TableCell>
                       <TableCell>
                         <Chip
-                          label={item.is_present ? "✅ Present" : "❌ Absent"}
+                          label={item.is_persent ? "✅ Present" : "❌ Absent"}
                           style={{
                             backgroundColor: item.is_present ? theme.palette.primary.main : theme.palette.accent.main,
                             color: theme.palette.text.primary,

@@ -33,7 +33,7 @@ function QRCode({ onScan }) {
     async function handleScan(scanResult, module) {
       try {
         const response = await fetch(`http://127.0.0.1:8000/etu/${scanResult}/exa/${module}/`, {
-          method: "PUT",
+          method: "POST",
           headers: { "Content-Type": "application/json" }
         });
 
