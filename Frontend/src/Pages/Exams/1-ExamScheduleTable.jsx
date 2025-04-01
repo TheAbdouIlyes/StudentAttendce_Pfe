@@ -11,6 +11,8 @@ import {
   Paper,
   Button,
   TextField,
+  MenuItem,
+  Select,
 } from "@mui/material";
 
 const ExamScheduleTable = () => {
@@ -21,6 +23,10 @@ const ExamScheduleTable = () => {
   const [editedData, setEditedData] = useState([]);
   const [showQrColumn, setShowQrColumn] = useState(false);
   const [addTeachers, setAddTeachers] = useState(false);
+
+  const timeOptions = [
+    "08:00", "09:30", "10:00", "11:30", "12:00", "13:30", "14:00", "15:30"
+  ];
 
   useEffect(() => {
     fetch(`http://127.0.0.1:8000/exam_list/${year}/${speciality}/${semester}`)
@@ -60,12 +66,6 @@ const ExamScheduleTable = () => {
     const updatedExams = [...editedData];
     updatedExams[index][field] = value;
     setEditedData(updatedExams);
-  };
-
-  const formatTime = (timeString) => {
-    if (!timeString) return "";
-    const [hours, minutes] = timeString.split(":");
-    return `${hours}:${minutes}`;
   };
 
   return (
@@ -139,13 +139,16 @@ const ExamScheduleTable = () => {
 
                 <TableCell align="center">
                   {editing ? (
-                    <TextField
-                      type="time"
+                    <Select
                       value={editedData[index].time}
                       onChange={(e) => handleChange(index, "time", e.target.value)}
-                    />
+                    >
+                      {timeOptions.map((time) => (
+                        <MenuItem key={time} value={time}>{time}</MenuItem>
+                      ))}
+                    </Select>
                   ) : (
-                    formatTime(row.time)
+                    row.time
                   )}
                 </TableCell>
 

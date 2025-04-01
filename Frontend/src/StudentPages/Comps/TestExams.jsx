@@ -7,31 +7,44 @@ import {
   TableHead,
   TableRow,
   Paper,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 
-const TestExams = ({ examData, headers }) => {
+const TestExams = ({ examData = [], headers }) => {
   const theme = useTheme();
-  const timeSlots = [
-    "8:00-9:30",
-    "9:30-10:00",
-    "10:00-11:30",
-    "11:30-12:00",
-    "12:00-13:30",
-    "13:30-14:00",
-    "14:00-15:30",
-    "15:30-16:00",
-  ];
+  const timeSlots = {
+    "08:00:00": "8:00-9:30",
+    "09:30:00": "9:30-10:00",
+    "10:00:00": "10:00-11:30",
+    "11:30:00": "11:30-12:00",
+    "12:00:00": "12:00-13:30",
+    "13:30:00": "13:30-14:00",
+    "14:00:00": "14:00-15:30",
+    "15:30:00": "15:30-16:00",
+  };
 
-  const examsByDate = examData.reduce((acc, exam) => {
-    if (!acc[exam.date]) acc[exam.date] = {};
-    acc[exam.date][exam.time] = exam;
+  console.log("Received examData:", examData); // Debugging
+
+  const examsByDate = (examData || []).reduce((acc, entry) => {
+    const exam = entry.exam; // Extract nested exam
+    if (!exam) return acc; // Avoid errors if structure is incorrect
+
+    if (!acc[exam.date]) acc[exam.date] = {}; // Initialize date object
+    const formattedTime = timeSlots[exam.time]; // Convert "08:00:00" → "8:00-9:30"
+
+    if (formattedTime) {
+      acc[exam.date][formattedTime] = exam; // Store the exam under the formatted time
+    } else {
+      console.warn(`Time slot mismatch: ${exam.time}`); // Debugging if time isn't found
+    }
+
     return acc;
   }, {});
 
-  // Check if the screen is small (mobile)
-  const isMobile = useMediaQuery("(max-width: 768px)");
+  console.log("Processed examsByDate:", examsByDate); // Debugging
+
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <TableContainer
@@ -80,8 +93,8 @@ const TestExams = ({ examData, headers }) => {
               >
                 {date}
               </TableCell>
-              {timeSlots.map((slot, slotIndex) => {
-                const exam = examsByDate[date][slot];
+              {Object.values(timeSlots).map((formattedTime, slotIndex) => {
+                const exam = examsByDate[date][formattedTime]; // Fetch exam from mapped time
                 return (
                   <TableCell
                     key={slotIndex}
@@ -89,13 +102,13 @@ const TestExams = ({ examData, headers }) => {
                     sx={{
                       fontSize: isMobile ? "0.7rem" : "0.9rem",
                       padding: isMobile ? "8px" : "12px",
-                      backgroundColor: exam ? theme.palette.primary.main : "inherit",
+                      backgroundColor: exam ? theme.palette.primary.light : "inherit",
                       minHeight: "50px",
                       wordBreak: "break-word",
                       color: theme.palette.text.primary,
                     }}
                   >
-                    {exam ? `${exam.module} (${exam.place})` : "-"}
+                    {exam ? `${exam.subject_name} (${exam.amphi})` : "-"}
                   </TableCell>
                 );
               })}
