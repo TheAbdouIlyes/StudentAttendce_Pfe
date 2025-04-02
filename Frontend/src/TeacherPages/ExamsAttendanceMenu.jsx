@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
-import { 
-  Box, Typography, Grid, Card, CardContent, Paper, Button, CircularProgress, Alert 
+import {
+  Box,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  Paper,
+  Button,
+  CircularProgress,
+  Alert,
+  Select,
+  MenuItem
 } from "@mui/material";
 
 export default function ExamsSelection() {
@@ -11,10 +21,11 @@ export default function ExamsSelection() {
   const [teacherExams, setTeacherExams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [semester, setSemester] = useState("s1");
 
   useEffect(() => {
     const fetchTeacherSubjects = async () => {
-      const token = localStorage.getItem("accessToken"); // Get the token from storage
+      const token = localStorage.getItem("accessToken");
       
       if (!token) {
         setError("Authentication token not found. Please log in.");
@@ -23,10 +34,10 @@ export default function ExamsSelection() {
       }
 
       try {
-        const response = await fetch("http://127.0.0.1:8000/teacher_subjects/", {
+        const response = await fetch(`http://127.0.0.1:8000/teacher_subjects/${semester}`, {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the header
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
@@ -45,22 +56,25 @@ export default function ExamsSelection() {
     };
 
     fetchTeacherSubjects();
-  }, []);
+  }, [semester]);
 
   return (
     <Box sx={{ p: 3, minHeight: "100vh", backgroundColor: theme.palette.background.default }}>
-      {/* Header Section */}
       <Paper elevation={3} sx={{ p: 3, mb: 4, textAlign: "center", borderRadius: 2 }}>
         <Typography variant="h4" fontWeight="bold" color="primary">
           📝 Exams Attendance
         </Typography>
+        <Select
+          value={semester}
+          onChange={(e) => setSemester(e.target.value)}
+          sx={{ mt: 2, color: theme.palette.text.primary }}
+        >
+          <MenuItem value="s1">Semester 1</MenuItem>
+          <MenuItem value="s2">Semester 2</MenuItem>
+        </Select>
       </Paper>
-
-      {/* Loading & Error Handling */}
       {loading && <CircularProgress sx={{ display: "block", margin: "auto" }} />}
       {error && <Alert severity="error">{error}</Alert>}
-
-      {/* Grid Layout for Teacher's Exams */}
       <Grid container spacing={3}>
         {teacherExams.map((exam, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>

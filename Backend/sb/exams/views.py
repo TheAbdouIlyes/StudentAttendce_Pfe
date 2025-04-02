@@ -799,16 +799,18 @@ from django.shortcuts import get_object_or_404
 class castomExam(APIView):
     permission_classes = [IsAuthenticated]  # Only authenticated users can access
 
-    def get(self, request):
+    def get(self, request, *args,**kwargs):
+
         # Retrieve student based on the authenticated user
         student_instance = get_object_or_404(Student, Name=request.user)  
-
+        s= self.kwargs['s']
         # Get level and speciality
         level1 = student_instance.level
         speciality1 = student_instance.speciality
-
+        
         # Get subjects and exams
-        subject1 = subject.objects.filter(level=level1, speciality=speciality1)
+        
+        subject1 = subject.objects.filter(level=level1, speciality=speciality1, semester=s)
         exams = Exam.objects.filter(subject__in=subject1)
 
         # Prepare exam data with attendance status
@@ -974,13 +976,13 @@ from .serializers import subjetSerializer
 class TeacherSubjectsView(APIView):
     permission_classes = [IsAuthenticated]  # Require authentication
 
-    def get(self, request):
+    def get(self, request ,*args,**kwargs):
         """Retrieve all subjects that the authenticated teacher actively teaches (teaching=True)."""
         # ✅ Get the authenticated teacher (assuming one teacher per user)
         teacher_instance = get_object_or_404(teacher, user=request.user)
-
+        s= self.kwargs['s']
         # ✅ Retrieve subjects where the teacher has `teaching=True`
-        subjects = subject.objects.filter(teach__teacher=teacher_instance)
+        subjects = subject.objects.filter(teach__teacher=teacher_instance, semester=s)
 
         # ✅ Serialize the subjects
         serializer = subjetSerializer(subjects, many=True)
@@ -1008,13 +1010,13 @@ class TeacherSubjectsId(APIView):
 class TeacherexamsView(APIView):
     permission_classes = [IsAuthenticated]  # Require authentication
 
-    def get(self, request):
+    def get(self, request, *args,**kwargs):
         """Retrieve all subjects that the authenticated teacher actively teaches (teaching=True)."""
         # ✅ Get the authenticated teacher (assuming one teacher per user)
         teacher_instance = get_object_or_404(teacher, user=request.user)
-
+        s = self.kwargs['s']
         # ✅ Retrieve subjects where the teacher has `teaching=True`
-        Exams = Exam.objects.filter(surveillance__teacher=teacher_instance)
+        Exams = Exam.objects.filter(surveillance__teacher=teacher_instance,subject__semester=s).select_related("subject")
 
         # ✅ Serialize the subjects
         serializer = ExamSerializer(Exams, many=True)

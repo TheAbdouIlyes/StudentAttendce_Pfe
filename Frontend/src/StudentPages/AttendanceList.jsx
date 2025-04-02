@@ -1,16 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { CircularProgress, Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import {
+  CircularProgress,
+  Chip,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  MenuItem,
+  Select,
+} from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import "./AttendanceList.css";
 
 function ExamAttendance() {
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [semester, setSemester] = useState("s1");
   const token = localStorage.getItem("accessToken");
   const theme = useTheme();
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/student/exam", {
+    setLoading(true);
+    fetch(`http://127.0.0.1:8000/student/exam/${semester}`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -25,15 +40,7 @@ function ExamAttendance() {
         console.error("Error fetching attendance data:", error);
         setLoading(false);
       });
-  }, [token]);
-
-  if (loading) {
-    return (
-      <div className="loading" style={{ background: theme.palette.background.default, color: theme.palette.text.primary }}>
-        Loading attendance data...
-      </div>
-    );
-  }
+  }, [semester, token]);
 
   return (
     <div>
@@ -41,12 +48,25 @@ function ExamAttendance() {
         <div className="profile-card" style={{ background: theme.palette.background.paper }}>
           <div className="profile-header">
             <h1 style={{ color: theme.palette.text.primary }}>📖 Exam Attendance</h1>
+            <Select
+              value={semester}
+              onChange={(e) => setSemester(e.target.value)}
+              style={{ marginBottom: "10px", color: theme.palette.text.primary }}
+            >
+              <MenuItem value="s1">Semester 1</MenuItem>
+              <MenuItem value="s2">Semester 2</MenuItem>
+             
+            </Select>
           </div>
 
-          {attendanceData.length === 0 ? (
-            <p style={{ textAlign: "center", color: theme.palette.text.primary }}>No attendance records found.</p>
+          {loading ? (
+            <div className="loading">Loading attendance data...</div>
+          ) : attendanceData.length === 0 ? (
+            <p style={{ textAlign: "center", color: theme.palette.text.primary }}>
+              No attendance records found.
+            </p>
           ) : (
-            <TableContainer component={Paper} style={{  backgroundColor: theme.palette.background.paper}}>
+            <TableContainer component={Paper} style={{ backgroundColor: theme.palette.background.paper }}>
               <Table>
                 <TableHead>
                   <TableRow>
@@ -66,9 +86,9 @@ function ExamAttendance() {
                       <TableCell style={{ color: theme.palette.text.primary }}>{item.exam.amphi}</TableCell>
                       <TableCell>
                         <Chip
-                          label={item.is_persent ? "✅ Present" : "❌ Absent"}
+                          label={item.is_persent? "✅ Present" : "❌ Absent"}
                           style={{
-                            backgroundColor: item.is_present ? theme.palette.primary.main : theme.palette.accent.main,
+                            backgroundColor: item.is_present ? theme.palette.primary.main : theme.palette.error.main,
                             color: theme.palette.text.primary,
                             fontWeight: "bold",
                           }}

@@ -64,7 +64,7 @@ urlpatterns = [
     path('student/info/<int:pk>',studentinfo.as_view(),name="studentinfo"),
    path('teacher/info/<int:pk>',teacherinfo.as_view(),name="teacherinfo"),
 #    path('teacher/subject',teacher_subjects,name="teacher_subjects"),
-   path('student/exam',castomExam.as_view(),name='student_exam'),
+   path('student/exam/<str:s>',castomExam.as_view(),name='student_exam'),
 
    path('student/delete/<int:pk>/', StudentDeleteAPIView.as_view(), name='student_delete_api'),
    path('teacher/delete/<int:pk>/', TeacherDeleteAPIView.as_view(), name='teacher_delete_api'),
@@ -72,8 +72,8 @@ urlpatterns = [
    path('student/exams/<int:exam_id>', students_by_exam.as_view(),name=" get_students_by_exam"),
    path('student/subject/<str:subject_name>', students_by_subject.as_view(),name=" get_students_by_subject"),
 
-   path('teacher_subjects/', TeacherSubjectsView.as_view(), name='teacher_subjects'),
-   path('teacher_exams/', TeacherexamsView.as_view(), name='teacher_exams'),
+   path('teacher_subjects/<str:s>', TeacherSubjectsView.as_view(), name='teacher_subjects'),
+   path('teacher_exams/<str:s>', TeacherexamsView.as_view(), name='teacher_exams'),
     path('teacher_subject/<int:tea_id>', TeacherSubjectsId.as_view(), name='teacher_subjects_b_id'),
    ]
 
