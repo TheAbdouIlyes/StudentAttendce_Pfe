@@ -38,10 +38,10 @@ export default function StudentTable({ showActions, students, page, setPage, tot
     <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: 2 }}>
       <TableContainer>
         <Table>
-          <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
+          <TableHead >
             <TableRow>
               {columns.map((column) => (
-                <TableCell key={column.dataKey} sx={{ fontWeight: "bold", padding: "12px" }}>
+                <TableCell key={column.dataKey} sx={{ fontWeight: "bold", padding: "12px" }} align="center">
                   {column.label}
                 </TableCell>
               ))}
@@ -51,7 +51,7 @@ export default function StudentTable({ showActions, students, page, setPage, tot
             {students.map((student) => (
               <TableRow key={student.id}>
                 {columns.map((column) => (
-                  <TableCell key={column.dataKey} align="left">
+                  <TableCell key={column.dataKey} align="center">
                     {column.dataKey === "actions" ? (
                       <>
                         <IconButton
@@ -62,7 +62,11 @@ export default function StudentTable({ showActions, students, page, setPage, tot
                         </IconButton>
                         <IconButton
                           sx={{ height: 30 }}
-                          onClick={() => onDelete(student.id)}
+                          onClick={() => {
+                            if (window.confirm("Are you sure you want to delete this student?")) {
+                              onDelete(student.id);
+                            }
+                          }}                          
                           color="error"
                         >
                           <DeleteIcon fontSize="small" />

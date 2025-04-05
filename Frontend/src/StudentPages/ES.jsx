@@ -44,20 +44,21 @@ export default function ES() {
 
   // Adjust QR code colors based on dark/light mode
   const qrColor = theme.palette.text.primary;
-  const qrBgColor = theme.palette.background.default;
+  const qrBgColor = theme.palette.background.paper;
 
   return (
     <Box>
       <Paper
-        elevation={3}
+        elevation={0}
         sx={{
+          border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`,
           p: 2,
           mb: 2,
           textAlign: 'center',
           bgcolor: theme.palette.background.paper,
           color: theme.palette.text.primary,
           borderRadius: 2,
-          width: '80%',
+          width: '100%',
           margin: '0 auto',
         }}
       >
@@ -66,29 +67,72 @@ export default function ES() {
         </Typography>
       </Paper>
 
-      <Box sx={{ p: 3, display: 'flex', justifyContent: 'center' }}>
+      <Box sx={{ pt: 3, display: 'flex', justifyContent: 'center' }}>
         <Paper
-          elevation={4}
+          elevation={0}
           sx={{
-            width: '80%',
+            border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`,
+            width: '100%',
             p: 3,
             borderRadius: 3,
             bgcolor: theme.palette.background.paper,
             color: theme.palette.text.primary,
           }}
         >
-          <Typography variant="h4" align="center" sx={{ mb: 2, fontWeight: 'bold' }}>
-            Student Card
+          <Typography variant="h4" align="center" sx={{ mb: 2, fontWeight: 'bold' }} color="primary">
+            Student infos
           </Typography>
 
           <Grid container spacing={3} alignItems="center">
+            <Grid item xs={12} md={7}>
+              <Card
+                sx={{
+                  p: 3,
+                  borderRadius: 3,
+                  bgcolor: theme.palette.background.default,
+                  color: theme.palette.text.primary,
+                }}
+              >
+                <CardContent>
+                  <Grid container spacing={2} textAlign="center">
+                    <Grid item xs={12}>
+                      <Typography variant="body1" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                        <User size={18} style={{ marginRight: 8 }} /> <b>Full Name:</b> {student.first_name} {student.last_name}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Mail size={18} style={{ marginRight: 8 }} /> <b>Email:</b> {student.email}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Hash size={18} style={{ marginRight: 8 }} /> <b>Matricule:</b> {student.matricul}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                        <BookOpen size={18} style={{ marginRight: 8 }} /> <b>Level:</b> {student.level}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Building2 size={18} style={{ marginRight: 8 }} /> <b>Speciality:</b>  {student.speciality}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+
             <Grid item xs={12} md={5}>
               <Card
+              elevation={0}
                 sx={{
                   textAlign: 'center',
                   p: 2,
                   borderRadius: 3,
-                  bgcolor: theme.palette.background.default,
+                  // bgcolor: theme.palette.background.default,
                   color: theme.palette.text.primary,
                 }}
               >
@@ -104,46 +148,6 @@ export default function ES() {
                 <Typography variant="body1" sx={{ mt: 1 }}>
                   <Download size={18} /> Click to download your QR Code
                 </Typography>
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={7}>
-              <Card
-                sx={{
-                  p: 3,
-                  borderRadius: 3,
-                  bgcolor: theme.palette.background.default,
-                  color: theme.palette.text.primary,
-                }}
-              >
-                <CardContent>
-                  <Grid container spacing={2} textAlign="center">
-                    <Grid item xs={12}>
-                      <Typography variant="body1" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
-                        <User size={18} style={{ marginRight: 8 }} />Full Name: {student.first_name} {student.last_name}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Mail size={18} style={{ marginRight: 8 }} /> Email: {student.email}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Hash size={18} style={{ marginRight: 8 }} /> Matricule: {student.matricul}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
-                        <BookOpen size={18} style={{ marginRight: 8 }} /> Level: {student.level}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Building2 size={18} style={{ marginRight: 8 }} /> Speciality: {student.speciality}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </CardContent>
               </Card>
             </Grid>
           </Grid>

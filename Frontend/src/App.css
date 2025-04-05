@@ -55,3 +55,70 @@
     /* color: black; */
     margin: 0.75%;
 }
+
+
+
+/* ===== LIGHT THEME COLORS ===== */
+
+/* Primary Color Background */
+.bg-light-primary {
+    background-color: #1ba4f6;
+  }
+  
+  /* Secondary Color Background */
+  .bg-light-secondary {
+    background-color: #7f74fa;
+  }
+  
+  /* Accent Color Background */
+  .bg-light-accent {
+    background-color: #7c42f8;
+  }
+  
+  /* Background Default */
+  .bg-light-background-default {
+    background-color: #eff7fe;
+  }
+  
+  /* Background Paper */
+  .bg-light-background-paper {
+    background-color: #ffffff;
+  }
+  
+  /* Text Primary Background */
+  .bg-light-text-primary {
+    background-color: #011723;
+  }
+  
+  /* ===== DARK THEME COLORS ===== */
+  
+  /* Primary Color Background */
+  .bg-dark-primary {
+    background-color: #0992e1;
+  }
+  
+  /* Secondary Color Background */
+  .bg-dark-secondary {
+    background-color: #10058a;
+  }
+  
+  /* Accent Color Background */
+  .bg-dark-accent {
+    background-color: #4007bb;
+  }
+  
+  /* Background Default */
+  .bg-dark-background-default {
+    background-color: #01080e;
+  }
+  
+  /* Background Paper */
+  .bg-dark-background-paper {
+    background-color: #01080e;
+  }
+  
+  /* Text Primary Background */
+  .bg-dark-text-primary {
+    background-color: #dcf2fe;
+  }
+  

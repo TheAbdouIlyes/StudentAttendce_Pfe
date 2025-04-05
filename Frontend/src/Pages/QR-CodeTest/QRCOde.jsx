@@ -2,6 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import { useParams, useLocation } from 'react-router-dom';
 
+import {
+  Box,
+  Typography,
+  Paper,
+  Alert,
+  useTheme,
+} from "@mui/material";
+
 function QRCode({ onScan }) {
   const { speciality, year, semester, module } = useParams();
   const location = useLocation();
@@ -55,7 +63,7 @@ function QRCode({ onScan }) {
   }, [onScan, finalModule]); // ✅ Ensure finalModule is up-to-date
 
   return (
-    <div className="App">
+    <div>
       <h1>QR Scanning for {speciality} {year} {semester} - {finalModule}</h1>
       {scanResult ? <p>Scanned: {scanResult}</p> : <div id="reader">Waiting for scan...</div>}
     </div>

@@ -21,14 +21,15 @@ const baseColumns = [
   { width: 220, label: "Email", dataKey: "email" },
 ];
 
-export default function TableTeacher({ showActions, setRows, rows, page, setPage, totalCount, rowsPerPage }) {
+export default function TableTeacher({ showActions, setRows, rows, page, setPage, totalCount, rowsPerPage,handleDelete }) {
   const navigate = useNavigate();
 
   const handlePageChange = (_, newPage) => {
     setPage(newPage);
   };
 
-  const handleDelete = (id) => setRows(rows.filter((row) => row.id !== id));
+  // const handleDelete = (id) => setRows(rows.filter((row) => row.id !== id));
+  
 
   const columns = showActions
     ? [...baseColumns, { width: 150, label: "Actions", dataKey: "actions" }]
@@ -38,7 +39,7 @@ export default function TableTeacher({ showActions, setRows, rows, page, setPage
     <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: 2 }}>
       <TableContainer>
         <Table>
-          <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
+          <TableHead>
             <TableRow>
               {columns.map((column) => (
                 <TableCell key={column.dataKey} sx={{ fontWeight: "bold", padding: "12px" }}>
@@ -57,7 +58,12 @@ export default function TableTeacher({ showActions, setRows, rows, page, setPage
                         <IconButton sx={{ marginRight: "8px", height: 30 }} onClick={() => navigate(`editTeacher/${row.id}`)}>
                           <EditIcon fontSize="small" />
                         </IconButton>
-                        <IconButton sx={{ height: 30 }} onClick={() => handleDelete(row.id)} color="error">
+                        <IconButton sx={{ height: 30 }} 
+                        onClick={() => {
+                        if (window.confirm("Are you sure you want to delete this teacher?")) {
+                          handleDelete(row.id)}
+                        }}
+                          color="error">
                           <DeleteIcon fontSize="small" />
                         </IconButton>
                       </>

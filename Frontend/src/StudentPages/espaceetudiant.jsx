@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
 import { GraduationCap, Download, User, Mail, Hash, BookOpen, Building2 } from 'lucide-react';
 import './Espaceetudiant.css';
-import Navbar from "./Navbar";
+// import Navbar from "./Navbar";
 function Espaceetudiant() {
   const [student, setStudent] = useState(null);
   const qrRef = useRef(null);

@@ -44,7 +44,21 @@ export default function Modulestest() {
   ];
 console.log(modules1,modules2);
   const handleEdit = () => setIsEditing((prev) => !prev);
+  
   const handleDelete = () => console.log("Delete Module button clicked");
+
+  // const handleDelete = (id) => {
+  //   fetch(`http://127.0.0.1:8000/student/delete/${id}/`, {
+  //     method: "DELETE",
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error("Failed to delete student");
+  //       }
+  //       fetchStudents(page + 1);
+  //     })
+  //     .catch((error) => console.error("Error deleting student:", error));
+  // };
 
   return (
     <div className="AllModules-Container">

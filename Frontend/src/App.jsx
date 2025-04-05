@@ -58,7 +58,6 @@ import The_API from "./HostingPhone";
 import Presence from "./pages/Presence";
 import ExamsAttendanceMenu from './TeacherPages/ExamsAttendanceMenu';
 
-
 import StudentsAttendances from "./TeacherPages/StudentsAttendance";
 import Surveillance from './TeacherPages/Surveillance';
 import ES from './StudentPages/ES';
@@ -176,10 +175,9 @@ const demoTheme = extendTheme({
       palette: {
         primary: { main: '#1ba4f6' }, // Light mode primary color
         secondary: { main: '#7f74fa' }, // Light mode secondary color
-        accent: { main: '#7c42f8' }, // Light mode accent color
         background: { 
           default: '#eff7fe', 
-          paper: '#eff7fe' 
+          paper: '#ffffff' 
         },
         text: { primary: '#011723' }
       }
@@ -188,10 +186,9 @@ const demoTheme = extendTheme({
       palette: {
         primary: { main: '#0992e1' }, // Dark mode primary color
         secondary: { main: '#10058a' }, // Dark mode secondary color
-        accent: { main: '#4007bb' }, // Dark mode accent color
         background: { 
           default: '#01080e', 
-          paper: '#01080e' 
+          paper: '#010a12' 
         },
         text: { primary: '#dcf2fe' }
       }
@@ -221,7 +218,6 @@ function AdminLayouts() {
   const validSpecialities = ["info", "physic", "gestion", "biology", "pharmacy", "medicine"];
   const validYears = ["l1", "l2", "l3", "m1", "m2"];
 
-
   return (
     <AppProvider 
       navigation={NAVIGATION} 
@@ -242,7 +238,6 @@ function AdminLayouts() {
             <Route path="MenuStudent/:speciality/:year/AddStudent" element={<AddStudent />} />
             <Route path="MenuStudent/:speciality/:year/edit-student/:id" element={<EditStudent />} />
 
-
             <Route path="ListTeachers/addTeacher" element={<AddTeacher/>} />
             <Route path="ListTeachers" element={<ListTeachers />} />
             <Route path="ListTeachers/editTeacher/:id" element={<EditTeacher />} />
@@ -250,7 +245,6 @@ function AdminLayouts() {
             <Route path="ListExams" element={<ListExams />} />
             <Route path="ExamsForm" element={<ListExamsForm />} />
             {/* <Route path="ListModules" element={<ListModules />} /> */}
-            
             {/* <Route path="ModulesTest" element={<ModulesTest />} /> */}
 
             <Route path="MenuModules" element={<ModulesMenu />} />

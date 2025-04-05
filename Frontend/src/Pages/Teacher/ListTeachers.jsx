@@ -40,6 +40,20 @@ export default function ListTeachers() {
     
   }, [page]);
 
+
+  const handleDelete = (id) => {
+    fetch(`http://127.0.0.1:8000/teacher/delete/${id}/`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to delete teacher");
+        }
+        fetchTeachers(page + 1);
+      })
+      .catch((error) => console.error("Error deleting teacher:", error));
+  };
+
   return (
     <div className="Teachers-Container">
       <div className="ListTeacher-Top">
@@ -66,6 +80,8 @@ export default function ListTeachers() {
           setPage={setPage} 
           totalCount={totalCount} 
           rowsPerPage={rowsPerPage} 
+          handleDelete={handleDelete}
+          
         />
       </div>
     </div>

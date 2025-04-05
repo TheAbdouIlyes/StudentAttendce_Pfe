@@ -10,11 +10,25 @@ import { useNavigate,useParams } from "react-router-dom";
 export default function ListStudents() {
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
-  const [showActions, setShowActions] = useState(false);
+  // const [showActions, setShowActions] = useState(false);
+
+  
+  const [showActions, setShowActions] = useState(() => {
+    const stored = localStorage.getItem("showActions");
+    return stored ? JSON.parse(stored) : false;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("showActions", JSON.stringify(showActions));
+  }, [showActions]);
+  
+  
   const [page, setPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const rowsPerPage = 5;
   const { speciality, year} = useParams();
+
+  
   const fetchStudents = (pageNumber = 1) => {
     fetch(`http://127.0.0.1:8000/student_par_specialitylevel/${speciality}/${year}?page=${pageNumber}`)
       .then((response) => {
@@ -39,8 +53,18 @@ export default function ListStudents() {
   }, [page]);
 
   const handleDelete = (id) => {
-    setStudents((prevStudents) => prevStudents.filter((student) => student.id !== id));
+    fetch(`http://127.0.0.1:8000/student/delete/${id}/`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to delete student");
+        }
+        fetchStudents(page + 1);
+      })
+      .catch((error) => console.error("Error deleting student:", error));
   };
+
 
   return (
     <div className="Student-Container">
@@ -53,7 +77,14 @@ export default function ListStudents() {
           <Button
             variant="contained"
             startIcon={showActions ? <VisibilityOffIcon /> : <VisibilityIcon />}
-            onClick={() => setShowActions((prev) => !prev)}
+            onClick={() => {
+              setShowActions((prev) => {
+                const newValue = !prev;
+                localStorage.setItem("showActions", JSON.stringify(newValue));
+                return newValue;
+              });
+            }}
+            
           >
             {showActions ? "Hide Actions" : "Show Actions"}
           </Button>

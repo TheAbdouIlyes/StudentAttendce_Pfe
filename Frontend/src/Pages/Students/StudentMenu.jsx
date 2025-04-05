@@ -1,69 +1,58 @@
-import React from "react";
-import { useTheme } from "@mui/material/styles";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./StudentMenu.css"; // Keep your CSS
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    Menu,
-    MenuItem,
-    Button,
-    FormControl,
-    FormLabel,
-    RadioGroup,
-    FormControlLabel,
-    Radio,
-    TextField
-  } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { 
+  Box, Typography, Grid, Card, CardContent, Paper, Button 
+} from "@mui/material";
 
-const StudentsTable = [
-  { id: 1, title: "L1", path: "/l1" },
-  { id: 2, title: "L2", path: "/l2" },
-  { id: 3, title: "L3", path: "/l3" },
-  { id: 4, title: "M1", path: "/m1" },
-  { id: 5, title: "M2", path: "/m2" },
-];
+const levels = ["L1", "L2", "L3", "M1", "M2"];
+const specialities = ["info", "physic", "gestion", "biology", "pharmacy", "medicine"];
 
-
- 
-
-export default function ModulesMenu() {
+export default function StudentsMenu() {
   const navigate = useNavigate();
-  const theme = useTheme(); // Detects dark or light mode
-
-  const [semester, setSemester] = useState("S1");
+  const theme = useTheme();
 
   return (
-    <div>
-        <div className="ExamsMenu-TOP">
-            <h2>Students Menu</h2>
-        </div>
-        
+    <Box sx={{ p: 3, minHeight: "100vh", backgroundColor: theme.palette.background.default }}>
+      {/* Header Section */}
+      <Paper elevation={0} sx={{ border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, p: 3, mb: 4, textAlign: "center", borderRadius: 2 }}>
+        <Typography variant="h4" fontWeight="bold" color="primary">
+          📚 Students
+        </Typography>
+        <Typography variant="h6" sx={{ mt: 1 }}>
+          Choose Your Specialty & Level
+        </Typography>
+      </Paper>
 
-    
-        <div className={`container ${theme.palette.mode === "dark" ? "dark-mode" : "light-mode"}`}>
-
-            
-        {["info", "physic", "gestion", "biology", "pharmacy", "medcine"].map((category, index) => (
-            <div key={index} className="spec">
-            <h2>{category}</h2>
-            <div className="contener">
-                {StudentsTable.map((student) => (
-                <div key={student.id} className="spec" onClick={() => navigate(`/MenuStudent/${category}/${student.title}`)}>
-                  
-                    <h2>{student.title}</h2>
-                </div>
-                ))}
-            </div>
-            </div>
+      {/* Grid Layout */}
+      <Grid container spacing={3}>
+        {specialities.map((speciality, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, borderRadius: 3, transition: "0.3s", "&:hover": { transform: "scale(1.05)" } }}>
+              <CardContent sx={{ textAlign: "center" }}>
+                <Typography variant="h5" fontWeight="bold" color="primary">
+                  {speciality.toUpperCase()}
+                </Typography>
+                <Grid container spacing={1} sx={{ mt: 2 }}>
+                  {levels.map((level) => (
+                    <Grid item xs={6} key={level}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        sx={{ fontWeight: "bold", borderRadius: 2 }}
+                        onClick={() => navigate(`/MenuStudent/${speciality}/${level}`)}
+                      >
+                        {level}
+                      </Button>
+                    </Grid>
+                  ))}
+                </Grid>
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
-        </div>
-    </div>
+      </Grid>
+    </Box>
   );
 }
