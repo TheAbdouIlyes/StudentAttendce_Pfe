@@ -6,6 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useNavigate,useParams } from "react-router-dom";
+import ReturnButton from "../../comps/ReturnButton";
 
 export default function ListStudents() {
   const navigate = useNavigate();
@@ -69,6 +70,7 @@ export default function ListStudents() {
   return (
     <div className="Student-Container">
       <div className="MainSection-Top">
+        <ReturnButton/>
         <h1 className="StudentListTitle">Student List</h1>
         <div style={{ display: "flex", gap: "10px" }}>
           <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate("AddStudent")}>

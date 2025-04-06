@@ -29,7 +29,7 @@ export default function ListExams() {
 
       <div className='TopExams'>
         <ReturnButton/>
-        <h1>{speciality} {year} {semester}</h1>
+        <h3>Current State: {speciality} {year} {semester}</h3>
 
 
       </div>

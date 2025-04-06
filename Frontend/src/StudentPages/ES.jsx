@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
-import { GraduationCap, Download, User, Mail, Hash, BookOpen, Building2 } from 'lucide-react';
+import { GraduationCap, Download, User, Mail, Hash, BookOpen, Building2, Columns } from 'lucide-react';
 import { AppBar, Toolbar, Typography, Paper, Grid, Box, Card, CardContent, Avatar, Button } from '@mui/material';
 import { useTheme, useColorScheme } from '@mui/material/styles';
 
@@ -47,15 +47,16 @@ export default function ES() {
   const qrBgColor = theme.palette.background.paper;
 
   return (
-    <Box>
-      <Paper
+    <Box sx={{ display: 'flex',flexDirection:'column', justifyContent: 'center' ,alignItems:'center'}}>
+      {/* <Paper
         elevation={0}
         sx={{
-          border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`,
+          // border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`,
           p: 2,
           mb: 2,
-          textAlign: 'center',
-          bgcolor: theme.palette.background.paper,
+          ml: 8,
+          textAlign: 'start',
+          bgcolor: theme.palette.background.default,
           color: theme.palette.text.primary,
           borderRadius: 2,
           width: '100%',
@@ -63,11 +64,11 @@ export default function ES() {
         }}
       >
         <Typography variant="h6">
-            Welcome, <b>{student.first_name} {student.last_name}</b> To Your Student Space
+            Welcome, <b>{student.first_name} {student.last_name}</b> To Your Student profile
         </Typography>
-      </Paper>
+      </Paper> */}
 
-      <Box sx={{ pt: 3, display: 'flex', justifyContent: 'center' }}>
+      <Box sx={{ width:'100%',maxWidth:'700px', display: 'flex', justifyContent: 'center' }}>
         <Paper
           elevation={0}
           sx={{
@@ -79,44 +80,45 @@ export default function ES() {
             color: theme.palette.text.primary,
           }}
         >
-          <Typography variant="h4" align="center" sx={{ mb: 2, fontWeight: 'bold' }} color="primary">
-            Student infos
+          <Typography variant="h4" align="center" sx={{ pl:4,pr:4,mb: 2, fontWeight: 'bold',display: 'flex',justifyContent: 'start' }} color="primary">
+            Student card
           </Typography>
 
           <Grid container spacing={3} alignItems="center">
             <Grid item xs={12} md={7}>
               <Card
+              elevation={0}
                 sx={{
                   p: 3,
                   borderRadius: 3,
-                  bgcolor: theme.palette.background.default,
-                  color: theme.palette.text.primary,
+                  // bgcolor: theme.palette.background.default,
+                  // color: theme.palette.text.primary,
                 }}
               >
                 <CardContent>
                   <Grid container spacing={2} textAlign="center">
                     <Grid item xs={12}>
-                      <Typography variant="body1" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography variant="body1" gutterBottom sx={{ display: 'flex', alignItems: 'center',mb: 1  }}>
                         <User size={18} style={{ marginRight: 8 }} /> <b>Full Name:</b> {student.first_name} {student.last_name}
                       </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' ,mb: 1 }}>
                         <Mail size={18} style={{ marginRight: 8 }} /> <b>Email:</b> {student.email}
                       </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center',mb: 1  }}>
                         <Hash size={18} style={{ marginRight: 8 }} /> <b>Matricule:</b> {student.matricul}
                       </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center',mb: 1  }}>
                         <BookOpen size={18} style={{ marginRight: 8 }} /> <b>Level:</b> {student.level}
                       </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center',mb: 1  }}>
                         <Building2 size={18} style={{ marginRight: 8 }} /> <b>Speciality:</b>  {student.speciality}
                       </Typography>
                     </Grid>

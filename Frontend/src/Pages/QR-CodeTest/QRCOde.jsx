@@ -9,6 +9,7 @@ import {
   Alert,
   useTheme,
 } from "@mui/material";
+import ReturnButton from '../../comps/ReturnButton';
 
 function QRCode({ onScan }) {
   const { speciality, year, semester, module } = useParams();
@@ -63,10 +64,17 @@ function QRCode({ onScan }) {
   }, [onScan, finalModule]); // ✅ Ensure finalModule is up-to-date
 
   return (
+    <Box sx={{ display: "flex",flexDirection:'column', height: "100%",width:'100%' }}>
+      <Box sx={{ display: "flex",alignItems:'center', height: "auto",width:'100%',mb:5 }}>
+
+        <ReturnButton/><h1 style={{margin:'0',padding:'0',marginLeft:'2%'}}>QR-Code Scanning Page for {speciality} {year} {semester} - {finalModule}</h1>
+      </Box>
+
     <div>
-      <h1>QR Scanning for {speciality} {year} {semester} - {finalModule}</h1>
+      
       {scanResult ? <p>Scanned: {scanResult}</p> : <div id="reader">Waiting for scan...</div>}
     </div>
+    </Box>
   );
 }
 

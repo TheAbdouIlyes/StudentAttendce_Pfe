@@ -13,7 +13,11 @@ import {
   TextField,
   MenuItem,
   Select,
+  Box,
 } from "@mui/material";
+
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
 
 const ExamScheduleTable = () => {
   const navigate = useNavigate();
@@ -70,12 +74,14 @@ const ExamScheduleTable = () => {
 
   return (
     <>
-      <div style={{ marginBottom: "10px" }}>
+      <Box sx={{ display:"flex",justifyContent:"end",marginBottom: "10px" }}>
         <Button
           variant="contained"
-          color={editing ? "primary" : "secondary"}
+          color="info"
           onClick={editing ? handleSave : handleEdit}
-          style={{ marginRight: "10px" }}
+          sx={{maxHeight:40, ml: "10px" }}
+
+
         >
           {editing ? "Save" : "Edit"}
         </Button>
@@ -84,6 +90,7 @@ const ExamScheduleTable = () => {
           variant="contained"
           color="info"
           onClick={() => setShowQrColumn(!showQrColumn)}
+          sx={{maxHeight:40, ml: "10px" }}
         >
           {showQrColumn ? "Hide QR Scanner" : "Show QR Scanner"}
         </Button>
@@ -92,10 +99,11 @@ const ExamScheduleTable = () => {
           variant="contained"
           color="info"
           onClick={() => setAddTeachers(!addTeachers)}
+          sx={{maxHeight:40, ml: "10px" }}
         >
           {addTeachers ? "Cancel" : "Add Teachers"}
         </Button>
-      </div>
+      </Box>
 
       <TableContainer component={Paper} className="Examan-MainTable">
         <Table>
@@ -107,6 +115,7 @@ const ExamScheduleTable = () => {
               <TableCell align="center">Time</TableCell>
               {showQrColumn && <TableCell align="center">QR Scan</TableCell>}
               {addTeachers && <TableCell align="center">Add Teacher</TableCell>}
+              <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -179,11 +188,14 @@ const ExamScheduleTable = () => {
                   </TableCell>
                 )}
 
-                <TableCell align="center">
+                <TableCell align="right">
                   <Button
-                    variant="contained"
+                    // variant="contained"
                     color="success"
                     onClick={() => navigate(`${row.id}/presence`)}
+                    startIcon={<ArrowForwardIcon />}
+                    sx={{border:"1px solid ",borderRadius:'0.5rem'}}
+
                   >
                     View Exam
                   </Button>

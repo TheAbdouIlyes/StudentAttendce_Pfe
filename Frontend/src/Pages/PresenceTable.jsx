@@ -39,7 +39,7 @@ export default function PresenceTable({ showActions, students, page, setPage, to
     <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: 2 }}>
       <TableContainer>
         <Table>
-          <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
+          <TableHead>
             <TableRow>
               {columns.map((column) => (
                 <TableCell key={column.dataKey} sx={{ fontWeight: "bold", padding: "12px" }}>

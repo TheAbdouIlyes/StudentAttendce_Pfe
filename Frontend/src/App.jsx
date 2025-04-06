@@ -18,6 +18,12 @@ import "./App.css";
 import UserID from"./LogIn/UserID"
 import LogInStudent from "./LogIn/LogInStudent"
 
+
+import PersonIcon from '@mui/icons-material/Person';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+
+
 ////////////////////////////////
 import LogInTeacher from "./LogIn/LogInTeacher"
 
@@ -61,6 +67,7 @@ import ExamsAttendanceMenu from './TeacherPages/ExamsAttendanceMenu';
 import StudentsAttendances from "./TeacherPages/StudentsAttendance";
 import Surveillance from './TeacherPages/Surveillance';
 import ES from './StudentPages/ES';
+import StudentDashboard from './StudentPages/StudentDashboard';
 
 const NAVIGATION = [
   { kind: 'header', title: 'Stats' },
@@ -137,17 +144,16 @@ const NAVIGATION_Teacher = [
 
 
 const NAVIGATION_Student = [
-  { kind: 'header', title: 'Main Student Espace' },
-  { segment: 'Student/profile', title: 'Profile', icon: <PeopleIcon />
-  },
-  { segment: 'Student/Attendance', title: 'Attendance', icon: <PeopleIcon />
-  },
-  { segment: 'Student/planning', title: 'planning', icon: <PeopleIcon />
-  },
-
+  { kind: 'header', title: 'Stats' },
+  { segment: 'Student/dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
+  { kind: 'divider' },
+  { kind: 'header', title: 'Espace Student' },
+  { segment: 'Student/profile', title: 'Profile', icon: <PersonIcon /> },
+  { segment: 'Student/Attendance', title: 'Attendance', icon: <EventAvailableIcon /> },
+  { segment: 'Student/planning', title: 'Planning', icon: <CalendarMonthIcon /> },
   { kind: 'divider' },
   { kind: 'header', title: 'Exit' },
-  { 
+  {
     segment: './', 
     title: 'Logout', 
     icon: <ExitToAppIcon />, 
@@ -258,7 +264,7 @@ function AdminLayouts() {
 
             {/* <Route path="MenuExams/:speciality/:year/:semester/qr-scanner" element={<QRCOde />} /> */}
             <Route path="MenuExams/:speciality/:year/:semester/:module/qr-scanner" element={<QRCOde />} />
-           <Route path="MenuExams/:speciality/:year/:semester/:id/presence" element={<Presence/>} />
+            <Route path="MenuExams/:speciality/:year/:semester/:id/presence" element={<Presence/>} />
             <Route path="MenuExams/:speciality/:year/:semester/:exam_name/SerTeacher" element={<SerTeacher/>} /> 
 
 
@@ -327,7 +333,7 @@ function StudentLayouts() {
       navigation={NAVIGATION_Student} 
       router={{ navigate }} 
       theme={demoTheme}  
-      branding={{ logo: <img src={logo} style={{ width: "40px", height: "50px", borderRadius: "50%" }} /> ,title: <div className='TITLE-ALGER1'><h5 className='ALger1'>FACULTY OF SCIENCE UNIVERSITY OF ALGIERS 1</h5><br /><h5 className='ALger1'>كـلـيـة الـعلوم جـامـعـة الـجـزائـر 1</h5></div> }}
+      branding={{ logo: <img src={logo} style={{ width: "40px", height: "50px", borderRadius: "50%" }} /> ,title: <div className='TITLE-ALGER1'><h5 className='ALger1'>UNIVERSITY OF ALGIERS 1</h5><br /><h5 className='ALger1'>كـلـيـة الـعلوم جـامـعـة الـجـزائـر 1</h5></div> }}
       // sx={{color:"primary"}}
     >
     
@@ -335,6 +341,7 @@ function StudentLayouts() {
 
         <PageContainer className='MainPage-Conatiner'>
           <Routes >
+          <Route path="dashboard" element={<StudentDashboard />} />
             <Route path="profile" element={<ES />} />
             <Route path="Attendance" element={<AttendanceList />} />
             <Route path="planning" element={<PlanningExams/>} />

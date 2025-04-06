@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./listStudents.css";
 import PresenceTable from "./PresenceTable";
 import { useParams } from "react-router-dom";
+import ReturnButton from "../comps/ReturnButton";
 
 export default function Presence() {
   const { id } = useParams(); // Exam ID from URL
@@ -35,7 +36,8 @@ export default function Presence() {
 
   return (
     <div className="Student-Container">
-      <div className="MainSection-Top">
+      <div style={{display:'flex',width:"100%",marginBottom:"2%"}}>
+        <ReturnButton/>
         <h1 className="StudentListTitle">Student List</h1>
       </div>
 
