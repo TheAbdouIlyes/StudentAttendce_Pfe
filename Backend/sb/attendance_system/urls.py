@@ -20,7 +20,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from exams import views
 from exams.views import GenerateQRCode
-from exams.views import  Examserv, TeacherSubjectsId,not_teaching,teacher_not_present,TeacherexamsView,TeacherSubjectsView,students_by_subject,students_by_exam,SubjectUpdateView,studentinfo,TeacherDeleteAPIView,StudentDeleteAPIView,castomExam,teacherinfo,subjectlist,Examlist,StudentProfileView,delete_subject,delete_exam,ExamListByLevelAndSpeciality,CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView,ExamUpdate,UpdateTeacherView,UpdateStudentView,teaching,teacher_present,ListStudentView,ListTeacherView,ListTeachView,ListSurveillanceView,studentListByspesialityandLevel,subjetListByspecialityandlevelandsemester,CheckTokenView,LogoutView
+from exams.views import  Présences_par_level,Présences_par_Spécialité,adminstats,Examserv, TeacherSubjectsId,not_teaching,teacher_not_present,TeacherexamsView,TeacherSubjectsView,students_by_subject,students_by_exam,SubjectUpdateView,studentinfo,TeacherDeleteAPIView,StudentDeleteAPIView,castomExam,teacherinfo,subjectlist,Examlist,StudentProfileView,delete_subject,delete_exam,ExamListByLevelAndSpeciality,CreateteacherView,subjectCreate,login_with_matricul_secret,login_with_matricul_roll,is_presente,CreatestudView,ExamUpdate,UpdateTeacherView,UpdateStudentView,teaching,teacher_present,ListStudentView,ListTeacherView,ListTeachView,ListSurveillanceView,studentListByspesialityandLevel,subjetListByspecialityandlevelandsemester,CheckTokenView,LogoutView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
@@ -78,5 +78,9 @@ urlpatterns = [
     path('teacher_subject/<int:tea_id>', TeacherSubjectsId.as_view(), name='teacher_subjects_b_id'),
 
     path('teacher/<str:s>/exam/<str:ex>',Examserv.as_view(),name="tea_examserv"),
+    path('adminstats/',adminstats.as_view(),name="admin_stats"),
+
+    path('Présences_par_Spécialité/<str:spes>',Présences_par_Spécialité.as_view(),name="Présences_par_Spécialité"),
+    path('Présences_par_level/<str:level>',Présences_par_level.as_view(),name="Présences_par_level"),
    ]
 
