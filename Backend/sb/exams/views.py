@@ -478,23 +478,16 @@ class  teacher_not_present(generics.UpdateAPIView):
     serializer_class = surveillanceSerializer
     permission_classes = [AllowAny]  
        
-    def get_object(self):
-        matricul = self.kwargs['matricul']
-        exam_name = self.kwargs['exam_name']
-
-        # Retrieve teacher by matricul
-        teacher_instance = get_object_or_404(teacher, matricul=matricul)
-
-        # Retrieve exam by subject name
-        exam_instance = get_object_or_404(Exam, subject__name=exam_name)
-
-        # Get Attendance object
-        return get_object_or_404(surveillance, teacher=teacher_instance, exam=exam_instance)
-
+    
     def delete(self, request, *args, **kwargs):
-        attendance_instance = self.get_object()
-        attendance_instance.delete()
-        return Response({'detail': 'Attendance record deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
+         matricule = self.kwargs['matricul']
+         exam_name = self.kwargs['exam_name']
+         teacher_instance = get_object_or_404(teacher, matricul=matricule)
+         exam_instance = get_object_or_404(Exam, subject__name=exam_name)
+         attendance_instance = surveillance.objects.filter(teacher=teacher_instance, exam=exam_instance)
+         if (surveillance.objects.filter(teacher=teacher_instance, exam=exam_instance).exists()):
+          attendance_instance.delete()
+         return Response({'detail': 'Attendance record deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
 
 
 
@@ -1023,3 +1016,19 @@ class TeacherexamsView(APIView):
 
         return Response(serializer.data)
          
+class Examserv(APIView):
+  
+    permission_classes = [AllowAny]  # Require authentication
+    def get(self, request, *args, **kwargs):
+
+
+     matricule = self.kwargs['s']
+     ex=self.kwargs['ex']
+     teacher_instance = get_object_or_404(teacher, matricul=matricule)
+     exam_instance = get_object_or_404(Exam, subject__name=ex)
+     surveillance_instance=surveillance.objects.filter(teacher=teacher_instance,exam= exam_instance)
+     if surveillance_instance.exists():
+            return JsonResponse({"is_present": True})
+     else:
+            return JsonResponse({"is_present": False})
+       

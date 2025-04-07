@@ -8,11 +8,11 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
   CircularProgress,
   Alert,
   Pagination,
   Checkbox,
+  Button,
 } from "@mui/material";
 
 export default function SerTeacher() {
@@ -35,9 +35,36 @@ export default function SerTeacher() {
         if (!response.ok) throw new Error("Failed to fetch teachers");
         return response.json();
       })
-      .then((data) => {
+      .then(async (data) => {
         if (data.results) {
-          setTeachers(data.results);
+          const fetchedTeachers = data.results;
+
+          // Set initial teachers
+          setTeachers(fetchedTeachers);
+
+          // Initialize selectedTeachers with false for all teachers
+          const newSelected = {};
+
+          // Check if the teacher is already assigned to the exam
+          for (let teacher of fetchedTeachers) {
+            try {
+              // Check if the teacher is already assigned to the exam
+              const response = await fetch(
+                `http://127.0.0.1:8000/teacher/${teacher.matricul}/exam/${exam_name}`
+              );
+              if (response.ok) {
+                const assignmentData = await response.json();
+                newSelected[teacher.matricul] = assignmentData.is_present==true; // Assuming 'isAssigned' field in response
+              } else {
+                newSelected[teacher.matricul] = assignmentData.is_present==false; // Teacher is not assigned
+              }
+            } catch (error) {
+              setError(`Error checking assignment for teacher ${teacher.matricul}: ${error}`);
+              newSelected[teacher.matricul] = false; // Error occurred, treat it as not assigned
+            }
+          }
+
+          setSelectedTeachers(newSelected);
           setTotalPages(Math.ceil(data.count / rowsPerPage));
         } else {
           throw new Error("Unexpected API response format");
@@ -45,33 +72,23 @@ export default function SerTeacher() {
       })
       .catch((error) => setError(error.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [exam_name]);
 
   useEffect(() => {
     fetchTeachers(page);
   }, [fetchTeachers, page]);
 
-  // ✅ Ensures state updates correctly
-  const handleSelect = (matricule) => {
-    setSelectedTeachers((prev) => {
-      const newState = { ...prev, [matricule]: !prev[matricule] };
-      console.log("Updated selection:", newState); // Debugging log
-      return newState;
-    });
-  };
+  const handleSelect = async (matricule) => {
+    const isChecked = !selectedTeachers[matricule]; // Toggle current state
 
-  async function handleSubmit() {
-    const selectedMatricules = Object.keys(selectedTeachers).filter((matricule) => selectedTeachers[matricule]);
+    // Update state with the new selection
+    setSelectedTeachers((prev) => ({
+      ...prev,
+      [matricule]: isChecked,
+    }));
 
-    if (selectedMatricules.length === 0) {
-      setError("No teachers selected!");
-      return;
-    }
-
-    let successCount = 0;
-    let failedMatricules = [];
-
-    for (const matricule of selectedMatricules) {
+    // If checked, send POST request
+    if (isChecked) {
       try {
         const response = await fetch(`http://127.0.0.1:8000/tea/${matricule}/exa/${exam_name}/`, {
           method: "POST",
@@ -79,24 +96,30 @@ export default function SerTeacher() {
         });
 
         if (!response.ok) {
-          failedMatricules.push(matricule);
-        } else {
-          successCount++;
+          setError(`Failed to assign teacher ${matricule}`);
         }
       } catch (error) {
-        console.error(`Error in assigning teacher ${matricule}:`, error);
-        failedMatricules.push(matricule);
+        setError(`Error on POST request for ${matricule}: ${error}`);
+      }
+    } 
+    // If unchecked, send DELETE request
+    else {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/tea/${matricule}/exa/${exam_name}/not`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          setError(`Failed to unassign teacher ${matricule}`);
+        }
+      } catch (error) {
+        setError(`Error on DELETE request for ${matricule}: ${error}`);
       }
     }
+  };
 
-    if (failedMatricules.length > 0) {
-      setError(`Failed to assign: ${failedMatricules.join(", ")}`);
-    }
-
-    if (successCount > 0) {
-      console.log("Teachers assigned successfully!");
-      navigate(-1);
-    }
+  function handleGoBack() {
+    navigate(-1);
   }
 
   return (
@@ -107,6 +130,14 @@ export default function SerTeacher() {
       {error && <Alert severity="error">{error}</Alert>}
 
       <TableContainer>
+        <Button
+          variant="contained"
+          color="success"
+          onClick={handleGoBack}
+          sx={{ marginTop: 2, display: "block", marginLeft: "auto", marginRight: "auto" }}
+        >
+          Go Back
+        </Button>
         <Table>
           <TableHead>
             <TableRow>
@@ -123,7 +154,7 @@ export default function SerTeacher() {
                 <TableRow key={teacher.matricul}>
                   <TableCell>
                     <Checkbox
-                      checked={!!selectedTeachers[teacher.matricul]}
+                      checked={selectedTeachers[teacher.matricul] || false}  // Ensure state is reflected here
                       onChange={() => handleSelect(teacher.matricul)}
                     />
                   </TableCell>
@@ -152,15 +183,6 @@ export default function SerTeacher() {
         onChange={(e, value) => setPage(value)}
         sx={{ marginTop: 2, display: "flex", justifyContent: "center" }}
       />
-
-      <Button
-        variant="contained"
-        color="success"
-        onClick={handleSubmit} // ✅ Submits selected teachers
-        sx={{ marginTop: 2, display: "block", marginLeft: "auto", marginRight: "auto" }}
-      >
-        Submit & Go Back
-      </Button>
     </Paper>
   );
 }
