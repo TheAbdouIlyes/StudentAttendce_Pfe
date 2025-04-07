@@ -22,7 +22,9 @@ async () => {
   return (
     <div className='Dashboard'>
       <script></script>
-      <button onClick={()=>{console.log("Logout button clicked");
+      <button onClick={()=>{
+        
+console.log("Logout button clicked");
 
 // Remove authentication data from localStorage
 localStorage.removeItem("accessToken");
