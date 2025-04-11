@@ -14,7 +14,7 @@ class StudentSerializer(serializers.ModelSerializer):
 class ExamSerializer(serializers.ModelSerializer):
 
     subject_name = serializers.CharField(source='subject.name', read_only=True)
-
+    time = serializers.TimeField(format="%H:%M")
     class Meta:
         model = Exam
         fields =['id', 'subject_name','date','time','amphi']
