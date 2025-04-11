@@ -13,7 +13,8 @@ import {
   TableRow,
   Paper,
   FormControl,
-  InputLabel
+  InputLabel,
+  Box
 } from "@mui/material";
 import ReturnButton from "../../comps/ReturnButton";
 
@@ -66,7 +67,8 @@ export default function AddStudent() {
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "auto" }}>
+    <Box sx={{  margin: "auto" }}>
+      <Paper sx={{ pl: 10,pr: 10,pt:1,pb:3 }}>
       <h2><ReturnButton/> Add a New Student</h2>
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -93,7 +95,7 @@ export default function AddStudent() {
 
         <FormControl>
                   <InputLabel>Speciality</InputLabel>
-                  <Select name="speciality" value={studentData.speciality} onChange={handleChange} required>
+                  <Select label="Speciality" name="speciality" value={studentData.speciality} onChange={handleChange} required>
                     <MenuItem value="info">Info</MenuItem>
                     <MenuItem value="physic">Physic</MenuItem>
                     <MenuItem value="gestion">Gestion</MenuItem>
@@ -139,6 +141,8 @@ export default function AddStudent() {
           </Table>
         </TableContainer>
       )}
-    </div>
+
+    </Paper>
+    </Box>
   );
 }

@@ -27,7 +27,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 ////////////////////////////////
 import LogInTeacher from "./LogIn/LogInTeacher"
 
-import StudentProfile from './StudentPages/Espaceetudiant';
+// import StudentProfile from './StudentPages/Espaceetudiant';
 import AttendanceList from './StudentPages/AttendanceList';
 // Import your pages
 import Dashboard from './Pages/Dashboard';
@@ -40,7 +40,7 @@ import ListExams from './Pages/Exams/ListExams';
 //----------------------------------;
 import AddModule from './Pages/Modules/AddModule';
 import ProtectedRoute from './context/ProtectedRoute';
-import ModulesTest from './Pages/Modules/ModulesTest2';
+import ListModules from './Pages/Modules/ListModules';
 import ListExamsForm from './StudentPages/ListExamsForm';
 import Examan1 from './Pages/Examan1';
 import ModulesMenu from './Pages/Modules/ModulesMenu';
@@ -49,7 +49,7 @@ import ExamsMenu from './Pages/Exams/ExamsMenu';
 import SerTeacher from './Pages/Exams/SerTeacher';
 // import ExamanForm from './Pages/Exams/ExamanForm';
 import LogInAdmin from './LogIn/LogInAdmin';
-import { colors } from '@mui/material';
+import { Button, colors } from '@mui/material';
 import StudentMenu from './Pages/Students/StudentMenu';
 import AddStudent from './Pages/Students/AddStudent';
 import PlanningExams from './StudentPages/PlanningExams';
@@ -61,6 +61,7 @@ import StudentsAttendances from "./TeacherPages/StudentsAttendance";
 import Surveillance from './TeacherPages/Surveillance';
 import ES from './StudentPages/ES';
 import StudentDashboard from './StudentPages/StudentDashboard';
+import LogOut from "./TheLogOut"
 
 const NAVIGATION = [
   { kind: 'header', title: 'Stats' },
@@ -76,29 +77,12 @@ const NAVIGATION = [
   },
   { segment: 'MenuModules', title: 'Modules', icon: <ClassIcon />, 
   },
-  // { kind: 'divider' },
-  // { kind: 'header', title: 'Settings' },
-  // { segment: 'Settings', title: 'Settings', icon: <SettingsIcon /> },
   { kind: 'divider' },
   { kind: 'header', title: 'Exit' },
-
   { 
-    segment: './', 
+    segment: 'LogOut', 
     title: 'Logout', 
     icon: <ExitToAppIcon />, 
-     onClick: () => {
-      console.log("Logout button clicked");
-
-      // Remove authentication data from localStorage
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("role");
-    
-      // Dispatch a custom event to notify other parts of the app
-      window.dispatchEvent(new Event("storage"));
-    
-      // Optionally, navigate to the login page programmatically
-      window.location.href = "/";
-    }
   },
 ];
 
@@ -116,22 +100,9 @@ const NAVIGATION_Teacher = [
   { kind: 'divider' },
   { kind: 'header', title: 'Exit' },
   { 
-    segment: './', 
+    segment: 'LogOut', 
     title: 'Logout', 
     icon: <ExitToAppIcon />, 
-     onClick: () => {
-      console.log("Logout button clicked");
-
-      // Remove authentication data from localStorage
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("role");
-    
-      // Dispatch a custom event to notify other parts of the app
-      window.dispatchEvent(new Event("storage"));
-    
-      // Optionally, navigate to the login page programmatically
-      window.location.href = "/";
-    }
   },
 ];
 
@@ -147,22 +118,9 @@ const NAVIGATION_Student = [
   { kind: 'divider' },
   { kind: 'header', title: 'Exit' },
   {
-    segment: './', 
+    segment: 'LogOut', 
     title: 'Logout', 
     icon: <ExitToAppIcon />, 
-     onClick: () => {
-      console.log("Logout button clicked");
-
-      // Remove authentication data from localStorage
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("role");
-    
-      // Dispatch a custom event to notify other parts of the app
-      window.dispatchEvent(new Event("storage"));
-    
-      // Optionally, navigate to the login page programmatically
-      window.location.href = "/";
-    }
   },
 ];
 
@@ -214,15 +172,12 @@ const Skeleton = styled('div')(({ theme, height }) => ({
 function AdminLayouts() {
   const navigate = useNavigate();
 
-  const validSpecialities = ["info", "physic", "gestion", "biology", "pharmacy", "medicine"];
-  const validYears = ["l1", "l2", "l3", "m1", "m2"];
-
   return (
     <AppProvider 
       navigation={NAVIGATION} 
       router={{ navigate }} 
       theme={demoTheme}  
-      branding={{ logo: <img src={logo} style={{ width: "40px", height: "50px", borderRadius: "50%" }} /> ,title: <div className='TITLE-ALGER1'><h5 className='ALger1'>FACULTY OF SCIENCE UNIVERSITY OF ALGIERS 1</h5><br /><h5 className='ALger1'>كـلـيـة الـعلوم جـامـعـة الـجـزائـر 1</h5></div> }}
+      branding={{ logo: <img src={logo} style={{ width: "40px", height: "50px", borderRadius: "50%" }} /> ,title: "Admin" }}
       // sx={{color:"primary"}}
     >
     
@@ -231,7 +186,7 @@ function AdminLayouts() {
         <PageContainer className='MainPage-Conatiner'>
           <Routes >
             <Route path="dashboard" element={<Dashboard />} />
-            
+
             <Route path="MenuStudent" element={<StudentMenu />} />
             <Route path="MenuStudent/:speciality/:year" element={<ListStudents />} />
             <Route path="MenuStudent/:speciality/:year/AddStudent" element={<AddStudent />} />
@@ -242,14 +197,12 @@ function AdminLayouts() {
 
             <Route path="ListExams" element={<ListExams />} />
             <Route path="ExamsForm" element={<ListExamsForm />} />
-            {/* <Route path="ListModules" element={<ListModules />} /> */}
-            {/* <Route path="ModulesTest" element={<ModulesTest />} /> */}
 
             <Route path="MenuModules" element={<ModulesMenu />} />
             <Route path="MenuModules/:speciality/:year/AddModules" element={<AddModule />} />
 
 
-            <Route path="MenuModules/:speciality/:year" element={<ModulesTest />} />
+            <Route path="MenuModules/:speciality/:year" element={<ListModules />} />
             
             <Route path="MenuExams" element={<ExamsMenu />} />
             <Route path="MenuExams/:speciality/:year/:semester" element={<ListExams />} />
@@ -359,6 +312,7 @@ export default function App() {
         <Route path="/Admin" element={<div className="ThePage"> <LogInAdmin /> </div>} />
         <Route path="/Student" element={<div className="ThePage"> <LogInStudent /> </div>} />
         <Route path="/Teacher" element={<div className="ThePage"> <LogInTeacher /> </div>} />
+        <Route path="/LogOut" element={<div className="ThePage"> <LogOut /> </div>} />
 
         {/* Protected Routes for Admin */}
         <Route element={<ProtectedRoute requiredRole="admin" />}>
@@ -389,3 +343,6 @@ export default function App() {
     </Router>
   );
 }
+
+
+

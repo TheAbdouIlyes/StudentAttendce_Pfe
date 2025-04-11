@@ -9,6 +9,7 @@ import Paper from "@mui/material/Paper";
 import { TableVirtuoso } from "react-virtuoso";
 import { IconButton, TextField } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 // Define custom components for TableVirtuoso with virtualized scrolling
 const VirtuosoTableComponents = {
@@ -19,95 +20,130 @@ const VirtuosoTableComponents = {
     <Table {...props} sx={{ borderCollapse: "separate", tableLayout: "fixed" }} />
   ),
   TableHead: React.forwardRef((props, ref) => <TableHead {...props} ref={ref} />),
-  TableRow, // Default TableRow component
+  TableRow,
   TableBody: React.forwardRef((props, ref) => <TableBody {...props} ref={ref} />),
-}; 
+};
 
-export default function ModuleTable({ isEditing, columns = [], initialRows = [] }) {
+export default function ModuleTable({ showActions, columns = [], initialRows = [], onDelete }) {
   const [rows, setRows] = useState(initialRows);
   const [editingCell, setEditingCell] = useState(null);
   const [editValue, setEditValue] = useState("");
 
-  // 🔹 Ensure rows update when initialRows change
   useEffect(() => {
     setRows(initialRows);
   }, [initialRows]);
 
-  // Function to handle the edit button click
   const handleEditClick = (rowIndex, columnKey, value) => {
-    setEditingCell({ rowIndex, columnKey }); // Set the editing cell
-    setEditValue(value); // Set the initial value for editing
+    setEditingCell({ rowIndex, columnKey });
+    setEditValue(value);
   };
 
-  // Function to handle input changes during editing
   const handleEditChange = (event) => {
-    setEditValue(event.target.value); // Update editValue state
+    setEditValue(event.target.value);
   };
 
-  // Function to save the edited value
-  const handleEditSave = () => {
-    if (!editingCell) return; // If no cell is being edited, exit function
-    const updatedRows = [...rows]; // Clone rows array
-    updatedRows[editingCell.rowIndex][editingCell.columnKey] = editValue; // Update specific cell
-    setRows(updatedRows); // Update state with new row data
-    setEditingCell(null); // Reset editing state
+  const handleEditSave = async () => {
+    if (!editingCell) return;
+    const updatedRows = [...rows];
+    const row = updatedRows[editingCell.rowIndex];
+    const columnKey = editingCell.columnKey;
+  
+    // Update UI first
+    row[columnKey] = editValue;
+    setRows(updatedRows);
+    setEditingCell(null);
+  
+    // Send PATCH request to the backend
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/subject/update/${row.id}/`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ [columnKey]: editValue }),
+      });
+  
+      if (!response.ok) {
+        console.error("Failed to update on server");
+        // Optionally revert UI change here
+      }
+    } catch (error) {
+      console.error("Error updating module:", error);
+      // Optionally revert UI change here
+    }
   };
+  
 
-  // Function to render the table header
   function fixedHeaderContent() {
     return (
       <TableRow>
         {columns.map((column) => (
           <TableCell
-            key={column.dataKey} // Unique key for each column
-            variant="head" // Header cell styling
-            align="left" // Align text to the left
-            style={{ width: column.width }} // Set column width
-            sx={{ backgroundColor: "background.paper", fontWeight: "bold" }} // Custom styles
+            key={column.dataKey}
+            variant="head"
+            align="center"
+            style={{ width: column.width }}
+            sx={{ backgroundColor: "background.paper", fontWeight: "bold" }}
           >
-            {column.label} {/* Display the column label */}
+            {column.label}
           </TableCell>
         ))}
+        {showActions && (
+          <TableCell
+            key="actions"
+            variant="head"
+            align="center"
+            sx={{ backgroundColor: "background.paper", fontWeight: "bold" }}
+          >
+            Actions
+          </TableCell>
+        )}
       </TableRow>
     );
   }
 
-  // Function to render the content of each row
   function rowContent(index, row) {
-    return columns.map((column) => (
-      <TableCell key={`${index}-${column.dataKey}`} align="left">
-        {editingCell && editingCell.rowIndex === index && editingCell.columnKey === column.dataKey ? (
-          <TextField
-            value={editValue}
-            onChange={handleEditChange}
-            onBlur={handleEditSave}
-            onKeyDown={(e) => e.key === "Enter" && handleEditSave()}
-            autoFocus
-            size="small"
-            variant="standard"
-          />
-        ) : (
-          <>
-            {row[column.dataKey]}
-            {isEditing && column.dataKey !== "id" && (
-              <IconButton sx={{ margin: "8px" }} onClick={() => handleEditClick(index, column.dataKey, row[column.dataKey])}>
-                <EditIcon fontSize="small" />
-              </IconButton>
+    return (
+      <>
+        {columns.map((column) => (
+          <TableCell key={`${index}-${column.dataKey}`} align="center">
+            {editingCell && editingCell.rowIndex === index && editingCell.columnKey === column.dataKey ? (
+              <TextField
+                value={editValue}
+                onChange={handleEditChange}
+                onBlur={handleEditSave}
+                onKeyDown={(e) => e.key === "Enter" && handleEditSave()}
+                autoFocus
+                size="small"
+                variant="standard"
+              />
+            ) : (
+              row[column.dataKey]
             )}
-          </>
+          </TableCell>
+        ))}
+        {showActions && (
+          <TableCell key={`actions-${index}`} align="center">
+            <IconButton onClick={() => handleEditClick(index, "name", row["name"])}>
+              <EditIcon fontSize="small" />
+            </IconButton>
+            <IconButton color="error" onClick={() => onDelete(row.id)}>
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+
+          </TableCell>
         )}
-      </TableCell>
-    ));
+      </>
+    );
   }
 
-  // Render the table component
   return (
     <Paper style={{ height: "100%", width: "100%", borderRadius: 0 }}>
       <TableVirtuoso
         data={rows}
         components={VirtuosoTableComponents}
         fixedHeaderContent={fixedHeaderContent}
-        itemContent={rowContent} // 🔹 Now correctly returning an array of TableCells
+        itemContent={rowContent}
       />
     </Paper>
   );

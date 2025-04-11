@@ -9,12 +9,13 @@ import {
   Paper,
   IconButton,
   TablePagination,
+  Box,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 
-const baseColumns = [
+const columns = [
   { width: 50, label: "ID", dataKey: "id" },
   { width: 100, label: "First Name", dataKey: "first_name" },
   { width: 150, label: "Last Name", dataKey: "last_name" },
@@ -31,9 +32,6 @@ export default function PresenceTable({ showActions, students, page, setPage, to
     setPage(newPage + 1); // Convert zero-based index to one-based index
   };
 
-  const columns = showActions
-    ? [...baseColumns, { width: 150, label: "Actions", dataKey: "actions" }]
-    : baseColumns;
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: 2 }}>
@@ -70,7 +68,17 @@ export default function PresenceTable({ showActions, students, page, setPage, to
                         </IconButton>
                       </>
                     ) : column.dataKey === "is_present" ? (
-                      student.is_present ? "Present" : "Absent"
+                      <Box
+                      sx={{maxWidth:"80px",p:0.25,textAlign:"center",borderRadius:"1rem",   
+                      backgroundColor: student.is_present
+                        ? "#cdf7c8"
+                        : "#f5e4e5",
+                      color: student.is_present ? "green" : "red",
+                      fontWeight: "bold",
+
+                      border :student.is_present? "1px solid green":"1px solid red"}}
+                      > {student.is_present ? "✔ Present" : "✘ Absent"}</Box>
+                      
                     ) : (
                       student[column.dataKey]
                     )}

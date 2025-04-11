@@ -15,24 +15,41 @@ export default function ListTeachers() {
   const [totalCount, setTotalCount] = useState(0);
   const rowsPerPage = 5;
 
-  const fetchTeachers = (pageNumber = 1) => {
-    fetch(`http://127.0.0.1:8000/Teacher_list/?page=${pageNumber}&page_size=${rowsPerPage}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch teachers");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.results) {
-          setRows(data.results);
-          setTotalCount(data.count || 0);
-        } else {
-          console.error("Unexpected API response format:", data);
-        }
-      })
-      .catch((error) => console.error("Error fetching teachers:", error));
+  const fetchTeachers = async (pageNumber = 1) => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/Teacher_list/?page=${pageNumber}&page_size=${rowsPerPage}`);
+      if (!response.ok) throw new Error("Failed to fetch teachers");
+  
+      const data = await response.json();
+  
+      if (data.results) {
+        // Fetch modules for each teacher
+        const teachersWithModules = await Promise.all(
+          data.results.map(async (teacher) => {
+            try {
+              const subjectsResponse = await fetch(`http://127.0.0.1:8000/teacher_subject/${teacher.id}`);
+              const assignedSubjects = await subjectsResponse.json();
+              teacher.modules = Array.isArray(assignedSubjects)
+                ? assignedSubjects.map((subject) => subject.name).join(", ")
+                : "No modules";
+            } catch (err) {
+              console.error(`Failed to fetch modules for teacher ID ${teacher.id}:`, err);
+              teacher.modules = "Error loading";
+            }
+            return teacher;
+          })
+        );
+  
+        setRows(teachersWithModules);
+        setTotalCount(data.count || 0);
+      } else {
+        console.error("Unexpected API response format:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching teachers:", error);
+    }
   };
+  
 
   useEffect(() => {
     fetchTeachers(page + 1);
@@ -62,18 +79,10 @@ export default function ListTeachers() {
           <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate("addTeacher")}>
             Add
           </Button>
-          <Button
-            variant="contained"
-            startIcon={showActions ? <VisibilityOffIcon /> : <VisibilityIcon />}
-            onClick={() => setShowActions((prev) => !prev)}
-          >
-            {showActions ? "Hide Actions" : "Show Actions"}
-          </Button>
         </div>
       </div>
       <div className="ListTeacher-Main">
         <TableTeacher 
-          showActions={showActions} 
           setRows={setRows} 
           rows={rows} 
           page={page} 

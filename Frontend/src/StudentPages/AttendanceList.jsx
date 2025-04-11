@@ -12,9 +12,11 @@ import {
   Button,
   MenuItem,
   Select,
+  Typography,
+  Box,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import "./AttendanceList.css";
+
 
 function ExamAttendance() {
   const [attendanceData, setAttendanceData] = useState([]);
@@ -43,66 +45,104 @@ function ExamAttendance() {
   }, [semester, token]);
 
   return (
-    <div>
-      <div className="profile-container" style={{ background: theme.palette.background.default }}>
-        <div className="profile-card" style={{ background: theme.palette.background.paper }}>
-          <div className="profile-header">
-            <h1 style={{ color: theme.palette.text.primary }}>📖 Exam Attendance</h1>
-            <Select
-              value={semester}
-              onChange={(e) => setSemester(e.target.value)}
-              style={{ marginBottom: "10px", color: theme.palette.text.primary }}
-            >
-              <MenuItem value="s1">Semester 1</MenuItem>
-              <MenuItem value="s2">Semester 2</MenuItem>
-             
-            </Select>
-          </div>
+    <Box
+      sx={{
+        p: 3,
+        pt:0,
+        backgroundColor: theme.palette.background.default,
+        minHeight: "100%",
+      }}
+    >
+      <Paper
+        elevation={3}
+        sx={{
+          p: 3,
+          backgroundColor: theme.palette.background.paper,
+          borderRadius: 0, // remove border radius
+        }}
+      >
+        <Box
+          display="flex"
+          flexDirection={{ xs: "column", sm: "row" }}
+          justifyContent="space-between"
+          alignItems={{ xs: "flex-start", sm: "center" }}
+          mb={2}
+        >
+          <Typography
+            variant="h4"
+            sx={{ color: theme.palette.text.primary, mb: { xs: 2, sm: 0 } }}
+          >
+          Exam Attendance
+          </Typography>
+          <Select
+            value={semester}
+            onChange={(e) => setSemester(e.target.value)}
+            sx={{
+              color: theme.palette.text.primary,
+              minWidth: 150,
+            }}
+          >
+            <MenuItem value="s1">Semester 1</MenuItem>
+            <MenuItem value="s2">Semester 2</MenuItem>
+          </Select>
+        </Box>
 
-          {loading ? (
-            <div className="loading">Loading attendance data...</div>
-          ) : attendanceData.length === 0 ? (
-            <p style={{ textAlign: "center", color: theme.palette.text.primary }}>
-              No attendance records found.
-            </p>
-          ) : (
-            <TableContainer component={Paper} style={{ backgroundColor: theme.palette.background.paper }}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell style={{ color: theme.palette.text.primary }}>📚 Subject</TableCell>
-                    <TableCell style={{ color: theme.palette.text.primary }}>📅 Date</TableCell>
-                    <TableCell style={{ color: theme.palette.text.primary }}>⏰ Time</TableCell>
-                    <TableCell style={{ color: theme.palette.text.primary }}>🏛️ Amphi</TableCell>
-                    <TableCell style={{ color: theme.palette.text.primary }}>🎓 Attendance</TableCell>
+        {loading ? (
+          <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
+            <CircularProgress />
+          </Box>
+        ) : attendanceData.length === 0 ? (
+          <Typography
+            align="center"
+            sx={{ color: theme.palette.text.primary, mt: 4 }}
+          >
+            No attendance records found.
+          </Typography>
+        ) : (
+          <TableContainer
+            elevation={0}
+            component={Paper}
+            sx={{ backgroundColor: theme.palette.background.paper, borderRadius: 0 }}
+          >
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Subject</TableCell>
+                  <TableCell>Date</TableCell>
+                  <TableCell>Time</TableCell>
+                  <TableCell>Amphi</TableCell>
+                  <TableCell>Attendance</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {attendanceData.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{item.exam.subject_name}</TableCell>
+                    <TableCell>{item.exam.date}</TableCell>
+                    <TableCell>{item.exam.time}</TableCell>
+                    <TableCell>{item.exam.amphi}</TableCell>
+                    <TableCell>
+                      <Chip
+                        label={item.is_persent ? "✔ Present" : "✘ Absent"}
+                        sx={{
+                          backgroundColor: item.is_persent
+                            ? "#cdf7c8"
+                            : "#f5e4e5",
+                          color: item.is_persent ? "green" : "red",
+                          fontWeight: "bold",
+
+                          border :item.is_persent? "1px solid green":"1px solid red"
+                        }}
+                      />
+                    </TableCell>
                   </TableRow>
-                </TableHead>
-                <TableBody>
-                  {attendanceData.map((item, index) => (
-                    <TableRow key={index}>
-                      <TableCell style={{ color: theme.palette.text.primary }}>{item.exam.subject_name}</TableCell>
-                      <TableCell style={{ color: theme.palette.text.primary }}>{item.exam.date}</TableCell>
-                      <TableCell style={{ color: theme.palette.text.primary }}>{item.exam.time}</TableCell>
-                      <TableCell style={{ color: theme.palette.text.primary }}>{item.exam.amphi}</TableCell>
-                      <TableCell>
-                        <Chip
-                          label={item.is_persent? "✅ Present" : "❌ Absent"}
-                          style={{
-                            backgroundColor: item.is_present ? theme.palette.primary.main : theme.palette.error.main,
-                            color: theme.palette.text.primary,
-                            fontWeight: "bold",
-                          }}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          )}
-        </div>
-      </div>
-    </div>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
+      </Paper>
+    </Box>
   );
 }
 

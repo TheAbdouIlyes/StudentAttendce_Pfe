@@ -70,13 +70,16 @@ export default function ListStudents() {
   return (
     <div className="Student-Container">
       <div className="MainSection-Top">
-        <ReturnButton/>
-        <h1 className="StudentListTitle">Student List</h1>
+        <div className="TSL">
+          <ReturnButton/>
+          <h1 className="StudentListTitle">Student List</h1>
+        </div>
+        
         <div style={{ display: "flex", gap: "10px" }}>
-          <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate("AddStudent")}>
+          <Button color="info" variant="contained" startIcon={<AddIcon />} onClick={() => navigate("AddStudent")}>
             Add
           </Button>
-          <Button
+          {/* <Button
             variant="contained"
             startIcon={showActions ? <VisibilityOffIcon /> : <VisibilityIcon />}
             onClick={() => {
@@ -89,7 +92,7 @@ export default function ListStudents() {
             
           >
             {showActions ? "Hide Actions" : "Show Actions"}
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -98,12 +101,16 @@ export default function ListStudents() {
           students={students} 
           navigate={navigate} 
           onDelete={handleDelete} 
-          showActions={showActions} 
+          // showActions={showActions} 
           page={page} 
           setPage={setPage} 
           totalCount={totalCount} 
           rowsPerPage={rowsPerPage} 
         />
+      </div>
+
+      <div className="LocationHelp">
+        loca
       </div>
     </div>
   );

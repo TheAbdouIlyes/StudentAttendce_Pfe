@@ -64,3 +64,10 @@
 .add-button:hover {
     background-color: var(--quaternary-color) !important;
 } */
+
+
+.TSL{
+    display: flex;
+    align-items: center;
+    width: 70%;
+}

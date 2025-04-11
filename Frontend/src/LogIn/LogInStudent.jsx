@@ -2,6 +2,10 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'; // ✅ Import NavLink
 import "./LogInAdmin.css";
 import LogInstudentform from './LoginStudentfrom';
+import ReturnButton from '../comps/ReturnButton';
+import { BookOpen} from "lucide-react";
+
+
 export default function LogInStudent() {
   return (
    
@@ -15,7 +19,12 @@ export default function LogInStudent() {
               </div>
         
               <div className='RightSide-LogIn'>
-                <h1 className='LogIn-Title'>LogIn</h1>
+                <div className='ReturnLog'>
+                  <ReturnButton/>
+                </div>
+                
+
+                <h1 className='LogIn-Title'>Login as Student <BookOpen className="role-card-icon" /></h1>
                 <LogInstudentform/>
               </div>
             </div>

@@ -12,7 +12,7 @@
     width: 55%;
     height: 100%;
     border-radius:0 10rem 10rem 0 ;
-    background-color: var(--primary-color);
+    background-color: #96d7fa;
 
     display: flex;
     align-items: center;
@@ -24,7 +24,7 @@
     border-radius:0 13rem 13rem 0 ;
 
 
-    background-color: var(--tertiary-color);
+    background-color: #0288d1;
 
 
     display: flex;
@@ -37,7 +37,7 @@
     border-radius:0 13rem 13rem 0 ;
 
     
-    background-color: #004631;
+    background-color: #013f60;
 
     display: flex;
     align-items: center;
@@ -57,7 +57,10 @@
 
 }
 .LogIn-Title{
-    margin-bottom: 0;
+    margin: 4% 2% 0 0;
+    padding: 0;
+    display: flex;justify-content: center;
+    gap:10px;
 }
 .Login-Submit{
     text-decoration: none;
@@ -74,4 +77,9 @@
     background-color: var(--secondary-color);
     color: var(--primaryText-color);
 
+}
+
+.ReturnLog{
+    width: 60%;
+    margin-bottom: 4%;
 }

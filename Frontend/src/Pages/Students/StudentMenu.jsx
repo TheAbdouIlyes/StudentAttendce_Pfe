@@ -4,6 +4,8 @@ import { useTheme } from "@mui/material/styles";
 import { 
   Box, Typography, Grid, Card, CardContent, Paper, Button 
 } from "@mui/material";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import GroupIcon from "@mui/icons-material/Group";
 
 const levels = ["L1", "L2", "L3", "M1", "M2"];
 const specialities = ["info", "physic", "gestion", "biology", "pharmacy", "medicine"];
@@ -16,8 +18,8 @@ export default function StudentsMenu() {
     <Box sx={{ p: 3, minHeight: "100vh", backgroundColor: theme.palette.background.default }}>
       {/* Header Section */}
       <Paper elevation={0} sx={{ border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, p: 3, mb: 4, textAlign: "center", borderRadius: 2 }}>
-        <Typography variant="h4" fontWeight="bold" color="primary">
-          📚 Students
+        <Typography variant="h4" fontWeight="bold" color="primary" sx={{display:"flex",alignItems:"center",justifyContent:"center"}}>
+        <GroupIcon fontSize="large" sx={{ mr: 1 }} /> Students
         </Typography>
         <Typography variant="h6" sx={{ mt: 1 }}>
           Choose Your Specialty & Level

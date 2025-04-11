@@ -1,11 +1,10 @@
 /* Main container styles */
 .profile-container {
     min-height: 100%;
-    background: linear-gradient(to bottom right, #04892c, #d9ded9);
     /* padding: 2rem 1rem; */
     display: flex;
-    align-items: center;
-    justify-content: center;
+    /* align-items: center; */
+    /* justify-content: center; */
   }
   
   .profile-card {
@@ -25,6 +24,10 @@
     padding: 0.5rem;
     text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2%;
   }
   
   .profile-header h1 {

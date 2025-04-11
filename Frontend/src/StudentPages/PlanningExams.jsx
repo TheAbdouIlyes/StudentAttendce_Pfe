@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./PlanningExams.css";
-import Navbar from "./Navbar";
 import TestExams from "./Comps/TestExams";
 import { Select, MenuItem } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -29,7 +28,6 @@ export default function PlanningExams() {
   
   return (
     <div>
-      <Navbar />
       <div className="schedule-container">
         <div className="schedule-card">
           <div className="schedule-header">

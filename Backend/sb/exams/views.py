@@ -637,7 +637,7 @@ class delete_subject(APIView):
         name1 = self.kwargs.get("name")
 
         # Get the subject instance or return a 404 response if not found
-        subject_instance = get_object_or_404(subject, name=name1)
+        subject_instance = get_object_or_404(subject, id=name1)
 
         # Delete related objects
         try:

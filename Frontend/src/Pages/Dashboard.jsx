@@ -104,8 +104,8 @@ const Dashboard = () => {
   ];
 
   return (
-    <Box sx={{ p: 4 }}>
-      <Typography variant="h4" gutterBottom>
+    <Box sx={{ p: 4 ,pt:0}}>
+      <Typography variant="h6" gutterBottom>
         Admin Dashboard – Présences aux Examens
       </Typography>
 
