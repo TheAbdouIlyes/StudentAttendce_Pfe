@@ -1118,3 +1118,22 @@ class Présences_par_level(APIView):
 
 
 
+class StudentStats(APIView):
+
+    permission_classes =[IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+         
+        semester1=self.kwargs['semester']
+        student_instance = get_object_or_404(Student, Name=request.user)
+
+        level1= student_instance.level
+        spesiality1= student_instance.speciality
+        exam_count=Exam.objects.filter(subject__level=level1,subject__speciality=spesiality1,subject__semester=semester1).count()
+        
+        exams=Exam.objects.filter(subject__level=level1,subject__speciality=spesiality1)
+        Attendance_count =Attendance.objects.filter(student= student_instance,exam__in=exams).count()
+        absence_count= exam_count- Attendance_count
+        nom=request.user.last_name
+        prenom=request.user.first_name
+        return JsonResponse({"absences_count": absence_count, "attendance_count": Attendance_count,"exam_count": exam_count,"nom":nom,"prenom":prenom})
