@@ -149,7 +149,7 @@ const ExamScheduleTable = ({addTeachers}) => {
                         navigate(`${row.subject_name}/SerTeacher/`)
                       }
                     >
-                      +
+                      {row.teacher_count}
                     </Button>
                   </TableCell>
                 )}
