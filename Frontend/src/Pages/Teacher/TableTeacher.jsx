@@ -18,8 +18,8 @@ const columns = [
   { width: 80, label: "First Name", dataKey: "first_name" },
   { width: 100, label: "Last Name", dataKey: "last_name" },
   { width: 220, label: "Email", dataKey: "email" },
-  { width: 240, label: "Modules", dataKey: "modules" },
-  { width: 80, label: "", dataKey: "actions" }
+  { width: 200, label: "Modules", dataKey: "modules" },
+  { width: 100, label: "", dataKey: "actions" }
 ];
 
 export default function TableTeacher({ setRows, rows, page, setPage, totalCount, rowsPerPage,handleDelete }) {

@@ -1,52 +1,30 @@
 import React, { useState, useEffect } from "react";
 import "./ListStudents.css";
 import StudentTable from "./StudentTable";
-import { Button } from "@mui/material";
+import { Button, Modal, Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useNavigate,useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ReturnButton from "../../comps/ReturnButton";
+import AddStudent from "./AddStudent"; // import the form component
 
 export default function ListStudents() {
   const navigate = useNavigate();
   const [students, setStudents] = useState([]);
-  // const [showActions, setShowActions] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  
-  const [showActions, setShowActions] = useState(() => {
-    const stored = localStorage.getItem("showActions");
-    return stored ? JSON.parse(stored) : false;
-  });
-
-  useEffect(() => {
-    localStorage.setItem("showActions", JSON.stringify(showActions));
-  }, [showActions]);
-  
-  
   const [page, setPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const rowsPerPage = 5;
-  const { speciality, year} = useParams();
+  const { speciality, year } = useParams();
 
-  
   const fetchStudents = (pageNumber = 1) => {
     fetch(`http://127.0.0.1:8000/student_par_specialitylevel/${speciality}/${year}?page=${pageNumber}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch students");
-        }
-        return response.json();
-      })
+      .then((res) => res.json())
       .then((data) => {
-        if (data.results) {
-          setStudents(data.results);
-          setTotalCount(data.count || 0);
-        } else {
-          console.error("Unexpected API response format:", data);
-        }
+        setStudents(data.results || []);
+        setTotalCount(data.count || 0);
       })
-      .catch((error) => console.error("Error fetching students:", error));
+      .catch((err) => console.error("Error fetching students:", err));
   };
 
   useEffect(() => {
@@ -57,61 +35,61 @@ export default function ListStudents() {
     fetch(`http://127.0.0.1:8000/student/delete/${id}/`, {
       method: "DELETE",
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to delete student");
-        }
-        fetchStudents(page + 1);
-      })
-      .catch((error) => console.error("Error deleting student:", error));
+      .then(() => fetchStudents(page + 1))
+      .catch((err) => console.error("Error deleting student:", err));
   };
-
 
   return (
     <div className="Student-Container">
       <div className="MainSection-Top">
         <div className="TSL">
-          <ReturnButton/>
+          <ReturnButton />
           <h1 className="StudentListTitle">Student List</h1>
         </div>
-        
-        <div style={{ display: "flex", gap: "10px" }}>
-          <Button color="info" variant="contained" startIcon={<AddIcon />} onClick={() => navigate("AddStudent")}>
-            Add
-          </Button>
-          {/* <Button
-            variant="contained"
-            startIcon={showActions ? <VisibilityOffIcon /> : <VisibilityIcon />}
-            onClick={() => {
-              setShowActions((prev) => {
-                const newValue = !prev;
-                localStorage.setItem("showActions", JSON.stringify(newValue));
-                return newValue;
-              });
-            }}
-            
-          >
-            {showActions ? "Hide Actions" : "Show Actions"}
-          </Button> */}
-        </div>
+
+        <Button
+          color="info"
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => setModalOpen(true)}
+        >
+          Add
+        </Button>
       </div>
 
       <div className="MainSection-Bottom">
-        <StudentTable 
-          students={students} 
-          navigate={navigate} 
-          onDelete={handleDelete} 
-          // showActions={showActions} 
-          page={page} 
-          setPage={setPage} 
-          totalCount={totalCount} 
-          rowsPerPage={rowsPerPage} 
+        <StudentTable
+          students={students}
+          navigate={navigate}
+          onDelete={handleDelete}
+          page={page}
+          setPage={setPage}
+          totalCount={totalCount}
+          rowsPerPage={rowsPerPage}
         />
       </div>
 
-      <div className="LocationHelp">
-        loca
-      </div>
+      {/* Modal */}
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
+        <Box sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: 500,
+          height:"auto",
+          bgcolor: "background.paper",
+          boxShadow: 24,
+          pl: 4,
+          pr: 4,
+          borderRadius: 2,
+        }}>
+          <AddStudent
+            onClose={() => setModalOpen(false)}
+            onAdd={() => fetchStudents(page + 1)}
+          />
+        </Box>
+      </Modal>
     </div>
   );
 }

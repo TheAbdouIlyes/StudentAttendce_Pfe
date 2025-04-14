@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useEffect ,useState} from'react';
 import ReturnButton from '../../comps/ReturnButton';
-import { Box,Button } from '@mui/material';
+import { Box,Button,FormControl,Typography,RadioGroup,FormControlLabel,Radio } from '@mui/material';
 
 
 export default function ListExams() {
@@ -26,7 +26,13 @@ export default function ListExams() {
     }
   }, [speciality, year, navigate]);
 
-  
+  const [s, setS] = useState(semester);
+
+  const HandleSChange=(e)=>{
+    setS(e);
+    navigate(`/MenuExams/${speciality}/${year}/${e}`)
+    
+  }
 
 
   return (
@@ -35,28 +41,30 @@ export default function ListExams() {
       <div className='TopExams'>
         <ReturnButton/>
 
-         <Box sx={{ display: "flex", justifyContent: "end", marginBottom: "10px" }}>
-            <Button
-              variant="contained"
-              color="info"
-              onClick={() => setAddTeachers(!addTeachers)}
-              sx={{ maxHeight: 40, ml: "10px" }}
-            >
-              {addTeachers ? "Cancel" : "Add Teachers"}
-            </Button>
-        </Box>
+        <Typography variant="h6" >{speciality} {year} {semester} Exams Table</Typography>
+       
+
+        <FormControl component="fieldset" sx={{ mt: 2 }}>
+          <Typography variant="h9">Select Semester</Typography>
+          <RadioGroup row value={s} onChange={(e) => HandleSChange(e.target.value)}>
+            {["S1", "S2"].map((sem) => (
+              <FormControlLabel key={sem} value={sem} control={<Radio color="primary" />} label={sem} />
+            ))}
+          </RadioGroup>
+        </FormControl>
+
 
       </div>
 
       
       <div className='ExamsTable-Conatainer'>
-        <ExamScheduleTable addTeachers={addTeachers}/>
+        <ExamScheduleTable />
 
       </div>
 
-      <div className="LocationHelp">
+      {/* <div className="LocationHelp">
         <h3>Current State: {speciality} {year} {semester}</h3>
-      </div>
+      </div> */}
     </div>
   )
 }

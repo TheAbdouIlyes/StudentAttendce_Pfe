@@ -42,15 +42,20 @@ export default function StudentsAttendance() {
 
   return (
     <Box sx={{ p: 3, minHeight: "100vh" }}>
-      <Paper elevation={3} sx={{ p: 3, textAlign: "center", borderRadius: 2, mb: 4 }}>
-        <ReturnButton />
-        <Typography variant="h4" fontWeight="bold" color="primary">
-          Attendance for {exam.toUpperCase()}
-        </Typography>
-        <Typography variant="h6" color="textSecondary">
-          {speciality.toUpperCase()} - {year.toUpperCase()}
-        </Typography>
-      </Paper>
+    <ReturnButton />
+      <Box elevation={3} sx={{  borderRadius: 2, mb: 4,textAlign:"center"}}>
+        
+   
+          <Typography variant="h4" fontWeight="bold" color="primary" sx={{pl:4}}>
+            Attendance for {exam.toUpperCase()}
+          </Typography>
+          <Typography variant="h6" color="textSecondary" sx={{pl:4}}>
+            {speciality.toUpperCase()} - {year.toUpperCase()}
+          </Typography>
+  
+        
+        
+      </Box>
 
       {/* Loading & Error Handling */}
       {loading && <CircularProgress sx={{ display: "block", margin: "auto" }} />}
@@ -61,18 +66,18 @@ export default function StudentsAttendance() {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="center">Matricule</TableCell>
-              <TableCell align="center">First Name</TableCell>
-              <TableCell align="center">Last Name</TableCell>
+              <TableCell align="left">Matricule</TableCell>
+              <TableCell align="left">First Name</TableCell>
+              <TableCell align="left">Last Name</TableCell>
               <TableCell align="center">Presence</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {students.map((student) => (
               <TableRow key={student.id}>
-                <TableCell align="center">{student.matricul}</TableCell>
-                <TableCell align="center">{student.first_name}</TableCell>
-                <TableCell align="center">{student.last_name}</TableCell>
+                <TableCell align="left">{student.matricul}</TableCell>
+                <TableCell align="left">{student.first_name}</TableCell>
+                <TableCell align="left">{student.last_name}</TableCell>
                 <TableCell align="center" sx={{ color: student.is_present ? "green" : "red" }}>
                   {student.is_present ? "✔ Present" : "✘ Absent"}
                 </TableCell>

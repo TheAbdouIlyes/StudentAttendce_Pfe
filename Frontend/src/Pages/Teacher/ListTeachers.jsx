@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./ListTeachers.css";
 import TableTeacher from "./TableTeacher";
-import { Button } from "@mui/material";
+import { Button,Typography,Box } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
+import ReturnButton from "../../comps/ReturnButton";
 
 export default function ListTeachers() {
   const navigate = useNavigate();
@@ -74,12 +75,16 @@ export default function ListTeachers() {
   return (
     <div className="Teachers-Container">
       <div className="ListTeacher-Top">
-        <div className="TeacherListTitle">Teacher List</div>
-        <div className="Buttons-side">
-          <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate("addTeacher")}>
+        <Box sx={{display:"flex",alignItems:"center"}}>
+          <ReturnButton/>
+          <Typography sx={{ml:1}} variant="h5"><b>Teachers List</b></Typography>
+        </Box>
+          
+        
+        
+          <Button variant="contained" color="info" startIcon={<AddIcon />} onClick={() => navigate("addTeacher")}>
             Add
           </Button>
-        </div>
       </div>
       <div className="ListTeacher-Main">
         <TableTeacher 

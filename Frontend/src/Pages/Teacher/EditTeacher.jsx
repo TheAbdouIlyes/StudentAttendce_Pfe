@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button, Paper, List, ListItem, IconButton, MenuItem } from "@mui/material";
+import { TextField, Button, Paper, List, ListItem, IconButton, MenuItem,Box } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import ReturnButton from "../../comps/ReturnButton";
 import DeleteIcon from "@mui/icons-material/Delete";
+// import { Box } from "lucide-react";
 
 export default function EditTeacher() {
   const navigate = useNavigate();
@@ -106,9 +107,12 @@ export default function EditTeacher() {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-    <Paper sx={{ padding: 3, maxWidth: 500, margin: "auto", marginTop: 5 }}>
-      <ReturnButton />
-      <h2>Edit Teacher {id}</h2>
+    <Paper sx={{ padding: 3, maxWidth: 500, margin: "auto"}}>
+      <Box sx={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <ReturnButton />
+        <h2>Edit Teacher {id}</h2>
+      </Box>
+      
       <TextField fullWidth label="First Name" name="first_name" value={formData.first_name} onChange={handleChange} margin="normal" />
       <TextField fullWidth label="Last Name" name="last_name" value={formData.last_name} onChange={handleChange} margin="normal" />
       <TextField fullWidth label="Email" name="email" value={formData.email} onChange={handleChange} margin="normal" />

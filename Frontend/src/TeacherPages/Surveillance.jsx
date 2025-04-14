@@ -59,10 +59,10 @@ export default function Surveillance() {
   }, [semester]);
 
   return (
-    <Box sx={{ p: 3, minHeight: "100vh", backgroundColor: theme.palette.background.default }}>
-      <Paper sx={{ p: 3, mb: 4, textAlign: "center", borderRadius: 2 }}>
-        <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-          📋 Your Surveillance Duties
+    <Box sx={{ width: "90%",margin:"auto",mt:0,p: 3, backgroundColor: theme.palette.background.default }}>
+      <Paper sx={{ p: 3, mb: 4, textAlign: "center", borderRadius: 2 ,display:"flex",justifyContent:"space-evenly",alignItems:"center" }}>
+        <Typography variant="h5"  color="primary" sx={{ fontWeight: "bold" }}>
+          Your Surveillance Duties for this semester
         </Typography>
         <Select
           value={semester}

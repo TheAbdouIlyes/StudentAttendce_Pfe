@@ -72,7 +72,7 @@ function ExamAttendance() {
             variant="h4"
             sx={{ color: theme.palette.text.primary, mb: { xs: 2, sm: 0 } }}
           >
-          Exam Attendance
+          Exams Attendance
           </Typography>
           <Select
             value={semester}
@@ -107,11 +107,11 @@ function ExamAttendance() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Subject</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Time</TableCell>
-                  <TableCell>Amphi</TableCell>
-                  <TableCell>Attendance</TableCell>
+                  <TableCell><b>Subject</b></TableCell>
+                  <TableCell><b>Date</b></TableCell>
+                  <TableCell><b>Time</b></TableCell>
+                  <TableCell align="center"><b>Amphi</b></TableCell>
+                  <TableCell align="right"><b>Attendance</b></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -120,8 +120,8 @@ function ExamAttendance() {
                     <TableCell>{item.exam.subject_name}</TableCell>
                     <TableCell>{item.exam.date}</TableCell>
                     <TableCell>{item.exam.time}</TableCell>
-                    <TableCell>{item.exam.amphi}</TableCell>
-                    <TableCell>
+                    <TableCell align="center">{item.exam.amphi}</TableCell>
+                    <TableCell align="right">
                       <Chip
                         label={item.is_persent ? "✔ Present" : "✘ Absent"}
                         sx={{

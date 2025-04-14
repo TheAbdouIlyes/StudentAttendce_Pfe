@@ -46,7 +46,7 @@ class ExamUpdate(generics.UpdateAPIView):
 #         return Response(serializer.data, status=status.HTTP_200_OK)
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 from django.shortcuts import get_object_or_404
 from .models import Attendance, Student, Exam
 from .serializers import AttendanceSerializer
@@ -55,26 +55,31 @@ class is_presente(generics.UpdateAPIView):
     serializer_class = AttendanceSerializer
     permission_classes = [AllowAny]
 
-    def post(self ,request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         matricul = self.kwargs['matricul']
         exam_name = self.kwargs['exam_name']
 
         # Retrieve student by matricul
-        student1 = get_object_or_404(Student, matricul=matricul)
+        student = get_object_or_404(Student, matricul=matricul)
 
         # Retrieve exam by subject name
-        exam1 = get_object_or_404(Exam, subject__name=exam_name)
+        exam = get_object_or_404(Exam, subject__name=exam_name)
 
-        
-        # Check if teaching record already exists
-        if Attendance.objects.filter(student=student1, exam=exam1 ).exists():
-            return Response({'detail': 'Teach record already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+        # Check level and speciality match
+        if student.level != exam.subject.level or student.speciality != exam.subject.speciality:
+            return Response({'detail': 'Student level or speciality does not match the exam.'},
+                            status=status.HTTP_403_FORBIDDEN)
 
-        # Create new teaching record
-        teaching_record =  Attendance.objects.create(student=student1, exam=exam1)
+        # Check if attendance record already exists
+        if Attendance.objects.filter(student=student, exam=exam).exists():
+            return Response({'detail': 'Attendance record already exists.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # Create new attendance record
+        attendance = Attendance.objects.create(student=student, exam=exam)
 
         # Serialize and return the created record
-        serializer = self.serializer_class(teaching_record)
+        serializer = self.serializer_class(attendance)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
@@ -1131,9 +1136,9 @@ class StudentStats(APIView):
         spesiality1= student_instance.speciality
         exam_count=Exam.objects.filter(subject__level=level1,subject__speciality=spesiality1,subject__semester=semester1).count()
         
-        exams=Exam.objects.filter(subject__level=level1,subject__speciality=spesiality1)
+        exams=Exam.objects.filter(subject__level=level1,subject__speciality=spesiality1,subject__semester=semester1)
         Attendance_count =Attendance.objects.filter(student= student_instance,exam__in=exams).count()
-        absence_count= exam_count- Attendance_count
+        absence_count= exam_count - Attendance_count
         nom=request.user.last_name
         prenom=request.user.first_name
         return JsonResponse({"absences_count": absence_count, "attendance_count": Attendance_count,"exam_count": exam_count,"nom":nom,"prenom":prenom})

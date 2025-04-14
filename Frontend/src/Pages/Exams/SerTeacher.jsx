@@ -13,7 +13,10 @@ import {
   Pagination,
   Checkbox,
   Button,
+  Box,
+  Typography
 } from "@mui/material";
+import ReturnButton from "../../comps/ReturnButton";
 
 export default function SerTeacher() {
   const { exam_name } = useParams();
@@ -123,21 +126,27 @@ export default function SerTeacher() {
   }
 
   return (
-    <Paper sx={{ width: "80%", margin: "20px auto", padding: "20px" }}>
-      <h2>Available Teachers for {exam_name}</h2>
+    <Paper sx={{ width: "100%", padding: "20px" }}>
+
+      <Box sx={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <ReturnButton/>
+        <Typography variant="h5"><b>Available Teachers for {exam_name}</b></Typography>
+        
+      </Box>
+      
 
       {loading && <CircularProgress />}
       {error && <Alert severity="error">{error}</Alert>}
 
       <TableContainer>
-        <Button
+        {/* <Button
           variant="contained"
           color="success"
           onClick={handleGoBack}
           sx={{ marginTop: 2, display: "block", marginLeft: "auto", marginRight: "auto" }}
         >
           Go Back
-        </Button>
+        </Button> */}
         <Table>
           <TableHead>
             <TableRow>

@@ -7,6 +7,8 @@ import {
   Chip,
   ToggleButton,
   ToggleButtonGroup,
+  FormControl,Select,MenuItem,
+  InputLabel
 } from "@mui/material";
 import {
   EventNote,
@@ -55,6 +57,8 @@ const StudentDashboard = () => {
         const data1 = await res1.json();
         const data2 = await res2.json();
 
+        console.log("data1 : ",data1,"data2 :",data2)
+
         setData1(data1);
         setData2(data2);
         setLoading(false);
@@ -82,7 +86,8 @@ const StudentDashboard = () => {
     examScheduleUploaded: true, // This can be dynamic
   };
 
-  const handleSemesterChange = (_, newSemester) => {
+  const handleSemesterChange = (e) => {
+    const newSemester = e.target.value;
     if (newSemester !== null) {
       setSelectedSemester(newSemester);
     }
@@ -97,13 +102,14 @@ const StudentDashboard = () => {
 
   return (
     <Box sx={{ p: 2 }}>
-      <Box sx={{ width: "100%", display: "flex" }} mb={2}>
+      <Box sx={{ width: "100%", display: "flex",flexWrap:"wrap" }} mb={2}>
         <Box sx={{ width: "60%" }}>
-          <Typography variant="h4" gutterBottom>
-            Bienvenue, {name || "Étudiant"}
+          <Typography variant="h5" gutterBottom>
+            Welcome, <b>{name || "Étudiant"}</b>
           </Typography>
-          <Typography variant="subtitle1" color="text.secondary" mb={3}>
-            Voici un aperçu détaillé de votre présence aux examens.
+          <Typography variant="subtitle2" color="text.secondary" mb={3}>
+            {/* Voici un aperçu détaillé de votre présence aux examens. */}
+            here you can check your attendances in your exams.
           </Typography>
         </Box>
 
@@ -113,7 +119,7 @@ const StudentDashboard = () => {
           justifyContent="flex-end"
           mb={2}
         >
-          <ToggleButtonGroup
+          {/* <ToggleButtonGroup
             value={selectedSemester}
             exclusive
             onChange={handleSemesterChange}
@@ -123,7 +129,16 @@ const StudentDashboard = () => {
           >
             <ToggleButton value="semester1">Semestre 1</ToggleButton>
             <ToggleButton value="semester2">Semestre 2</ToggleButton>
-          </ToggleButtonGroup>
+          </ToggleButtonGroup> */}
+
+
+          <FormControl fullWidth>
+            <InputLabel>Semester</InputLabel>
+            <Select name="Semester" label="Semester" value={selectedSemester} onChange={handleSemesterChange}>
+              <MenuItem value="semester1">S1</MenuItem>
+              <MenuItem value="semester2">S2</MenuItem>
+            </Select>
+          </FormControl>
         </Box>
       </Box>
 

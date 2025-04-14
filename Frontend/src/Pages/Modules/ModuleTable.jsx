@@ -24,7 +24,7 @@ const VirtuosoTableComponents = {
   TableBody: React.forwardRef((props, ref) => <TableBody {...props} ref={ref} />),
 };
 
-export default function ModuleTable({ showActions, columns = [], initialRows = [], onDelete }) {
+export default function ModuleTable({ columns = [], initialRows = [], onDelete }) {
   const [rows, setRows] = useState(initialRows);
   const [editingCell, setEditingCell] = useState(null);
   const [editValue, setEditValue] = useState("");
@@ -88,7 +88,7 @@ export default function ModuleTable({ showActions, columns = [], initialRows = [
             {column.label}
           </TableCell>
         ))}
-        {showActions && (
+        
           <TableCell
             key="actions"
             variant="head"
@@ -97,7 +97,7 @@ export default function ModuleTable({ showActions, columns = [], initialRows = [
           >
             Actions
           </TableCell>
-        )}
+        
       </TableRow>
     );
   }
@@ -122,7 +122,7 @@ export default function ModuleTable({ showActions, columns = [], initialRows = [
             )}
           </TableCell>
         ))}
-        {showActions && (
+        
           <TableCell key={`actions-${index}`} align="center">
             <IconButton onClick={() => handleEditClick(index, "name", row["name"])}>
               <EditIcon fontSize="small" />
@@ -132,7 +132,7 @@ export default function ModuleTable({ showActions, columns = [], initialRows = [
             </IconButton>
 
           </TableCell>
-        )}
+        
       </>
     );
   }
@@ -145,6 +145,7 @@ export default function ModuleTable({ showActions, columns = [], initialRows = [
         fixedHeaderContent={fixedHeaderContent}
         itemContent={rowContent}
       />
+
     </Paper>
   );
 }

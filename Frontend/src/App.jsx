@@ -42,7 +42,7 @@ import AddModule from './Pages/Modules/AddModule';
 import ProtectedRoute from './context/ProtectedRoute';
 import ListModules from './Pages/Modules/ListModules';
 import ListExamsForm from './StudentPages/ListExamsForm';
-import Examan1 from './Pages/Examan1';
+// import Examan1 from './Pages/Examan1';
 import ModulesMenu from './Pages/Modules/ModulesMenu';
 // import UserID from './LogIn/UserID';
 import ExamsMenu from './Pages/Exams/ExamsMenu';
@@ -63,66 +63,12 @@ import ES from './StudentPages/ES';
 import StudentDashboard from './StudentPages/StudentDashboard';
 import LogOut from "./TheLogOut"
 
-const NAVIGATION = [
-  { kind: 'header', title: 'Stats' },
-  { segment: 'dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
-  { kind: 'divider' },
-  { kind: 'header', title: 'Lists' },
-  { 
-    segment: 'MenuStudent', title: 'Students', icon: <SchoolIcon />,
-  },
-  { segment: 'ListTeachers', title: 'Teachers', icon: <PeopleIcon />
-  },
-  { segment: 'MenuExams', title: 'Exams', icon: <AssignmentIcon /> 
-  },
-  { segment: 'MenuModules', title: 'Modules', icon: <ClassIcon />, 
-  },
-  { kind: 'divider' },
-  { kind: 'header', title: 'Exit' },
-  { 
-    segment: 'LogOut', 
-    title: 'Logout', 
-    icon: <ExitToAppIcon />, 
-  },
-];
 
 
+import Rteacher from "./Rteacher"
+import Rstudent from "./Rstudent"
+import Radmin from "./Radmin"
 
-const NAVIGATION_Teacher = [
-  { kind: 'header', title: 'Stats' },
-  { segment: 'Teacher/Dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
-  { kind: 'divider' },
-  { kind: 'header', title: 'Lists' },
-  { segment: 'Teacher/ExamsAttendance', title: 'ExamsAttendance', icon: <PeopleIcon />
-  },
-  { segment: 'Teacher/Surveillance', title: 'Surveillance', icon: <PeopleIcon />
-  },
-  { kind: 'divider' },
-  { kind: 'header', title: 'Exit' },
-  { 
-    segment: 'LogOut', 
-    title: 'Logout', 
-    icon: <ExitToAppIcon />, 
-  },
-];
-
-
-const NAVIGATION_Student = [
-  { kind: 'header', title: 'Stats' },
-  { segment: 'Student/dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
-  { kind: 'divider' },
-  { kind: 'header', title: 'Espace Student' },
-  { segment: 'Student/profile', title: 'Profile', icon: <PersonIcon /> },
-  { segment: 'Student/Attendance', title: 'Attendance', icon: <EventAvailableIcon /> },
-  { segment: 'Student/planning', title: 'Planning', icon: <CalendarMonthIcon /> },
-  { kind: 'divider' },
-  { kind: 'header', title: 'Exit' },
-  {
-    segment: 'LogOut', 
-    title: 'Logout', 
-    icon: <ExitToAppIcon />, 
-  },
-];
 
 
 
@@ -169,136 +115,11 @@ const Skeleton = styled('div')(({ theme, height }) => ({
 }));
 
 
-function AdminLayouts() {
-  const navigate = useNavigate();
-
-  return (
-    <AppProvider 
-      navigation={NAVIGATION} 
-      router={{ navigate }} 
-      theme={demoTheme}  
-      branding={{ logo: <img src={logo} style={{ width: "40px", height: "50px", borderRadius: "50%" }} /> ,title: "Admin" }}
-      // sx={{color:"primary"}}
-    >
-    
-      <DashboardLayout>
-
-        <PageContainer className='MainPage-Conatiner'>
-          <Routes >
-            <Route path="dashboard" element={<Dashboard />} />
-
-            <Route path="MenuStudent" element={<StudentMenu />} />
-            <Route path="MenuStudent/:speciality/:year" element={<ListStudents />} />
-            <Route path="MenuStudent/:speciality/:year/AddStudent" element={<AddStudent />} />
-            <Route path="MenuStudent/:speciality/:year/edit-student/:id" element={<EditStudent />} />
-            <Route path="ListTeachers/addTeacher" element={<AddTeacher/>} />
-            <Route path="ListTeachers" element={<ListTeachers />} />
-            <Route path="ListTeachers/editTeacher/:id" element={<EditTeacher />} />
-
-            <Route path="ListExams" element={<ListExams />} />
-            <Route path="ExamsForm" element={<ListExamsForm />} />
-
-            <Route path="MenuModules" element={<ModulesMenu />} />
-            <Route path="MenuModules/:speciality/:year/AddModules" element={<AddModule />} />
-
-
-            <Route path="MenuModules/:speciality/:year" element={<ListModules />} />
-            
-            <Route path="MenuExams" element={<ExamsMenu />} />
-            <Route path="MenuExams/:speciality/:year/:semester" element={<ListExams />} />
-
-            {/* <Route path="MenuExams/:speciality/:year/:semester/qr-scanner" element={<QRCOde />} /> */}
-            <Route path="MenuExams/:speciality/:year/:semester/:module/qr-scanner" element={<QRCOde />} />
-            <Route path="MenuExams/:speciality/:year/:semester/:id/presence" element={<Presence/>} />
-            <Route path="MenuExams/:speciality/:year/:semester/:exam_name/SerTeacher" element={<SerTeacher/>} /> 
 
 
 
 
-            <Route
-              path="*"
-              element={
-                <Grid container spacing={2}>
-                  {[14, 100, 100, 150].map((height, index) => (
-                    <Grid key={index} xs={index === 0 || index === 3 ? 12 : 6}>
-                      <Skeleton height={height} />
-                    </Grid>
-                  ))}
-                </Grid>
-              }
-            />
-          </Routes>
-        </PageContainer>
-        
-      </DashboardLayout>
-    </AppProvider>
-  );
-}
 
-
-function TeacherLayouts() {
-  const navigate = useNavigate();
-
-  return (
-    <AppProvider 
-      navigation={NAVIGATION_Teacher} 
-      router={{ navigate }} 
-      theme={demoTheme}  
-      branding={{ logo: <img src={logo} style={{ width: "40px", height: "50px", borderRadius: "50%" }} /> ,title: <div className='TITLE-ALGER1'><h5 className='ALger1'>FACULTY OF SCIENCE UNIVERSITY OF ALGIERS 1</h5><br /><h5 className='ALger1'>كـلـيـة الـعلوم جـامـعـة الـجـزائـر 1</h5></div> }}
-      // sx={{color:"primary"}}
-    >
-    
-      <DashboardLayout>
-
-        <PageContainer className='MainPage-Conatiner'>
-          <Routes >
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="ExamsAttendance" element={<ExamsAttendanceMenu />} />
-
-            <Route path="ExamsAttendance/:speciality/:year/:exam" element={<StudentsAttendances/>} />
-
-            <Route path="Surveillance" element={<Surveillance />} />
-
-           
-          </Routes>
-        </PageContainer>
-        
-      </DashboardLayout>
-    </AppProvider>
-  );
-}
-
-
-
-function StudentLayouts() {
-  const navigate = useNavigate();
-
-  return (
-    <AppProvider 
-      navigation={NAVIGATION_Student} 
-      router={{ navigate }} 
-      theme={demoTheme}  
-      branding={{ logo: <img src={logo} style={{ width: "40px", height: "50px", borderRadius: "50%" }} /> ,title: <div className='TITLE-ALGER1'><h5 className='ALger1'>UNIVERSITY OF ALGIERS 1</h5><br /><h5 className='ALger1'>كـلـيـة الـعلوم جـامـعـة الـجـزائـر 1</h5></div> }}
-      // sx={{color:"primary"}}
-    >
-    
-      <DashboardLayout>
-
-        <PageContainer className='MainPage-Conatiner'>
-          <Routes >
-          <Route path="dashboard" element={<StudentDashboard />} />
-            <Route path="profile" element={<ES />} />
-            <Route path="Attendance" element={<AttendanceList />} />
-            <Route path="planning" element={<PlanningExams/>} />
-
-           
-          </Routes>
-        </PageContainer>
-        
-      </DashboardLayout>
-    </AppProvider>
-  );
-}
 
 
 
@@ -316,24 +137,17 @@ export default function App() {
 
         {/* Protected Routes for Admin */}
         <Route element={<ProtectedRoute requiredRole="admin" />}>
-          <Route path="/*" element={<AdminLayouts />} />
+          <Route path="/*" element={<Radmin demoTheme={demoTheme} Skeleton={Skeleton } />} />
         </Route>
 
         {/* Protected Routes for Students */}
         <Route element={<ProtectedRoute requiredRole="student" />}>
-          {/* <Route path="/student/profile" element={<StudentProfile />} />
-          <Route path="/student/exams" element={<ExamsMenu />} />
-          <Route path="/student/Attendance" element={<AttendanceList />} />
-          <Route path="/student/planning" element={<PlanningExams/>} /> */}
-
-          <Route path="/student/*" element={<StudentLayouts />} />
-
+          <Route path="/student/*" element={<Rstudent demoTheme={demoTheme} Skeleton={Skeleton } />} />
         </Route>
-
 
          {/* Protected Routes for Teacher */}
          <Route element={<ProtectedRoute requiredRole="teacher" />}>
-          <Route path="/teacher/*" element={<TeacherLayouts />} />
+          <Route path="/teacher/*" element={<Rteacher demoTheme={demoTheme} Skeleton={Skeleton }/>} />
         </Route>
 
 

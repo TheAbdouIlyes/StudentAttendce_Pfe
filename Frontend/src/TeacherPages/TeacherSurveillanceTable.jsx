@@ -8,9 +8,14 @@ import {
   TableRow,
   Paper,
   Typography,
+  Button,
 } from "@mui/material";
 
+import { useParams, useNavigate } from "react-router-dom";
+
+
 const TeacherSurveillanceTable = ({ exams }) => {
+    const navigate = useNavigate();
   return (
     <TableContainer component={Paper} sx={{ maxWidth: "80%", margin: "auto", mt: 3, p: 2 }}>
       {exams.length > 0 ? (
@@ -21,6 +26,7 @@ const TeacherSurveillanceTable = ({ exams }) => {
               <TableCell align="center"><strong>Time</strong></TableCell>
               <TableCell align="center"><strong>Module</strong></TableCell>
               <TableCell align="center"><strong>Place</strong></TableCell>
+              <TableCell align="center"><strong>Qr-Code</strong></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -30,6 +36,18 @@ const TeacherSurveillanceTable = ({ exams }) => {
                 <TableCell align="center">{exam.time}</TableCell>
                 <TableCell align="center">{exam.subject_name}</TableCell>
                 <TableCell align="center">{exam.amphi}</TableCell>
+                <TableCell align="center">
+                        <Button
+                          color="primary"
+                          onClick={() =>
+                            navigate(`${row.subject_name}/qr-scanner`, {
+                              state: { module: row.subject_name },
+                            })
+                          }
+                        >
+                          Scan QR
+                        </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -5,6 +5,11 @@ import {
   Box, Typography, Grid, Card, CardContent, Paper, RadioGroup, FormControl, 
   FormControlLabel, Radio, Button 
 } from "@mui/material";
+
+import TeacherSvg from "../../../public/PlanningSvg.svg"
+
+
+
 const levels = ["L1", "L2", "L3", "M1", "M2"];
 const specialities = ["info", "physic", "gestion", "biology", "pharmacy", "medicine"];
 
@@ -14,20 +19,37 @@ export default function ExamsMenu() {
   const [semester, setSemester] = useState("S1");
 
   return (
-    <Box sx={{ p: 3, minHeight: "100vh", backgroundColor: theme.palette.background.default }}>
+    <Box sx={{ p: 3, backgroundColor: theme.palette.background.default }}>
       {/* Header Section */}
-      <Paper elevation={0} sx={{ border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`,p: 3, mb: 4, textAlign: "center", borderRadius: 2 }} >
-        <Typography variant="h4" fontWeight="bold" color="primary">
-          📚 Exams
-        </Typography>
-        <FormControl component="fieldset" sx={{ mt: 2 }}>
+      <Paper elevation={0} sx={{ border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`,p: 3, mb: 4,
+      borderRadius: 2,
+      textAlign: "center",
+      borderRadius: 2,
+      display:"flex",
+      justifyContent:"space-evenly"
+       }} >
+
+
+        <img src={TeacherSvg} alt="Teacher" className="SvgPics" />
+
+        <Box sx={{height:"100%",maxWidth:"45%" ,display:"flex",alignItems:"center",flexDirection:"column"}}>
+          <Typography variant="h4" fontWeight="bold" color="primary">
+            Exams
+          </Typography>
+          <Typography variant="h6" sx={{ mt: 1 }}>
+                      Choose Your Specialty & Level to control and manage Exams
+           </Typography>
+        </Box>
+
+
+        {/* <FormControl component="fieldset" sx={{ mt: 2 }}>
           <Typography variant="h6">Select Semester</Typography>
           <RadioGroup row value={semester} onChange={(e) => setSemester(e.target.value)}>
             {["S1", "S2"].map((sem) => (
               <FormControlLabel key={sem} value={sem} control={<Radio color="primary" />} label={sem} />
             ))}
           </RadioGroup>
-        </FormControl>
+        </FormControl> */}
       </Paper>
 
       {/* Grid Layout */}

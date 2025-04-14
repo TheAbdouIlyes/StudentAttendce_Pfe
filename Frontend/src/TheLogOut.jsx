@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+// import CircularProgress from '@mui/material/CircularProgress';
 
 export default function LogOut() {
 
@@ -44,7 +45,9 @@ export default function LogOut() {
 
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>
+      {/* <CircularProgress disableShrink /> */}
       Logging out...
+
     </div>
   );
 }

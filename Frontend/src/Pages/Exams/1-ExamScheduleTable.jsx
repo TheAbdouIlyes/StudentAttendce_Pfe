@@ -21,13 +21,14 @@ import {
   IconButton,
   FormControl,
   InputLabel,
+  Typography,
 } from "@mui/material";
 
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import EditIcon from '@mui/icons-material/Edit';
 import { useTheme } from "@mui/material";
 
-const ExamScheduleTable = ({addTeachers}) => {
+const ExamScheduleTable = () => {
   const navigate = useNavigate();
   const { speciality, year, semester } = useParams();
   const [examData, setExamData] = useState([]);
@@ -91,20 +92,20 @@ const ExamScheduleTable = ({addTeachers}) => {
   };
 
   return (
-    <Box sx={{ mb: 5 }}>
+    <Box sx={{ m:0,p:0,mb:10 }}>
       
       <TableContainer component={Paper} className="Examan-MainTable">
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="left">Date</TableCell>
-              <TableCell align="left">Exam</TableCell>
-              <TableCell align="left">Place</TableCell>
-              <TableCell align="left">Time</TableCell>
-              <TableCell align="center">QR State</TableCell>
-              {addTeachers && <TableCell align="left">Add Teacher</TableCell>}
-              <TableCell align="center">Edit</TableCell>
-              <TableCell align="left"></TableCell>
+              <TableCell align="left" sx={{fontWeight:"bolder"}}>Date</TableCell>
+              <TableCell align="left" sx={{fontWeight:"bolder"}}>Exam</TableCell>
+              <TableCell align="left" sx={{fontWeight:"bolder"}}>Place</TableCell>
+              <TableCell align="left" sx={{fontWeight:"bolder"}}>Time</TableCell>
+              <TableCell align="center" sx={{fontWeight:"bolder"}}>QR State</TableCell>
+              <TableCell align="center" sx={{fontWeight:"bolder"}}>Surveillance</TableCell>
+              <TableCell align="center" sx={{fontWeight:"bolder"}}>Edit</TableCell>
+              <TableCell align="left" sx={{fontWeight:"bolder"}}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -122,7 +123,15 @@ const ExamScheduleTable = ({addTeachers}) => {
                     const fourHoursInMs = 4 * 60 * 60 * 1000;
 
                     if (now - examDateTime > fourHoursInMs) {
-                      return "Ended";
+                        return (
+                          <Button
+                            color="secondary"
+                            onClick={() =>console.log("hhh")}
+                            >
+
+                            Ended
+                          </Button>
+                        );
                     } else {
                       return (
                         <Button
@@ -140,10 +149,14 @@ const ExamScheduleTable = ({addTeachers}) => {
                   })()}
                 </TableCell>
 
-                {addTeachers && (
-                  <TableCell align="left">
-                    <Button
-                      variant="contained"
+               
+                  <TableCell align="center">
+
+                    <Box sx={{display:"flex",flexDirection:"column",alignItems:"center"}}>
+                      <Typography variant="h8">N</Typography>
+                      <Button
+                      sx={{width:"30px",height:"30px"}}
+                      variant="outlined"
                       color="primary"
                       onClick={() =>
                         navigate(`${row.subject_name}/SerTeacher/`)
@@ -151,8 +164,10 @@ const ExamScheduleTable = ({addTeachers}) => {
                     >
                       +
                     </Button>
+                    </Box>
+                    
                   </TableCell>
-                )}
+                
 
                 <TableCell align="center">
                   <IconButton onClick={() => handleDialogOpen(row)}>
@@ -163,9 +178,10 @@ const ExamScheduleTable = ({addTeachers}) => {
                 <TableCell align="right">
                   <Button
                     color="success"
+                    variant="outlined"
                     onClick={() => navigate(`${row.id}/presence`)}
                     startIcon={<ArrowForwardIcon />}
-                    sx={{ border: "1px solid", borderRadius: '0.5rem' }}
+                    // sx={{ border: "1px solid", borderRadius: '0.5rem' }}
                   >
                     View Exam
                   </Button>
@@ -179,9 +195,9 @@ const ExamScheduleTable = ({addTeachers}) => {
       {/* Dialog for editing exam */}
       {selectedExam && (
         <Dialog open={openDialog} onClose={handleDialogClose}>
-          <DialogTitle sx={{ backgroundColor: theme.palette.background.paper }}>Edit <b>"{selectedExam.subject_name}"</b> Exam</DialogTitle>
+          <DialogTitle>Edit <b>"{selectedExam.subject_name}"</b> Exam</DialogTitle>
           <DialogContent
-            sx={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: "300px", backgroundColor: theme.palette.background.paper }}
+            sx={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: "300px" }}
           >
 
             <TextField

@@ -10,3 +10,8 @@
     font-size: 1.25rem;
   }
   
+.schedule-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

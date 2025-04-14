@@ -52,6 +52,8 @@ const Dashboard = () => {
           { label: "Total Exams", count: stats.exam_count, icon: <EventNote sx={{ fontSize: 40, color: "#7b1fa2" }} /> },
           { label: "Attendances", count: stats.attendance_count, icon: <CheckCircle sx={{ fontSize: 40, color: "#388e3c" }} /> },
           { label: "Absences", count: stats.absences_count, icon: <Cancel sx={{ fontSize: 40, color: "#d32f2f" }} /> },
+          { label: "Total Teachers", count: "No fetch", icon: <People sx={{ fontSize: 40, color: "#1976d2" }} /> },
+
         ]);
 
         // Attendance by specialty
@@ -116,10 +118,10 @@ const Dashboard = () => {
       ) : (
         <>
           {/* Stats Cards */}
-          <Grid container spacing={3} mb={4}>
+          <Grid container spacing={2} mb={4}>
             {statsData.map((item, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
-                <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, borderRadius: 3, display: "flex", justifyContent: "space-between", alignItems: "center", p: 2 }}>
+                <Card  sx={{ border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, borderRadius: 3, display: "flex", justifyContent: "space-between", alignItems: "center", p: 2 }}>
                   <Box>
                     <Typography variant="body2" color="text.secondary">
                       {item.label}
@@ -135,7 +137,7 @@ const Dashboard = () => {
           {/* Charts */}
           <Grid container spacing={4}>
             <Grid item xs={12} md={6}>
-              <Card elevation={0} sx={{ border: `1px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, borderRadius: 3, p: 2 }}>
+              <Card  sx={{ border: `1px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, borderRadius: 3, p: 2 }}>
                 <Typography variant="h6" mb={2}>
                   Présences par Spécialité
                 </Typography>
@@ -153,7 +155,7 @@ const Dashboard = () => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Card elevation={0} sx={{ border: `1px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, borderRadius: 3, p: 2 }}>
+              <Card  sx={{ border: `1px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, borderRadius: 3, p: 2 }}>
                 <Typography variant="h6" mb={2}>
                   Présences par Niveau
                 </Typography>

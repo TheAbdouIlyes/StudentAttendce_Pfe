@@ -11,6 +11,10 @@ import {
   Button,
 } from "@mui/material";
 
+import TeacherSvg from "../../../public/TeacherSvg.svg"
+
+
+
 const modules = ["L1", "L2", "L3", "M1", "M2"];
 const categories = ["info", "physic", "gestion", "biology", "pharmacy", "medcine"];
 
@@ -23,7 +27,7 @@ export default function ModulesMenu() {
     <Box
       sx={{
         p: 3,
-        minHeight: "100vh",
+        // minHeight: "100vh",
         backgroundColor: theme.palette.background.default,
       }}
     >
@@ -36,14 +40,22 @@ export default function ModulesMenu() {
           mb: 4,
           textAlign: "center",
           borderRadius: 2,
+          display:"flex",
+          justifyContent:"space-evenly"
         }}
       >
-        <Typography variant="h4" fontWeight="bold" color="primary">
-          📦 Modules
-        </Typography>
-        <Typography variant="h6" sx={{ mt: 1 }}>
-          Choose Your Specialty & Level
-        </Typography>
+
+        <Box sx={{height:"100%",maxWidth:"45%" ,display:"flex",alignItems:"center",flexDirection:"column"}}>
+          <Typography variant="h4" fontWeight="bold" color="primary">
+            Modules
+          </Typography>
+          <Typography variant="h6" sx={{ mt: 1 }}>
+            Choose Your Specialty & Level to control and manage modules 
+          </Typography>
+        </Box>
+        
+
+        <img src={TeacherSvg} alt="Teacher" className="SvgPics" />
       </Paper>
 
       {/* Grid */}

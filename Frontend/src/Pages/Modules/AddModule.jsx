@@ -17,10 +17,12 @@ import {
   RadioGroup,
   FormControlLabel,
   FormLabel,
+  Box,
+
 } from "@mui/material";
 import ReturnButton from "../../comps/ReturnButton";
 
-export default function AddModule() {
+export default function AddModule({onClose,onAdd}) {
   const [moduleData, setModuleData] = useState({
     name: "",
     level: "",
@@ -29,6 +31,7 @@ export default function AddModule() {
   });
 
   const [modules, setModules] = useState([]); // Store modules
+  
 
   // Handle input changes
   const handleChange = (event) => {
@@ -62,6 +65,10 @@ export default function AddModule() {
       // Update state
       setModules([...modules, moduleData]);
       setModuleData({ name: "", level: "", speciality: "", semester: "s1" }); // Reset form
+      
+      onAdd(moduleData)
+      onClose(); // close modal
+
 
     } catch (error) {
       console.error("Error:", error);
@@ -70,9 +77,9 @@ export default function AddModule() {
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "auto" }}>
+    <Box sx={{ pb:3, maxWidth: "600px", margin: "auto" }}>
       <h2>
-        <ReturnButton /> Add a New Module
+        Add a New Module
       </h2>
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -80,7 +87,7 @@ export default function AddModule() {
 
         <FormControl>
           <InputLabel>Year</InputLabel>
-          <Select name="level" value={moduleData.level} onChange={handleChange} required>
+          <Select label="Year" name="level" value={moduleData.level} onChange={handleChange} required>
             <MenuItem value="l1">L1</MenuItem>
             <MenuItem value="l2">L2</MenuItem>
             <MenuItem value="l3">L3</MenuItem>
@@ -91,7 +98,7 @@ export default function AddModule() {
 
         <FormControl>
           <InputLabel>Speciality</InputLabel>
-          <Select name="speciality" value={moduleData.speciality} onChange={handleChange} required>
+          <Select label="Speciality" name="speciality" value={moduleData.speciality} onChange={handleChange} required>
             <MenuItem value="info">Info</MenuItem>
             <MenuItem value="physic">Physic</MenuItem>
             <MenuItem value="gestion">Gestion</MenuItem>
@@ -110,9 +117,14 @@ export default function AddModule() {
           </RadioGroup>
         </FormControl>
 
-        <Button type="submit" variant="contained" color="primary">
-          Add Module
-        </Button>
+
+        <Box display="flex" justifyContent="flex-end" gap={2}>
+          <Button variant="outlined" color="primary" onClick={onClose}  sx={{ pr:1,pl:1,mt: 2,border:0 }}>Cancel</Button>
+
+          <Button variant="contained"color="info" sx={{ mt: 2,border:0 }}  type="submit">
+            Add Module
+          </Button>
+        </Box>
       </form>
 
       {/* Table to display modules */}
@@ -140,6 +152,6 @@ export default function AddModule() {
           </Table>
         </TableContainer>
       )}
-    </div>
+    </Box>
   );
 }

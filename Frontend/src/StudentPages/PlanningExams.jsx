@@ -31,11 +31,11 @@ export default function PlanningExams() {
       <div className="schedule-container">
         <div className="schedule-card">
           <div className="schedule-header">
-            <h1>📅 Exam Schedule</h1>
+            <h1>Exams Planning</h1>
             <Select
               value={semester}
               onChange={(e) => setSemester(e.target.value)}
-              style={{ marginBottom: "10px", color: theme.palette.text.primary }}
+              style={{ height:"50px", color: theme.palette.text.primary }}
             >
               <MenuItem value="s1">Semester 1</MenuItem>
               <MenuItem value="s2">Semester 2</MenuItem>

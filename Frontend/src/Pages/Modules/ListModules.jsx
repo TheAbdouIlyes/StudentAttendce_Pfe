@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Button ,  Modal,Box} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ModelTable from "./ModuleTable";
 import ReturnButton from "../../comps/ReturnButton";
 import "./ListModules.css";
+import AddModule from "./AddModule";
 
 export default function ListModules() {
   const navigate = useNavigate();
@@ -12,9 +13,10 @@ export default function ListModules() {
 
   const [modules1, setModules1] = useState([]);
   const [modules2, setModules2] = useState([]);
-  const [showActions, setShowActions] = useState(false);
+  // const [showActions, setShowActions] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
+  
     const fetchModules = async () => {
       try {
         const [response1, response2] = await Promise.all([
@@ -32,6 +34,7 @@ export default function ListModules() {
       }
     };
 
+useEffect(() => {
     fetchModules();
   }, [speciality, year]);
 
@@ -68,19 +71,19 @@ export default function ListModules() {
         </h3>
 
         <div className="Buttons-side">
-          <Button variant="contained" startIcon={<AddIcon />} onClick={() => navigate("AddModules")}>
+          <Button color="info"  variant="contained" startIcon={<AddIcon />} onClick={() => setModalOpen(true)}>
             Add
           </Button>
-          <Button variant="contained" onClick={() => setShowActions((prev) => !prev)}>
+          {/* <Button variant="contained" onClick={() => setShowActions((prev) => !prev)}>
             Show Actions
-          </Button>
+          </Button> */}
         </div>
       </div>
 
       <div className="ModulesAll-Main">
         <div className="ModulesCard-Div">
           <ModelTable
-            showActions={showActions}
+            // showActions={showActions}
             columns={columns}
             initialRows={modules1}
             onDelete={(id) => handleRowDelete(id, 1)}
@@ -88,12 +91,35 @@ export default function ListModules() {
         </div>
         <div className="ModulesCard-Div">
           <ModelTable
-            showActions={showActions}
+            // showActions={showActions}
             columns={columns}
             initialRows={modules2}
             onDelete={(id) => handleRowDelete(id, 2)}
           />
         </div>
+
+
+        {/* Modal */}
+        <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
+          <Box sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 500,
+            height:"auto",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            pl: 4,
+            pr: 4,
+            borderRadius: 2,
+          }}>
+            <AddModule
+              onClose={() => setModalOpen(false)}
+              onAdd={() => fetchModules()}
+            />
+          </Box>
+        </Modal>
       </div>
     </div>
   );

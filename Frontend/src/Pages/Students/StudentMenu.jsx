@@ -7,23 +7,43 @@ import {
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import GroupIcon from "@mui/icons-material/Group";
 
+import TeacherSvg from "../../../public/Sabora.svg"
+
+
 const levels = ["L1", "L2", "L3", "M1", "M2"];
 const specialities = ["info", "physic", "gestion", "biology", "pharmacy", "medicine"];
 
 export default function StudentsMenu() {
   const navigate = useNavigate();
   const theme = useTheme();
+  const NAVStudent=(speciality,level)=>{
+    navigate(`/MenuStudent/${speciality}/${level}`)
+  }
 
   return (
-    <Box sx={{ p: 3, minHeight: "100vh", backgroundColor: theme.palette.background.default }}>
+    <Box sx={{ p: 3, backgroundColor: theme.palette.background.default }}>
+
+
       {/* Header Section */}
-      <Paper elevation={0} sx={{ border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, p: 3, mb: 4, textAlign: "center", borderRadius: 2 }}>
-        <Typography variant="h4" fontWeight="bold" color="primary" sx={{display:"flex",alignItems:"center",justifyContent:"center"}}>
-        <GroupIcon fontSize="large" sx={{ mr: 1 }} /> Students
-        </Typography>
-        <Typography variant="h6" sx={{ mt: 1 }}>
-          Choose Your Specialty & Level
-        </Typography>
+      <Paper elevation={0} sx={{ border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, p: 3, mb: 4,
+      borderRadius: 2 ,
+      textAlign: "center",
+      borderRadius: 2,
+      display:"flex",
+      justifyContent:"space-evenly"
+      }}>
+
+          <Box sx={{height:"100%",maxWidth:"45%" ,display:"flex",alignItems:"center",flexDirection:"column"}}>
+          <Typography variant="h4" fontWeight="bold" color="primary" sx={{display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <GroupIcon fontSize="large" sx={{ mr: 1 }} /> Students
+          </Typography>
+          <Typography variant="h6" sx={{ mt: 1 }}>
+            Choose Your Specialty & Level
+          </Typography>
+        </Box>
+
+                <img src={TeacherSvg} alt="Teacher" className="SvgPics" />
+        
       </Paper>
 
       {/* Grid Layout */}
@@ -43,7 +63,7 @@ export default function StudentsMenu() {
                         color="primary"
                         fullWidth
                         sx={{ fontWeight: "bold", borderRadius: 2 }}
-                        onClick={() => navigate(`/MenuStudent/${speciality}/${level}`)}
+                        onClick={() => NAVStudent(speciality,level)}
                       >
                         {level}
                       </Button>
