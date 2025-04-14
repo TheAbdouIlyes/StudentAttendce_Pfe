@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./ListTeachers.css";
 import TableTeacher from "./TableTeacher";
-import { Button,Typography,Box } from "@mui/material";
+import { Button,Typography,Box,Modal } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
 import ReturnButton from "../../comps/ReturnButton";
+
+import AddTeacher from "./AddTheTeacher";
 
 export default function ListTeachers() {
   const navigate = useNavigate();
@@ -15,6 +17,8 @@ export default function ListTeachers() {
   const [page, setPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const rowsPerPage = 5;
+
+  const [modalOpen, setModalOpen] = useState(false);
 
   const fetchTeachers = async (pageNumber = 1) => {
     try {
@@ -82,7 +86,7 @@ export default function ListTeachers() {
           
         
         
-          <Button variant="contained" color="info" startIcon={<AddIcon />} onClick={() => navigate("addTeacher")}>
+          <Button variant="contained" color="info" startIcon={<AddIcon />} onClick={() => setModalOpen(true)}>
             Add
           </Button>
       </div>
@@ -95,9 +99,32 @@ export default function ListTeachers() {
           totalCount={totalCount} 
           rowsPerPage={rowsPerPage} 
           handleDelete={handleDelete}
+          onAdd={() => fetchTeachers(page + 1)}
           
         />
       </div>
+
+        {/* Modal */}
+        <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
+        <Box sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: 500,
+          height:"auto",
+          bgcolor: "background.paper",
+          boxShadow: 24,
+          pl: 4,
+          pr: 4,
+          borderRadius: 2,
+        }}>
+          <AddTeacher
+            onClose={() => setModalOpen(false)}
+            onAdd={() => fetchTeachers(page + 1)}
+          />
+        </Box>
+      </Modal>
     </div>
   );
 }

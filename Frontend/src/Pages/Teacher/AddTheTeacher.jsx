@@ -12,11 +12,12 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  Box
 } from "@mui/material";
 import ReturnButton from "../../comps/ReturnButton";
 
-export default function AddTeacher() {
+export default function AddTeacher({ onClose, onAdd }) {
   const [teacherData, setTeacherData] = useState({
     first_name: "",
     last_name: "",
@@ -51,6 +52,9 @@ export default function AddTeacher() {
       });
   
       const result = await response.json(); // Get backend response
+
+      onAdd(teacherData); // callback to update parent
+      onClose(); // close modal
   
       if (!response.ok) {
         if (response.status === 400 && result?.error?.includes("already exists")) {
@@ -95,15 +99,18 @@ export default function AddTeacher() {
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "600px", margin: "auto" }}>
-      <h2><ReturnButton /> Add a New Teacher</h2>
+    <div style={{ padding: 10, maxWidth: "600px", margin: "auto" }}>
+      <h2>Add a New Teacher</h2>
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <TextField label="First Name" name="first_name" value={teacherData.first_name} onChange={handleChange} required />
         <TextField label="Last Name" name="last_name" value={teacherData.last_name} onChange={handleChange} required />
         <TextField label="Email" name="email" value={teacherData.email} onChange={handleChange} required />
         <TextField label="Secret Number" name="secret_number" value={teacherData.secret_number} onChange={handleChange} required />
         <TextField label="Matricule" name="matricul" value={teacherData.matricul} onChange={handleChange} required />
-        <Button type="submit" variant="contained" color="primary">Add Teacher</Button>
+        <Box display="flex" justifyContent="flex-end" sx={{mb:2}} gap={2} mt={2}>
+          <Button variant="outlined" color="primary" onClick={onClose}  sx={{ pr:1,pl:1,mt: 2,border:0 }}>Cancel</Button>
+          <Button variant="contained"color="info" sx={{ mt: 2,border:0 }}  type="submit">Add</Button>
+        </Box>
       </form>
       
       {teachers.length > 0 && (
@@ -131,7 +138,7 @@ export default function AddTeacher() {
         </TableContainer>
       )}
       
-      <h3>Assign Subject to Teacher</h3>
+      {/* <h3>Assign Subject to Teacher</h3>
       <FormControl fullWidth>
         <InputLabel>Teacher Matricule</InputLabel>
         <Select value={selectedTeacher} onChange={(e) => setSelectedTeacher(e.target.value)}>
@@ -152,7 +159,9 @@ export default function AddTeacher() {
       
       <Button onClick={assignSubject} variant="contained" color="secondary" style={{ marginTop: "10px" }}>
         Assign Subject
-      </Button>
+      </Button> */}
+
+      
     </div>
   );
 }

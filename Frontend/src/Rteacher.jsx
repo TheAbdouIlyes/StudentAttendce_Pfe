@@ -72,10 +72,10 @@ const NAVIGATION_Teacher = [
     { segment: 'Teacher/Dashboard', title: 'Dashboard', icon: <DashboardIcon /> },
     { kind: 'divider' },
     { kind: 'header', title: 'Lists' },
+    { segment: 'Teacher/Surveillance', title: 'Surveillance', icon: <PeopleIcon />},
     { segment: 'Teacher/ExamsAttendance', title: 'ExamsAttendance', icon: <PeopleIcon />
     },
-    { segment: 'Teacher/Surveillance', title: 'Surveillance', icon: <PeopleIcon />
-    },
+    
     { kind: 'divider' },
     { kind: 'header', title: 'Exit' },
     { 
@@ -106,10 +106,12 @@ export default function TeacherLayouts({demoTheme,Skeleton }) {
               <Route path="ExamsAttendance" element={<ExamsAttendanceMenu />} />
   
               <Route path="ExamsAttendance/:speciality/:year/:exam" element={<StudentsAttendances/>} />
-  
+
+
               <Route path="Surveillance" element={<Surveillance />} />
-  
-             
+              <Route path="Surveillance/:module/qr-scanner" element={<QRCOde />} />
+
+
             </Routes>
           </PageContainer>
           

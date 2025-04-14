@@ -5,9 +5,9 @@ import ReturnButton from "../../comps/ReturnButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 // import { Box } from "lucide-react";
 
-export default function EditTeacher() {
+export default function EditTeacher({teacherId, onClose, onAdd }) {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const  id  = teacherId ;
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -68,59 +68,62 @@ export default function EditTeacher() {
         body: JSON.stringify(formData),
       });
       if (!response.ok) throw new Error("Failed to update teacher");
-      navigate(-1);
+      // navigate(-1);
     } catch (err) {
       setError(err.message);
     }
+    onAdd(formData);
+    onClose();
   };
 
-  const handleAddSubject = async () => {
-    if (!newSubject || !matricul) return;
+  // const handleAddSubject = async () => {
+  //   if (!newSubject || !matricul) return;
 
-    // Check if subject exists in availableSubjects
-    const subjectToAdd = availableSubjects.find((subj) => subj.name === newSubject);
-    if (!subjectToAdd) return;
+  //   // Check if subject exists in availableSubjects
+  //   const subjectToAdd = availableSubjects.find((subj) => subj.name === newSubject);
+  //   if (!subjectToAdd) return;
 
-    try {
-      const response = await fetch(`http://127.0.0.1:8000/tea/${matricul}/sub/${newSubject}/`, { method: "POST" });
-      if (!response.ok) throw new Error("Failed to assign subject");
+  //   try {
+  //     const response = await fetch(`http://127.0.0.1:8000/tea/${matricul}/sub/${newSubject}/`, { method: "POST" });
+  //     if (!response.ok) throw new Error("Failed to assign subject");
 
-      setSubjects([...subjects, subjectToAdd]); // Add subject object to state
-      setNewSubject("");
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  //     setSubjects([...subjects, subjectToAdd]); // Add subject object to state
+  //     setNewSubject("");
+  //   } catch (err) {
+  //     setError(err.message);
+  //   }
+  // };
 
-  const handleRemoveSubject = async (subjectName) => {
-    if (!matricul) return;
-    try {
-      const response = await fetch(`http://127.0.0.1:8000/tea/${matricul}/sub/${subjectName}/not`, { method: "DELETE" });
-      if (!response.ok) throw new Error("Failed to remove subject");
-      setSubjects(subjects.filter((sub) => sub.name !== subjectName));
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  // const handleRemoveSubject = async (subjectName) => {
+  //   if (!matricul) return;
+  //   try {
+  //     const response = await fetch(`http://127.0.0.1:8000/tea/${matricul}/sub/${subjectName}/not`, { method: "DELETE" });
+  //     if (!response.ok) throw new Error("Failed to remove subject");
+  //     setSubjects(subjects.filter((sub) => sub.name !== subjectName));
+  //   } catch (err) {
+  //     setError(err.message);
+  //   }
+  // };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-    <Paper sx={{ padding: 3, maxWidth: 500, margin: "auto"}}>
+    <Paper elevation={0} sx={{ padding: 3, pb:5, maxWidth: 500, margin: "auto"}}>
       <Box sx={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <ReturnButton />
         <h2>Edit Teacher {id}</h2>
       </Box>
       
       <TextField fullWidth label="First Name" name="first_name" value={formData.first_name} onChange={handleChange} margin="normal" />
       <TextField fullWidth label="Last Name" name="last_name" value={formData.last_name} onChange={handleChange} margin="normal" />
       <TextField fullWidth label="Email" name="email" value={formData.email} onChange={handleChange} margin="normal" />
-      <Button variant="contained" color="primary" onClick={handleSave} sx={{ marginTop: 2 }}>
-        Save
-      </Button>
+      
+       <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
+      <Button variant="outlined" color="primary" onClick={onClose}  sx={{ pr:1,pl:1,mt: 2,border:0 }}>Cancel</Button>
+      <Button variant="contained"color="info" sx={{ mt: 2,border:0 }} onClick={handleSave} >Save</Button>
+      </Box>
 
-      <h3>Subjects</h3>
+      {/* <h3>Subjects</h3>
       <List>
         {subjects.map((subject) => (
           <ListItem key={subject.name} secondaryAction={
@@ -151,7 +154,7 @@ export default function EditTeacher() {
       </TextField>
       <Button variant="contained" color="secondary" onClick={handleAddSubject} sx={{ marginTop: 2 }}>
         Add Subject
-      </Button>
+      </Button> */}
     </Paper>
   );
 }

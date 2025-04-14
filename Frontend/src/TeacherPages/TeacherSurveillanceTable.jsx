@@ -40,9 +40,7 @@ const TeacherSurveillanceTable = ({ exams }) => {
                         <Button
                           color="primary"
                           onClick={() =>
-                            navigate(`${row.subject_name}/qr-scanner`, {
-                              state: { module: row.subject_name },
-                            })
+                            navigate(`${exam.subject_name}/qr-scanner`)
                           }
                         >
                           Scan QR
