@@ -14,25 +14,23 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 
-const baseColumns = [
+const columns = [
   { width: 50, label: "ID", dataKey: "id" },
-  { width: 100, label: "First Name", dataKey: "first_name" },
-  { width: 150, label: "Last Name", dataKey: "last_name" },
-  { width: 220, label: "Email", dataKey: "email" },
-  { width: 180, label: "Speciality", dataKey: "speciality" },
-  { width: 120, label: "Year", dataKey: "level" },
+  { width: 120, label: "First Name", dataKey: "first_name" },
+  { width: 240, label: "Last Name", dataKey: "last_name" },
+  { width: 240, label: "Email", dataKey: "email" },
+  { width: 120, label: "Speciality", dataKey: "speciality" },
+  { width: 40, label: "Year", dataKey: "level" },
+  { width: 80, label: "", dataKey: "actions" }
 ];
 
-export default function StudentTable({ showActions, students, page, setPage, totalCount, rowsPerPage, onDelete }) {
+export default function StudentTable({  students, page, setPage, totalCount, rowsPerPage, onDelete }) {
   const navigate = useNavigate();
 
   const handlePageChange = (_, newPage) => {
     setPage(newPage);
   };
 
-  const columns = showActions
-    ? [...baseColumns, { width: 150, label: "Actions", dataKey: "actions" }]
-    : baseColumns;
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: 2 }}>
@@ -41,7 +39,7 @@ export default function StudentTable({ showActions, students, page, setPage, tot
           <TableHead >
             <TableRow>
               {columns.map((column) => (
-                <TableCell key={column.dataKey} sx={{ fontWeight: "bold", padding: "12px" }} align="center">
+                <TableCell key={column.dataKey} sx={{ fontWeight: "bold", padding: "12px" }} align="left">
                   {column.label}
                 </TableCell>
               ))}
@@ -51,17 +49,17 @@ export default function StudentTable({ showActions, students, page, setPage, tot
             {students.map((student) => (
               <TableRow key={student.id}>
                 {columns.map((column) => (
-                  <TableCell key={column.dataKey} align="center">
+                  <TableCell key={column.dataKey} align="left">
                     {column.dataKey === "actions" ? (
                       <>
                         <IconButton
-                          sx={{ marginRight: "8px", height: 30 }}
+                          sx={{ mr: "4px", height: 30 ,width:30 }}
                           onClick={() => navigate(`edit-student/${student.id}`)}
                         >
                           <EditIcon fontSize="small" />
                         </IconButton>
                         <IconButton
-                          sx={{ height: 30 }}
+                          sx={{ height: 30 ,width:30 }}
                           onClick={() => {
                             if (window.confirm("Are you sure you want to delete this student?")) {
                               onDelete(student.id);

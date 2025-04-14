@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import { Button } from '@mui/material';
 
 
 export default function LogInForm() {
@@ -45,7 +46,7 @@ export default function LogInForm() {
   };
 
   return (
-    <div>
+    <div className='FormLogIn'>
       <form onSubmit={handleSubmit} className='FormLogIn'>
         <h3 className='LogIn-Info'>username</h3>
         <Box sx={{ width: 300, marginBottom: 4, maxWidth: '100%' }}>
@@ -74,7 +75,12 @@ export default function LogInForm() {
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <button type="submit" className="Login-Submit">Submit</button>
+        <Button 
+        variant='contained' 
+        sx={{height:40 ,maxWidth:130}}
+        color="info" 
+        type="submit" 
+       >Submit</Button>
       </form>
     </div>
   );

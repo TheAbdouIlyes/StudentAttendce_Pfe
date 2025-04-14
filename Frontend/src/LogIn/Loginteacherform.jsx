@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import { Button } from '@mui/material';
+
 
 export default function LogInteacherform() {
   const [credentials, setCredentials] = useState({ matricul: '', secret_number: '' });
@@ -73,7 +75,12 @@ export default function LogInteacherform() {
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        <button type="submit" className="Login-Submit">Submit</button>
+         <Button 
+                variant='contained' 
+                sx={{height:40 ,maxWidth:130}}
+                color="info" 
+                type="submit" 
+               >Submit</Button>
       </form>
     </div>
   );

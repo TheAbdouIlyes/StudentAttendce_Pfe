@@ -56,7 +56,7 @@ urlpatterns = [
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('exam_list/<level>/<speciality>/<semester>',ExamListByLevelAndSpeciality.as_view(),name="exam_list"),
     
-    path('delete_subject/<name>', delete_subject.as_view(), name='delete_subject'),
+    path('delete_subject/<int:name>', delete_subject.as_view(), name='delete_subject'),
     path('delete_exam/<int:pk>', delete_exam.as_view(), name='delete_exam'),
     path('student/profile/',StudentProfileView.as_view(),name="student_profile"),
     

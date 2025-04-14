@@ -15,9 +15,16 @@ class ExamSerializer(serializers.ModelSerializer):
 
     subject_name = serializers.CharField(source='subject.name', read_only=True)
     time = serializers.TimeField(format="%H:%M")
+    teacher_count = serializers.SerializerMethodField()
+
     class Meta:
         model = Exam
-        fields =['id', 'subject_name','date','time','amphi']
+        fields =['id', 'subject_name','date','time','amphi','teacher_count']
+    def get_teacher_count(self, obj):
+        return surveillance.objects.filter(exam=obj).count()
+
+
+
 
 class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:

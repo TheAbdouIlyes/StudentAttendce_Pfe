@@ -1,6 +1,9 @@
 import React from 'react';
 import "./LogInAdmin.css";
 import LogInForm from './LogInForm';
+import ReturnButton from '../comps/ReturnButton';
+import {Users } from "lucide-react";
+
 
 export default function LogInAdmin() {
   return (
@@ -9,12 +12,18 @@ export default function LogInAdmin() {
         <div className='LeftSide-LogIn2'>
           <div className='LeftSide-LogIn3'>
             {/* Left side content */}
+            
           </div>
         </div>
       </div>
 
       <div className='RightSide-LogIn'>
-        <h1 className='LogIn-Title'>LogIn</h1>
+        <div className='ReturnLog'>
+          <ReturnButton/>
+        </div>
+        
+        
+        <h1 className='LogIn-Title'>Login as Admin<Users className="role-card-icon" /></h1>
         <LogInForm />
       </div>
     </div>
