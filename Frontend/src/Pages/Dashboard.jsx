@@ -52,7 +52,7 @@ const Dashboard = () => {
           { label: "Total Exams", count: stats.exam_count, icon: <EventNote sx={{ fontSize: 40, color: "#7b1fa2" }} /> },
           { label: "Attendances", count: stats.attendance_count, icon: <CheckCircle sx={{ fontSize: 40, color: "#388e3c" }} /> },
           { label: "Absences", count: stats.absences_count, icon: <Cancel sx={{ fontSize: 40, color: "#d32f2f" }} /> },
-          { label: "Total Teachers", count: "No fetch", icon: <People sx={{ fontSize: 40, color: "#1976d2" }} /> },
+          { label: "Total Teachers", count: stats.teacher_count, icon: <People sx={{ fontSize: 40, color: "#1976d2" }} /> },
 
         ]);
 

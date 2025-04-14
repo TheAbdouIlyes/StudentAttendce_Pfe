@@ -1057,6 +1057,7 @@ class adminstats(APIView):
       students_count = Student.objects.count()
      
       exam_count = Exam.objects.count() 
+      teacher_count=teacher.objects.count()
       Attendance_count=Attendance.objects.count()
       expected_attendance = 0
 
@@ -1074,7 +1075,7 @@ class adminstats(APIView):
       absences_count = expected_attendance - Attendance_count
             
 
-      return JsonResponse({"students_count": students_count,"exam_count": exam_count, "absences_count":absences_count, "attendance_count": Attendance_count})
+      return JsonResponse({"students_count": students_count,"exam_count": exam_count,"teacher_count":teacher_count ,"absences_count":absences_count, "attendance_count": Attendance_count})
 
 
 
