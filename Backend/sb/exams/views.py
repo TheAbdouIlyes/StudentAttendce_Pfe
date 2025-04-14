@@ -448,8 +448,7 @@ class not_teaching(generics.UpdateAPIView):
 
 
 
-class  teacher_present(generics.UpdateAPIView):
-       
+class teacher_present(generics.UpdateAPIView):
     serializer_class = surveillanceSerializer
     permission_classes = [AllowAny]
 
@@ -463,13 +462,24 @@ class  teacher_present(generics.UpdateAPIView):
         # Retrieve exam by subject name
         exam_instance = get_object_or_404(Exam, subject__name=exam_name)
 
-        # Check if attendance already exists
-        
-        # Check if teaching record already exists
+        # Check if the teacher already surveils this exam
         if surveillance.objects.filter(teacher=teacher_instance, exam=exam_instance).exists():
-            return Response({'detail': 'Teach record already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': 'Teacher is already assigned to this exam.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Create new teaching record
+        # Check for time/date conflict with another exam
+        conflicting_exam = surveillance.objects.filter(
+            teacher=teacher_instance,
+            exam__date=exam_instance.date,
+            exam__time=exam_instance.time
+        ).exists()
+
+        if conflicting_exam:
+            return Response(
+                {'detail': 'Teacher is already assigned to another exam at the same time.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Create new surveillance record
         teaching_record = surveillance.objects.create(teacher=teacher_instance, exam=exam_instance)
 
         # Serialize and return the created record

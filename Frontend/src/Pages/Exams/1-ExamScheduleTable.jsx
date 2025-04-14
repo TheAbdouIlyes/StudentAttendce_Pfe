@@ -153,7 +153,7 @@ const ExamScheduleTable = () => {
                   <TableCell align="center">
 
                     <Box sx={{display:"flex",flexDirection:"column",alignItems:"center"}}>
-                      <Typography variant="h8">N</Typography>
+                      <Typography variant="h8">{row.teacher_count}</Typography>
                       <Button
                       sx={{width:"30px",height:"30px"}}
                       variant="outlined"
