@@ -189,6 +189,7 @@ export default function StudentTable({
               />
               <TextField
                 fullWidth
+                type="email"
                 margin="normal"
                 label="Email"
                 name="email"

@@ -79,10 +79,10 @@ export default function ListTeachers() {
   return (
     <div className="Teachers-Container">
       <div className="ListTeacher-Top">
-        <Box sx={{display:"flex",alignItems:"center"}}>
-          <ReturnButton/>
-          <Typography sx={{ml:1}} variant="h5"><b>Teachers List</b></Typography>
-        </Box>
+        {/* <Box sx={{display:"flex",alignItems:"center"}}> */}
+          {/* <ReturnButton/> */}
+          <Typography  variant="h5"><b>Teachers List</b></Typography>
+        {/* </Box> */}
           
         
         

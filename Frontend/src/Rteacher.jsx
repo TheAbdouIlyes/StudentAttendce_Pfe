@@ -53,7 +53,7 @@ import { Button, colors } from '@mui/material';
 import StudentMenu from './Pages/Students/StudentMenu';
 import AddStudent from './Pages/Students/AddStudent';
 import PlanningExams from './StudentPages/PlanningExams';
-import QRCOde from "./Pages/QR-CodeTest/QRCOde";
+import QRCOdetea from "./Pages/QR-CodeTest/QRCOdetea";
 import The_API from "./HostingPhone";
 import Presence from "./pages/Presence";
 import ExamsAttendanceMenu from './TeacherPages/ExamsAttendanceMenu';
@@ -62,6 +62,8 @@ import Surveillance from './TeacherPages/Surveillance';
 import ES from './StudentPages/ES';
 import StudentDashboard from './StudentPages/StudentDashboard';
 import LogOut from "./TheLogOut"
+
+import QRCode from './Pages/QR-CodeTest/QRCOde';
 
 
 
@@ -109,7 +111,7 @@ export default function TeacherLayouts({demoTheme,Skeleton }) {
 
 
               <Route path="Surveillance" element={<Surveillance />} />
-              <Route path="Surveillance/:module/qr-scanner" element={<QRCOde />} />
+              <Route path="Surveillance/:module/qr-scanner" element={<QRCode />} />
 
 
             </Routes>

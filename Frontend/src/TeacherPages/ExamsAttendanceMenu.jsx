@@ -62,7 +62,7 @@ export default function ExamsSelection() {
     <Box sx={{ p: 3, minHeight: "100vh", backgroundColor: theme.palette.background.default }}>
       <Paper elevation={3} sx={{ p: 3, mb: 4, textAlign: "center", borderRadius: 2 }}>
         <Typography variant="h4" fontWeight="bold" color="primary">
-          📝 Exams Attendance
+          Exams Attendance
         </Typography>
         <Select
           value={semester}

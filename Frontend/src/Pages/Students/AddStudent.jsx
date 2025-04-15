@@ -61,7 +61,7 @@ export default function AddStudent({ onClose, onAdd }) {
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <TextField label="First Name" name="first_name" value={studentData.first_name} onChange={handleChange} />
         <TextField label="Last Name" name="last_name" value={studentData.last_name} onChange={handleChange} />
-        <TextField label="Email" name="email" value={studentData.email} onChange={handleChange} />
+        <TextField label="Email" name="email" type="email" value={studentData.email} onChange={handleChange} />
         <FormControl fullWidth>
           <InputLabel>Year</InputLabel>
           <Select name="level" label="Year" value={studentData.level} onChange={handleChange}>
@@ -88,7 +88,7 @@ export default function AddStudent({ onClose, onAdd }) {
         <TextField label="Roll Number" name="roll_number" value={studentData.roll_number} onChange={handleChange} />
         <TextField label="Matricule" name="matricul" value={studentData.matricul} onChange={handleChange} />
 
-        <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
+        <Box display="flex" justifyContent="flex-end" gap={2}>
           <Button variant="outlined" color="primary" onClick={onClose}  sx={{ pr:1,pl:1,mt: 2,border:0 }}>Cancel</Button>
           <Button variant="contained"color="info" sx={{ mt: 2,border:0 }}  type="submit">Add</Button>
           

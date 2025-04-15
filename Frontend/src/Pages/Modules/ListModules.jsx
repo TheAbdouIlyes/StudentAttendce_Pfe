@@ -70,14 +70,13 @@ useEffect(() => {
           Speciality: {speciality} | Level: {year}
         </h3>
 
-        <div className="Buttons-side">
           <Button color="info"  variant="contained" startIcon={<AddIcon />} onClick={() => setModalOpen(true)}>
             Add
           </Button>
           {/* <Button variant="contained" onClick={() => setShowActions((prev) => !prev)}>
             Show Actions
           </Button> */}
-        </div>
+    
       </div>
 
       <div className="ModulesAll-Main">

@@ -11,11 +11,12 @@ import {
   Button,
 } from "@mui/material";
 
-import { useParams, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 
 
 const TeacherSurveillanceTable = ({ exams }) => {
     const navigate = useNavigate();
+   
   return (
     <TableContainer component={Paper} sx={{ maxWidth: "80%", margin: "auto", mt: 3, p: 2 }}>
       {exams.length > 0 ? (
@@ -42,6 +43,7 @@ const TeacherSurveillanceTable = ({ exams }) => {
                           onClick={() =>
                             navigate(`${exam.subject_name}/qr-scanner`)
                           }
+                          
                         >
                           Scan QR
                         </Button>
