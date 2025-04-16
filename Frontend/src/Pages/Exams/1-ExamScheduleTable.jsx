@@ -94,7 +94,7 @@ const ExamScheduleTable = () => {
   return (
     <Box sx={{ m:0,p:0,mb:10 }}>
       
-      <TableContainer component={Paper} className="Examan-MainTable">
+      <TableContainer elevation={0} component={Paper} className="Examan-MainTable">
         <Table>
           <TableHead>
             <TableRow>
@@ -125,7 +125,7 @@ const ExamScheduleTable = () => {
                     if (now - examDateTime > fourHoursInMs) {
                         return (
                           <Button
-                            color="secondary"
+                            color="present"
                             onClick={() =>console.log("hhh")}
                             >
 
@@ -163,6 +163,7 @@ const ExamScheduleTable = () => {
                       }
                     >
                       +
+                     
                     </Button>
                     </Box>
                     

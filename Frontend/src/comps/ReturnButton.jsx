@@ -12,8 +12,8 @@ const ReturnButton = () => {
       variant="contained"
       startIcon={<ExitToAppIcon />}
       onClick={() => navigate(-1)} // Navigate back
-      sx={{height:40 ,maxWidth:130}}
-      color="info"
+      sx={{height:40 ,maxWidth:130 ,color:`${theme.palette.text.rev}`}}
+      color="primary"
     >
       Return
     </Button>

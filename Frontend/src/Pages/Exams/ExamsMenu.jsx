@@ -21,7 +21,7 @@ export default function ExamsMenu() {
   return (
     <Box sx={{ p: 3, backgroundColor: theme.palette.background.default }}>
       {/* Header Section */}
-      <Paper elevation={0} sx={{ border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`,p: 3, mb: 4,
+      <Paper elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`,p: 3, mb: 4,
       borderRadius: 2,
       textAlign: "center",
       borderRadius: 2,
@@ -56,7 +56,7 @@ export default function ExamsMenu() {
       <Grid container spacing={3}>
         {specialities.map((speciality, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}  >
-            <Card elevation={0} sx={{  border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`,borderRadius: 3, transition: "0.3s", "&:hover": { transform: "scale(1.05)" } }} >
+            <Card elevation={0} sx={{  border: `1.5px solid ${theme.palette.border}`,borderRadius: 3, transition: "0.3s", "&:hover": { transform: "scale(1.05)" } }} >
               <CardContent sx={{ textAlign: "center" }}>
                 <Typography variant="h5" fontWeight="bold" color="primary">
                   {speciality.toUpperCase()}

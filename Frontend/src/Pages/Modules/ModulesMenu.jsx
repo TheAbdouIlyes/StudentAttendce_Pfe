@@ -21,8 +21,6 @@ const categories = ["info", "physic", "gestion", "biology", "pharmacy", "medcine
 export default function ModulesMenu() {
   const navigate = useNavigate();
   const theme = useTheme();
-  const isDarkMode = theme.palette.mode === "dark";
-
   return (
     <Box
       sx={{
@@ -35,7 +33,7 @@ export default function ModulesMenu() {
       <Paper
         elevation={0}
         sx={{
-          border: `1.5px solid ${isDarkMode ? "#171f27" : "#e0e0e0"}`,
+          border: `1.5px solid ${theme.palette.border}`,
           p: 3,
           mb: 4,
           textAlign: "center",
@@ -65,7 +63,7 @@ export default function ModulesMenu() {
             <Card
               elevation={0}
               sx={{
-                border: `1.5px solid ${isDarkMode ? "#171f27" : "#e0e0e0"}`,
+                border: `1.5px solid ${theme.palette.border}`,
                 borderRadius: 3,
                 transition: "0.3s",
                 "&:hover": { transform: "scale(1.05)" },

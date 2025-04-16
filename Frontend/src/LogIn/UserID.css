@@ -1,15 +1,24 @@
 /* Main container styles */
 .login-container {
     
-    height: 100vh;
-    background: linear-gradient(to bottom right, #429252, #22853d);
+    min-height: 100vh;
+    /* background: linear-gradient(to bottom right, #429252, #22853d); */
     background: linear-gradient(to bottom , #1467c0, #032d4f);
 
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    /* overflow: hidden; */
+    /* overflow: hidden ; */
+  }
+
+  @media (max-width: 768px) {
+    .login-container {
+    
+      min-height: auto;
+
+
+    }
   }
   
   /* Background overlay */
@@ -51,7 +60,7 @@
   .header-icon svg {
     width: 3rem;
     height: 3rem;
-    color: #cce1d3;
+    color: #bfdbfe;
   }
   
   .header h1 {

@@ -73,38 +73,90 @@ import Radmin from "./Radmin"
 
 
 const demoTheme = extendTheme({
-  colorSchemes: { 
+  colorSchemes: {
     light: {
       palette: {
-        primary: { main: '#1ba4f6' }, // Light mode primary color
-        secondary: { main: '#7f74fa' }, // Light mode secondary color
-        background: { 
-          default: '#eff7fe', 
-          paper: '#ffffff' 
+        primary: { main: '#0288d1' },
+        secondary: { main: '#7f74fa' },
+        background: {
+          default: '#eff7fe',
+          paper: '#ffffff',
+          // tableRow: '#dbefff',       // Custom light zebra row
+          // tableRowAlt: '#ffffff',    // Alternate row color
+          // tableHeader: '#ffffff'     // Light header background
         },
-        text: { primary: '#011723' }
-      }
+        text: { primary: '#011723',rev:"#ffffff" },
+        action:{hover:"#e3f6ff"},
+        absent:"#ff0000",
+        present:{dark:"#4caf50",light:"#e8f5e9"},
+        border:"#e3e5e7"
+      },
     },
     dark: {
       palette: {
-        primary: { main: '#0992e1' }, // Dark mode primary color
-        secondary: { main: '#10058a' }, // Dark mode secondary color
-        background: { 
-          default: '#01080e', 
-          paper: '#010a12' 
+        primary: { main: '#BBE1FA' },
+        secondary: { main: '#10058a' },
+        background: {
+          default: '#0c1d27',
+          paper: '#0c171d',
+          // tableRow: '#1f2a35',       // Custom dark zebra row
+          // tableRowAlt: '#17212B',    // Alternate dark row color
+          // tableHeader: '#0e1621'     // Dark header background
         },
-        text: { primary: '#dcf2fe' }
-      }
-    }
+        text: { primary: '#ffffff' ,rev:"#0c171d"},
+        action:{hover:"#05496b"},
+        absent:"#ff0000",
+        present:{dark:"#e8f5e9",light:"#4caf50"},
+        border:"#303b42"
+
+      },
+    },
   },
   colorSchemeSelector: 'class',
-  breakpoints: { values: { xs: 0, sm: 600, md: 600, lg: 1200, xl: 1536 } },
+  breakpoints: {
+    values: { xs: 0, sm: 600, md: 600, lg: 1200, xl: 1536 },
+  },
   components: {
     MuiDrawer: {
       styleOverrides: {
         paper: { width: 200 },
       },
     },
+    MuiTable: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          backgroundColor: theme.palette.background.paper,
+        }),
+      },
+    },
+    // MuiTableRow: {
+    //   styleOverrides: {
+    //     root: ({ theme }) => ({
+    //       // '&:nth-of-type(odd)': {
+    //       //   backgroundColor: theme.palette.background.tableRow,
+    //       // },
+    //       // '&:nth-of-type(even)': {
+    //       //   backgroundColor: theme.palette.background.tableRowAlt,
+    //       // },
+    //       // '&:hover': {
+    //       //   backgroundColor: theme.palette.action.hover,
+    //       // },
+    //     }),
+    //   },
+    // },
+    // MuiTableCell: {
+    //   styleOverrides: {
+    //     root: ({ theme }) => ({
+    //       backgroundColor: 'inherit', // inherits from row
+    //       color: theme.palette.text.primary,
+    //     }),
+    //     head: ({ theme }) => ({
+    //       backgroundColor: theme.palette.background.tableHeader,
+    //       fontWeight: 'bold',
+    //       color: theme.palette.text.primary,
+    //     }),
+    //   },
+    // },
   },
 });
 

@@ -64,6 +64,7 @@ import StudentDashboard from './StudentPages/StudentDashboard';
 import LogOut from "./TheLogOut"
 
 import QRCode from './Pages/QR-CodeTest/QRCOde';
+import TeacherDashboard from './TeacherPages/TeacherDashboard';
 
 
 
@@ -104,7 +105,7 @@ export default function TeacherLayouts({demoTheme,Skeleton }) {
   
           <PageContainer className='MainPage-Conatiner'>
             <Routes >
-              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="dashboard" element={<TeacherDashboard />} />
               <Route path="ExamsAttendance" element={<ExamsAttendanceMenu />} />
   
               <Route path="ExamsAttendance/:speciality/:year/:exam" element={<StudentsAttendances/>} />

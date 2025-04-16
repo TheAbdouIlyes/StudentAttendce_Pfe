@@ -104,7 +104,7 @@ export default function StudentTable({
 
   return (
     <>
-      <Paper sx={{ width: "100%", borderRadius: 2 }}>
+      <Paper elevation={0} sx={{ width: "100%", borderRadius: 2 }}>
         <TableContainer>
           <Table>
             <TableHead>
