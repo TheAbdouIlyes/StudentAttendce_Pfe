@@ -59,6 +59,8 @@ import StudentDashboard from './StudentPages/StudentDashboard';
 import LogOut from "./TheLogOut"
 import ZButtons from './ZButtons';
 
+import { useState,useMemo } from 'react';
+
 
 
 
@@ -101,12 +103,33 @@ export default function AdminLayouts({demoTheme,Skeleton }) {
     },
   ];
 
+
+  // function useDemoRouter(initialPath) {
+  //   const [pathname, setPathname] = useState(initialPath);
   
+  //   const router = useMemo(() => {
+  //     return {
+  //       pathname,
+  //       searchParams: new URLSearchParams(),
+  //       navigate: (path) => setPathname(String(path)), 
+        
+  //     };
+  //   }, [pathname]);
+  
+  //   return router;
+    
+    
+  // }
+
+  // const router = useDemoRouter('/dashboard');
 
   return (
+
+    
     <AppProvider 
       navigation={NAVIGATION} 
       router={{ navigate }} 
+      // router={router}
       theme={demoTheme}  
       branding={{ logo: <img src={logo} style={{ width: "30px", height: "30px", borderRadius: "50%" }} /> ,title: "Admin" }}
       // branding={{ logo: "" ,title: "Pfe" }}
@@ -119,9 +142,12 @@ export default function AdminLayouts({demoTheme,Skeleton }) {
       //   }} 
         >
 
+  
         <PageContainer className='MainPage-Conatiner'>
           <Routes >
             <Route path="dashboard" element={<Dashboard />} />
+
+            
 
             <Route path="MenuStudent" element={<StudentMenu />} />
             <Route path="MenuStudent/:speciality/:year" element={<ListStudents />} />

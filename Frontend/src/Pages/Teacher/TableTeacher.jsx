@@ -42,7 +42,7 @@ export default function TableTeacher({ setRows,onAdd, rows, page, setPage, total
   
 
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: 2 }}>
+    <Paper elevation={0} sx={{ width: "100%", overflow: "hidden", borderRadius: 2 }}>
       <TableContainer>
         <Table>
           <TableHead>

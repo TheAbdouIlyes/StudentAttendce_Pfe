@@ -47,17 +47,17 @@ function ExamAttendance() {
   return (
     <Box
       sx={{
-        p: 3,
-        pt:0,
-        backgroundColor: theme.palette.background.default,
+        // p: 3,
+        // pt:0,
+        // backgroundColor: theme.palette.background.default,
+        
         minHeight: "100%",
       }}
     >
       <Paper
-        elevation={3}
+        elevation={0}
         sx={{
           p: 3,
-          backgroundColor: theme.palette.background.paper,
           borderRadius: 0, // remove border radius
         }}
       >

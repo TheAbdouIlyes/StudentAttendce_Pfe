@@ -70,7 +70,7 @@ export default function ES() {
 
       <Box sx={{maxWidth:'800px', display: 'flex', justifyContent: 'center' }}>
         <Paper
-          elevation={4}
+          elevation={0}
           sx={{
             border: `1px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`,
             width: '100%',

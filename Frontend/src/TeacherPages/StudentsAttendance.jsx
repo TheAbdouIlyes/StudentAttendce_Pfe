@@ -42,20 +42,22 @@ export default function StudentsAttendance() {
 
   return (
     <Box sx={{ p: 3, minHeight: "100vh" }}>
-    <ReturnButton />
-      <Box elevation={3} sx={{  borderRadius: 2, mb: 4,textAlign:"center"}}>
-        
-   
-          <Typography variant="h4" fontWeight="bold" color="primary" sx={{pl:4}}>
-            Attendance for {exam.toUpperCase()}
+      <Box sx={{display:"flex"}}>
+        <ReturnButton />
+        <Box elevation={3} sx={{  ml:15,borderRadius: 2, mb: 4,textAlign:"center"}}>
+
+          <Typography variant="h4" fontWeight="bold" color="text.primary" sx={{pl:4}}>
+            Attendance for <b>"{exam.toUpperCase()}"</b>
           </Typography>
           <Typography variant="h6" color="textSecondary" sx={{pl:4}}>
             {speciality.toUpperCase()} - {year.toUpperCase()}
           </Typography>
-  
+
         
-        
+          
+        </Box>
       </Box>
+    
 
       {/* Loading & Error Handling */}
       {loading && <CircularProgress sx={{ display: "block", margin: "auto" }} />}

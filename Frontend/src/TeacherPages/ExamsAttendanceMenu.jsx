@@ -60,7 +60,7 @@ export default function ExamsSelection() {
 
   return (
     <Box sx={{ p: 3, minHeight: "100vh", backgroundColor: theme.palette.background.default }}>
-      <Paper elevation={3} sx={{ p: 3, mb: 4, textAlign: "center", borderRadius: 2 }}>
+      <Paper elevation={0} sx={{ p: 3, mb: 4, textAlign: "center", borderRadius: 2 }}>
         <Typography variant="h4" fontWeight="bold" color="primary">
           Exams Attendance
         </Typography>
@@ -78,9 +78,9 @@ export default function ExamsSelection() {
       <Grid container spacing={3}>
         {teacherExams.map((exam, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card elevation={4} sx={{ borderRadius: 3, transition: "0.3s", "&:hover": { transform: "scale(1.05)" } }}>
+            <Card elevation={0} sx={{ borderRadius: 3, transition: "0.3s", "&:hover": { transform: "scale(1.05)" } }}>
               <CardContent sx={{ textAlign: "center" }}>
-                <Typography variant="h5" fontWeight="bold" color="secondary">
+                <Typography variant="h5" fontWeight="bold" color="primary">
                   {exam.name.toUpperCase()}
                 </Typography>
                 <Typography variant="body1" color="textSecondary">
@@ -88,7 +88,7 @@ export default function ExamsSelection() {
                 </Typography>
                 <Button
                   variant="contained"
-                  color="success"
+                  color="primary"
                   fullWidth
                   sx={{ fontWeight: "bold", borderRadius: 2, mt: 2 }}
                   onClick={() => navigate(`${exam.speciality}/${exam.level}/${exam.name}`)}

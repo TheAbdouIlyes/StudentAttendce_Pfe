@@ -49,10 +49,11 @@ const Dashboard = () => {
 
         setStatsData([
           { label: "Total Students", count: stats.students_count, icon: <People sx={{ fontSize: 40, color: "#1976d2" }} /> },
+          { label: "Total Teachers", count: stats.teacher_count, icon: <People sx={{ fontSize: 40, color: "#1976d2" }} /> },
           { label: "Total Exams", count: stats.exam_count, icon: <EventNote sx={{ fontSize: 40, color: "#7b1fa2" }} /> },
           { label: "Attendances", count: stats.attendance_count, icon: <CheckCircle sx={{ fontSize: 40, color: "#388e3c" }} /> },
           { label: "Absences", count: stats.absences_count, icon: <Cancel sx={{ fontSize: 40, color: "#d32f2f" }} /> },
-          { label: "Total Teachers", count: stats.teacher_count, icon: <People sx={{ fontSize: 40, color: "#1976d2" }} /> },
+          
 
         ]);
 
@@ -118,26 +119,39 @@ const Dashboard = () => {
       ) : (
         <>
           {/* Stats Cards */}
-          <Grid container spacing={2} mb={4}>
+          <Box sx={{display:"flex", alignItems:"ceter" ,justifyContent:"space-evenly", flexWrap:"wrap"}}  gap={2}>
             {statsData.map((item, index) => (
-              <Grid item xs={12} sm={6} md={3} key={index}>
-                <Card  sx={{ border: `1.5px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, borderRadius: 3, display: "flex", justifyContent: "space-between", alignItems: "center", p: 2 }}>
-                  <Box>
-                    <Typography variant="body2" color="text.secondary">
-                      {item.label}
-                    </Typography>
-                    <Typography variant="h6">{item.count}</Typography>
-                  </Box>
-                  {item.icon}
-                </Card>
-              </Grid>
+              <Card
+              elevation={0}
+                key={index}
+                sx={{
+                  width: 'calc(20% - 16px)', // 5 per row with spacing
+                  minWidth: 150,
+                  border: `1.5px solid ${theme.palette.border}`,
+                  borderRadius: 3,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  p: 2,
+                  mb:2,
+                }}
+              >
+                <Box>
+                  <Typography variant="body2" color="text.secondary">
+                    {item.label}
+                  </Typography>
+                  <Typography variant="h6">{item.count}</Typography>
+                </Box>
+                {item.icon}
+              </Card>
             ))}
-          </Grid>
+          </Box>
+
 
           {/* Charts */}
           <Grid container spacing={4}>
             <Grid item xs={12} md={6}>
-              <Card  sx={{ border: `1px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, borderRadius: 3, p: 2 }}>
+              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
                 <Typography variant="h6" mb={2}>
                   Présences par Spécialité
                 </Typography>
@@ -155,7 +169,7 @@ const Dashboard = () => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Card  sx={{ border: `1px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, borderRadius: 3, p: 2 }}>
+              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
                 <Typography variant="h6" mb={2}>
                   Présences par Niveau
                 </Typography>
@@ -173,7 +187,7 @@ const Dashboard = () => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Card elevation={0} sx={{ border: `1px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, borderRadius: 3, p: 2 }}>
+              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
                 <Typography variant="h6" mb={2}>
                   Taux de Présence par Spécialité (%)
                 </Typography>
@@ -199,7 +213,7 @@ const Dashboard = () => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              <Card elevation={0} sx={{ border: `1px solid ${theme.palette.mode === "dark" ? "#171f27" : "#e0e0e0"}`, borderRadius: 3, p: 2 }}>
+              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
                 <Typography variant="h6" mb={2}>
                   Évolution des Présences par Spécialité
                 </Typography>

@@ -25,6 +25,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+import { desktopOS, valueFormatter } from './webUsageStats';
+
 const COLORS = ["#4caf50", "#f44336"];
 
 const StudentDashboard = () => {
@@ -102,16 +104,109 @@ const StudentDashboard = () => {
 
   return (
     <Box sx={{ p: 2 }}>
-      <Box sx={{ width: "100%", display: "flex",flexWrap:"wrap" }} mb={2}>
+      <Box sx={{ width: "100%", display: "flex",flexWrap:"wrap" }}>
         <Box sx={{ width: "60%" }}>
           <Typography variant="h5" gutterBottom>
             Welcome, <b>{name || "Étudiant"}</b>
           </Typography>
           <Typography variant="subtitle2" color="text.secondary" mb={3}>
-            {/* Voici un aperçu détaillé de votre présence aux examens. */}
+
             here you can check your attendances in your exams.
           </Typography>
         </Box>
+      </Box>
+
+      <Grid container spacing={3} mb={4}>
+        <Grid item xs={12} sm={4}>
+          <Card
+            sx={{
+              p: 2,
+              borderRadius: 3,
+              border: `1px solid ${theme.palette.divider}`,
+            }}
+            elevation={0}
+          >
+            <Typography variant="body2" color="text.secondary">
+              Total des examens
+            </Typography>
+            <Typography variant="h6" mt={1}>
+              <EventNote sx={{ verticalAlign: "middle", mr: 1 }} />
+              {currentData.total}
+            </Typography>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Card
+            sx={{
+              p: 2,
+              borderRadius: 3,
+              border: `1px solid ${theme.palette.divider}`,
+            }}
+            elevation={0}
+          >
+            <Typography variant="body2" color="text.secondary">
+              Présences
+            </Typography>
+            <Typography variant="h6" mt={1}>
+              <CheckCircle
+                color="success"
+                sx={{ verticalAlign: "middle", mr: 1 }}
+              />
+              {currentData.attended}
+            </Typography>
+          </Card>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <Card
+            sx={{
+              p: 2,
+              borderRadius: 3,
+              border: `1px solid ${theme.palette.divider}`,
+            }}
+            elevation={0}
+          >
+            <Typography variant="body2" color="text.secondary">
+              Absences
+            </Typography>
+            <Typography variant="h6" mt={1}>
+              <Cancel color="error" sx={{ verticalAlign: "middle", mr: 1 }} />
+              {currentData.total - currentData.attended}
+            </Typography>
+          </Card>
+        </Grid>
+
+        {/* <Grid item xs={12} sm={4}>
+          <Card
+            sx={{
+              p: 2,
+              borderRadius: 3,
+              border: `1px solid ${theme.palette.divider}`,
+            }}
+            elevation={0}
+          >
+            <Typography variant="body2" color="text.secondary">
+              Note Yet
+            </Typography>
+            <Typography variant="h6" mt={1}>
+              <Cancel color="error" sx={{ verticalAlign: "middle", mr: 1 }} />
+              {currentData.total - currentData.attended}
+            </Typography>
+          </Card>
+        </Grid> */}
+      </Grid>
+
+      <Card
+        sx={{
+          p: 3,
+          borderRadius: 3,
+          border: `1px solid ${theme.palette.divider}`,
+          mb: 4,
+        }}
+        elevation={0}
+      >
+        <Typography variant="h6" mb={2}>
+          Taux de présence – {selectedSemester === "semester1" ? "Semestre 1" : "Semestre 2"}
+        </Typography>
 
         <Box
           sx={{ width: "40%", height: "60%" }}
@@ -140,78 +235,19 @@ const StudentDashboard = () => {
             </Select>
           </FormControl>
         </Box>
-      </Box>
 
-      <Grid container spacing={3} mb={4}>
-        <Grid item xs={12} sm={4}>
-          <Card
-            sx={{
-              p: 2,
-              borderRadius: 3,
-              border: `1px solid ${theme.palette.divider}`,
-            }}
-          >
-            <Typography variant="body2" color="text.secondary">
-              Total des examens
-            </Typography>
-            <Typography variant="h6" mt={1}>
-              <EventNote sx={{ verticalAlign: "middle", mr: 1 }} />
-              {currentData.total}
-            </Typography>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Card
-            sx={{
-              p: 2,
-              borderRadius: 3,
-              border: `1px solid ${theme.palette.divider}`,
-            }}
-          >
-            <Typography variant="body2" color="text.secondary">
-              Présences
-            </Typography>
-            <Typography variant="h6" mt={1}>
-              <CheckCircle
-                color="success"
-                sx={{ verticalAlign: "middle", mr: 1 }}
-              />
-              {currentData.attended}
-            </Typography>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <Card
-            sx={{
-              p: 2,
-              borderRadius: 3,
-              border: `1px solid ${theme.palette.divider}`,
-            }}
-          >
-            <Typography variant="body2" color="text.secondary">
-              Absences
-            </Typography>
-            <Typography variant="h6" mt={1}>
-              <Cancel color="error" sx={{ verticalAlign: "middle", mr: 1 }} />
-              {currentData.total - currentData.attended}
-            </Typography>
-          </Card>
-        </Grid>
-      </Grid>
-
-      <Card
-        sx={{
-          p: 3,
-          borderRadius: 3,
-          border: `1px solid ${theme.palette.divider}`,
-          mb: 4,
-        }}
-      >
-        <Typography variant="h6" mb={2}>
-          Taux de présence – {selectedSemester === "semester1" ? "Semestre 1" : "Semestre 2"}
-        </Typography>
         <ResponsiveContainer width="100%" height={250}>
-          <PieChart>
+          <PieChart
+            series={[
+              {
+                data: desktopOS,
+                highlightScope: { fade: 'global', highlight: 'item' },
+                faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                valueFormatter,
+              },
+            ]}
+            height={200}
+          >
             <Pie
               data={pieData}
               cx="50%"
@@ -219,6 +255,8 @@ const StudentDashboard = () => {
               outerRadius={70}
               dataKey="value"
               label={({ name, value }) => `${name}: ${value}`}
+              
+              
             >
               {pieData.map((_, index) => (
                 <Cell key={index} fill={COLORS[index % COLORS.length]} />
@@ -236,8 +274,9 @@ const StudentDashboard = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          backgroundColor: examScheduleUploaded ? "#e8f5e9" : "#fff3e0",
+          backgroundColor: examScheduleUploaded ?`${theme.palette.present.light}` : `${theme.palette.absent.light}`,
         }}
+        elevation={0}
       >
         <Box display="flex" alignItems="center">
           {examScheduleUploaded ? (
