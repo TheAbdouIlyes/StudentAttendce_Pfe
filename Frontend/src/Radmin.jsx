@@ -131,7 +131,7 @@ export default function AdminLayouts({demoTheme,Skeleton }) {
       router={{ navigate }} 
       // router={router}
       theme={demoTheme}  
-      branding={{ logo: <img src={logo} style={{ width: "30px", height: "30px", borderRadius: "50%" }} /> ,title: "Admin" }}
+      branding={{ logo: <img src={logo} style={{ width: "40px", height: "50px", borderRadius: "50%" }} /> ,title: <div className='TITLE-ALGER1'><h5 className='ALger1'>FACULTY OF SCIENCE UNIVERSITY OF ALGIERS 1</h5><br /><h5 className='ALger1'>كـلـيـة الـعلوم جـامـعـة الـجـزائـر 1</h5></div> }}
       // branding={{ logo: "" ,title: "Pfe" }}
       // sx={{color:"primary"}}
     >

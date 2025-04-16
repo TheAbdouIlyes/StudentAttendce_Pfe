@@ -10,6 +10,8 @@ import {
   Box,
   Paper
 } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+
 
 export default function AddStudent({ onClose, onAdd }) {
   const [studentData, setStudentData] = useState({
@@ -90,7 +92,7 @@ export default function AddStudent({ onClose, onAdd }) {
 
         <Box display="flex" justifyContent="flex-end" gap={2}>
           <Button variant="outlined" color="primary" onClick={onClose}  sx={{ pr:1,pl:1,mt: 2,border:0 }}>Cancel</Button>
-          <Button variant="contained"color="info" sx={{ mt: 2,border:0 }}  type="submit">Add</Button>
+          <Button variant="contained"color="primary" sx={{ mt: 2,border:0 }}  type="submit" startIcon={<AddIcon />}> Add</Button>
           
         </Box>
 

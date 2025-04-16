@@ -104,7 +104,7 @@ const demoTheme = extendTheme({
           // tableHeader: '#0e1621'     // Dark header background
         },
         text: { primary: '#ffffff' ,rev:"#0c171d"},
-        action:{hover:"#0c1f38"},
+        action:{hover:"#05496b"},
         absent:"#ff0000",
         present:{dark:"#e8f5e9",light:"#4caf50"},
         border:"#303b42"

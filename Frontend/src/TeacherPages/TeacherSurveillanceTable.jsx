@@ -18,7 +18,7 @@ const TeacherSurveillanceTable = ({ exams }) => {
     const navigate = useNavigate();
    
   return (
-    <TableContainer component={Paper} sx={{ maxWidth: "80%", margin: "auto", mt: 3, p: 2 }}>
+    <TableContainer elevation={0} component={Paper} sx={{ maxWidth: "80%", margin: "auto", mt: 3, p: 2 }}>
       {exams.length > 0 ? (
         <Table>
           <TableHead>

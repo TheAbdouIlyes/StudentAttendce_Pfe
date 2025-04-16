@@ -11,6 +11,7 @@ import {
   EventNote,
   CheckCircle,
   Cancel,
+  Visibility
 } from "@mui/icons-material";
 import {
   BarChart,
@@ -32,7 +33,7 @@ const specialties = ["info","physic","gestion","biology","pharmacy","medcine"];
 const levels = ["L1", "L2", "L3", "M1", "M2"];
 const pieColors = ["#4caf50", "#66bb6a", "#81c784", "#a5d6a7", "#c8e6c9", "#e8f5e9"];
 
-const Dashboard = () => {
+const TeacherDashboard = () => {
   const theme = useTheme();
 
   const [statsData, setStatsData] = useState([]);
@@ -41,57 +42,39 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        // General stats
-        const statsRes = await fetch("http://127.0.0.1:8000/adminstats/");
-        const stats = await statsRes.json();
-
-        setStatsData([
-          { label: "Total Students", count: stats.students_count, icon: <People sx={{ fontSize: 40, color: "#1976d2" }} /> },
-          { label: "Total Teachers", count: stats.teacher_count, icon: <People sx={{ fontSize: 40, color: "#1976d2" }} /> },
-          { label: "Total Exams", count: stats.exam_count, icon: <EventNote sx={{ fontSize: 40, color: "#7b1fa2" }} /> },
-          { label: "Attendances", count: stats.attendance_count, icon: <CheckCircle sx={{ fontSize: 40, color: "#388e3c" }} /> },
-          { label: "Absences", count: stats.absences_count, icon: <Cancel sx={{ fontSize: 40, color: "#d32f2f" }} /> },
-          
-
-        ]);
-
-        // Attendance by specialty
-        const specialtyResults = await Promise.all(
-          specialties.map(async (s) => {
-            const res = await fetch(`http://127.0.0.1:8000/Présences_par_Spécialité/${s}`);
-            const data = await res.json();
-            return {
-              name: s,
-              present: data.attendance_count,
-              absent: data.absences_count,
-            };
-          })
-        );
-        setAttendanceBySpecialty(specialtyResults);
-
-        // Attendance by level
-        const levelResults = await Promise.all(
-          levels.map(async (l) => {
-            const res = await fetch(`http://127.0.0.1:8000/Présences_par_level/${l}`);
-            const data = await res.json();
-            return {
-              level: l,
-              present: data.attendance_count,
-              absent: data.absences_count,
-            };
-          })
-        );
-        setAttendanceByLevel(levelResults);
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+    // Dummy data (replace this later with actual fetch calls)
+    const stats = {
+      students_count: 120,
+      modules_count: 8,
+      attendance_count: 480,
+      absences_count: 40,
+      duties_count: 15,
     };
 
-    fetchStats();
+    const specialtyResults = specialties.map((s, i) => ({
+      name: s,
+      present: Math.floor(Math.random() * 100),
+      absent: Math.floor(Math.random() * 30),
+    }));
+
+    const levelResults = levels.map((l) => ({
+      level: l,
+      present: Math.floor(Math.random() * 90),
+      absent: Math.floor(Math.random() * 20),
+    }));
+
+    setStatsData([
+      { label: "Total Students", count: stats.students_count, icon: <People sx={{ fontSize: 40, color: "#1976d2" }} /> },
+      { label: "Total Modules", count: stats.modules_count, icon: <EventNote sx={{ fontSize: 40, color: "#7b1fa2" }} /> },
+      { label: "Total Duties", count: stats.duties_count, icon: <Visibility sx={{ fontSize: 40, color: "#ff9800" }} /> },
+      { label: "Total Presences", count: stats.attendance_count, icon: <CheckCircle sx={{ fontSize: 40, color: "#388e3c" }} /> },
+      { label: "Total Absences", count: stats.absences_count, icon: <Cancel sx={{ fontSize: 40, color: "#d32f2f" }} /> },
+
+    ]);
+
+    setAttendanceBySpecialty(specialtyResults);
+    setAttendanceByLevel(levelResults);
+    setLoading(false);
   }, []);
 
   const detailedPresenceRates = attendanceBySpecialty.map((s) => ({
@@ -100,41 +83,36 @@ const Dashboard = () => {
   }));
 
   const attendanceOverTime = [
-    { date: "Jan", Informatique: 80, Mathématiques: 70, Chimie: 75, Physique: 85, Biologie: 65, Géologie: 60 },
-    { date: "Feb", Informatique: 85, Mathématiques: 75, Chimie: 80, Physique: 90, Biologie: 70, Géologie: 65 },
-    { date: "Mar", Informatique: 88, Mathématiques: 80, Chimie: 82, Physique: 95, Biologie: 72, Géologie: 68 },
-    { date: "Apr", Informatique: 90, Mathématiques: 85, Chimie: 85, Physique: 93, Biologie: 75, Géologie: 70 },
+    { date: "Jan", info: 80, physic: 70, gestion: 75, biology: 85, pharmacy: 65, medcine: 60 },
+    { date: "Feb", info: 85, physic: 75, gestion: 80, biology: 90, pharmacy: 70, medcine: 65 },
+    { date: "Mar", info: 88, physic: 80, gestion: 82, biology: 95, pharmacy: 72, medcine: 68 },
+    { date: "Apr", info: 90, physic: 85, gestion: 85, biology: 93, pharmacy: 75, medcine: 70 },
   ];
 
   return (
-    <Box sx={{ p: 4 ,pt:0}}>
-      {/* <Typography variant="h6" gutterBottom>
-        Admin Dashboard – Présences aux Examens
-      </Typography> */}
-
+    <Box sx={{ p: 4, pt: 0 }}>
       {loading ? (
         <Box textAlign="center" py={10}>
           <CircularProgress />
         </Box>
       ) : (
         <>
-          {/* Stats Cards */}
-          <Box sx={{display:"flex", alignItems:"ceter" ,justifyContent:"space-evenly", flexWrap:"wrap"}}  gap={2}>
+          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-evenly", flexWrap: "wrap" }} gap={2}>
             {statsData.map((item, index) => (
               <Card
-              elevation={0}
+                elevation={0}
                 key={index}
                 sx={{
-                  width: 'calc(20% - 16px)', // 5 per row with spacing
+                  width: 'calc(20% - 16px)',
                   minWidth: 150,
-                  height:100,
+                  height: 100,
                   border: `1.5px solid ${theme.palette.border}`,
                   borderRadius: 3,
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
                   p: 2,
-                  mb:2,
+                  mb: 2,
                 }}
               >
                 <Box>
@@ -148,8 +126,6 @@ const Dashboard = () => {
             ))}
           </Box>
 
-
-          {/* Charts */}
           <Grid container spacing={4}>
             <Grid item xs={12} md={6}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
@@ -238,4 +214,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default TeacherDashboard;

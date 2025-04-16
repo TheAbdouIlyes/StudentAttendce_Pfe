@@ -41,11 +41,12 @@ export default function StudentsAttendance() {
   }, [exam, page]);
 
   return (
-    <Box sx={{ p: 3, minHeight: "100vh" }}>
-      <Box sx={{display:"flex"}}>
-        <ReturnButton />
-        <Box elevation={3} sx={{  ml:15,borderRadius: 2, mb: 4,textAlign:"center"}}>
-
+    <Paper elevation={0} sx={{ p: 3,mt:0 }}>
+       
+      <Box>
+       <ReturnButton />
+        <Box elevation={0} sx={{ borderRadius: 2, mb: 4,textAlign:"center"}}>
+          
           <Typography variant="h4" fontWeight="bold" color="text.primary" sx={{pl:4}}>
             Attendance for <b>"{exam.toUpperCase()}"</b>
           </Typography>
@@ -64,7 +65,7 @@ export default function StudentsAttendance() {
       {error && <Alert severity="error">{error}</Alert>}
 
       {/* Student Table */}
-      <TableContainer component={Paper} elevation={3} sx={{ borderRadius: 2 }}>
+      <TableContainer component={Paper} elevation={0} sx={{ borderRadius: 2 }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -111,6 +112,6 @@ export default function StudentsAttendance() {
           Next
         </Button>
       </Box>
-    </Box>
+    </Paper>
   );
 }

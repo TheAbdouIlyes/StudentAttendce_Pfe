@@ -48,7 +48,7 @@ export default function ListStudents() {
         </div>
 
         <Button
-          color="info"
+          color="primary"
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => setModalOpen(true)}

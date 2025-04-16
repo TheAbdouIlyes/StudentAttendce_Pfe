@@ -60,7 +60,7 @@ export default function Surveillance() {
 
   return (
     <Box sx={{ width: "90%",margin:"auto",mt:0,p: 3, backgroundColor: theme.palette.background.default }}>
-      <Paper sx={{ p: 3, mb: 4, textAlign: "center", borderRadius: 2 ,display:"flex",justifyContent:"space-evenly",alignItems:"center" }}>
+      <Paper elevation={0} sx={{ p: 3, mb: 4, textAlign: "center", borderRadius: 2 ,display:"flex",justifyContent:"space-evenly",alignItems:"center" }}>
         <Typography variant="h5"  color="primary" sx={{ fontWeight: "bold" }}>
           Your Surveillance Duties for this semester
         </Typography>
