@@ -1153,3 +1153,110 @@ class StudentStats(APIView):
         nom=request.user.last_name
         prenom=request.user.first_name
         return JsonResponse({"absences_count": absence_count, "attendance_count": Attendance_count,"exam_count": exam_count,"nom":nom,"prenom":prenom})
+
+
+class teacherstats(APIView):
+
+    permission_classes =[IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        
+        teacher_instance = get_object_or_404(teacher, user=request.user)
+        
+        modul_count= teach.objects.filter(teacher= teacher_instance).count()
+        duties_count= surveillance.objects.filter(teacher= teacher_instance).count()
+                        
+        subjects = subject.objects.filter(
+         id__in=teach.objects.filter(teacher=teacher_instance).values_list('subject__id', flat=True)
+          )
+        
+        exams= Exam.objects.filter(subject__in=subjects)
+
+        Attendance_count=Attendance.objects.filter(exam__in=exams).count()
+       
+        expected_attendance = 0
+        for exam in exams:
+              expected_students = Student.objects.filter(
+                level=exam.subject.level,
+                speciality=exam.subject.speciality
+               ).count()
+              expected_attendance += expected_students
+        level1=subject.objects.filter(id__in=subjects).values_list('level', flat=True)
+        spe1 =subject.objects.filter(id__in=subjects).values_list('speciality', flat=True)
+        student_count= Student.objects.filter(level__in= level1,speciality__in=spe1).count()
+
+        absences_count = expected_attendance - Attendance_count
+
+        return JsonResponse({"modul_count":modul_count,"duties_count":duties_count,"student_count":student_count ,"absences_count": absences_count, "attendance_count": Attendance_count})
+
+        
+
+
+class teacher_par_Spécialité(APIView):
+   
+    permission_classes =[IsAuthenticated]  # Require authentication
+    def get(self, request, *args, **kwargs):
+           spes=self.kwargs['spes']
+          
+          
+         
+           teacher_instance = get_object_or_404(teacher, user=request.user)
+           subjects = subject.objects.filter(
+             id__in=teach.objects.filter(teacher=teacher_instance).values_list('subject__id', flat=True)
+              )
+  
+           exams= Exam.objects.filter(subject__in=subjects,subject__speciality=spes)
+           Attendance_count=Attendance.objects.filter( exam__in=exams).count()
+           expected_attendance = 0
+           for exam in exams:
+              expected_students = Student.objects.filter(
+                level=exam.subject.level,
+                speciality=exam.subject.speciality
+               ).count()
+              expected_attendance += expected_students
+            
+           subject_total=subject.objects.filter(speciality=spes)
+            
+           teacher_count=teacher.objects.filter(
+                id__in=teach.objects.filter(subject__in=subject_total).values_list('teacher__id', flat=True)
+              ).count()
+            
+           absences_count = expected_attendance - Attendance_count
+           return JsonResponse({"absences_count": absences_count, "attendance_count": Attendance_count,"teacher_count":teacher_count})
+
+
+ 
+
+
+
+
+class teacher_par_level(APIView):
+   
+    permission_classes =[IsAuthenticated] # Require authentication
+    def get(self, request, *args, **kwargs):
+           spes=self.kwargs['level']
+           teacher_instance = get_object_or_404(teacher, user=request.user)
+           subjects = subject.objects.filter(
+             id__in=teach.objects.filter(teacher=teacher_instance).values_list('subject__id', flat=True)
+              )
+  
+           exams= Exam.objects.filter(subject__in=subjects,subject__level=spes)
+           Attendance_count=Attendance.objects.filter( exam__in=exams).count()
+           expected_attendance = 0
+           for exam in exams:
+              expected_students = Student.objects.filter(
+                level=exam.subject.level,
+                speciality=exam.subject.speciality
+               ).count()
+              expected_attendance += expected_students
+            
+           subject_total=subject.objects.filter(level=spes)
+            
+           teacher_count=teacher.objects.filter(
+                id__in=teach.objects.filter(subject__in=subject_total).values_list('teacher__id', flat=True)
+               ).count() 
+            
+            
+           absences_count = expected_attendance - Attendance_count
+           return JsonResponse({"absences_count": absences_count, "attendance_count": Attendance_count,"teacher_count":teacher_count})
+

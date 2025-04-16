@@ -7,7 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { TableVirtuoso } from "react-virtuoso";
-import { IconButton, TextField } from "@mui/material";
+import { IconButton, TextField, Button } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
 const columns = [
@@ -20,12 +20,13 @@ const columns = [
 ];
 
 const initialRows = [
-  { id: 1,matricule:202212345 ,firstName: "Alice", lastName: "Johnson", examan: "Maths", presence: "Present" },
-  { id: 2,matricule:202267890, firstName: "Bob", lastName: "Smith", examan: "Science", presence: "Absent" },
-  { id: 3,matricule:202212345, firstName: "Charlie", lastName: "Brown", examan: "English", presence: "Present" },
-  { id: 4,matricule:202212345, firstName: "David", lastName: "Williams", examan: "Maths", presence: "Present" },
-  { id: 5,matricule:202267890, firstName: "Emma", lastName: "Davis", examan: "Science", presence: "Absent" },
-
+  { id: 1, matricule: 202212345, firstName: "Alice", lastName: "Johnson", examan: "Maths", presence: "Present" },
+  { id: 2, matricule: 202267890, firstName: "Bob", lastName: "Smith", examan: "Science", presence: "Absent" },
+  { id: 3, matricule: 202212345, firstName: "Charlie", lastName: "Brown", examan: "English", presence: "Present" },
+  { id: 4, matricule: 202212345, firstName: "David", lastName: "Williams", examan: "Maths", presence: "Present" },
+  { id: 5, matricule: 202267890, firstName: "Emma", lastName: "Davis", examan: "Science", presence: "Absent" },
+  { id: 6, matricule: 202212345, firstName: "Grace", lastName: "Lee", examan: "History", presence: "Absent" },
+  // Add more rows as needed
 ];
 
 const VirtuosoTableComponents = {
@@ -51,6 +52,8 @@ function fixedHeaderContent() {
 export default function ReactVirtualizedTable({ isEditing, students, setStudents }) {
   const [editingCell, setEditingCell] = React.useState(null);
   const [editValue, setEditValue] = React.useState("");
+  const [currentPage, setCurrentPage] = React.useState(0);
+  const rowsPerPage = 5; // Number of rows per page
 
   const handleEditClick = (rowIndex, columnKey, value) => {
     setEditingCell({ rowIndex, columnKey });
@@ -69,6 +72,22 @@ export default function ReactVirtualizedTable({ isEditing, students, setStudents
 
     setStudents(updatedRows); // Update parent state
     setEditingCell(null);
+  };
+
+  // Pagination Logic
+  const startIndex = currentPage * rowsPerPage;
+  const currentPageRows = students.slice(startIndex, startIndex + rowsPerPage);
+
+  const handleNextPage = () => {
+    if (startIndex + rowsPerPage < students.length) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage((prev) => prev - 1);
+    }
   };
 
   function rowContent(index, row) {
@@ -90,10 +109,7 @@ export default function ReactVirtualizedTable({ isEditing, students, setStudents
               <>
                 {row[column.dataKey]}
                 {isEditing && column.dataKey !== "id" && (
-                  <IconButton
-                    sx={{ margin: "8px", mt: 0, mb: 0, pt: 0, pb: 0, height: 30 }}
-                    onClick={() => handleEditClick(index, column.dataKey, row[column.dataKey])}
-                  >
+                  <IconButton sx={{ margin: "8px", mt: 0, mb: 0, pt: 0, pb: 0, height: 30 }} onClick={() => handleEditClick(index, column.dataKey, row[column.dataKey])}>
                     <EditIcon fontSize="small" />
                   </IconButton>
                 )}
@@ -107,12 +123,20 @@ export default function ReactVirtualizedTable({ isEditing, students, setStudents
 
   return (
     <Paper style={{ height: "100%", width: "100%", borderRadius: 0 }}>
-      <TableVirtuoso
-        data={students}
-        components={VirtuosoTableComponents}
-        fixedHeaderContent={fixedHeaderContent}
-        itemContent={rowContent}
-      />
+      <TableVirtuoso data={currentPageRows} components={VirtuosoTableComponents} fixedHeaderContent={fixedHeaderContent} itemContent={rowContent} />
+
+      {/* Pagination Controls */}
+      <div style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>
+        <Button onClick={handlePrevPage} disabled={currentPage === 0}>
+          Previous
+        </Button>
+        <Button
+          onClick={handleNextPage}
+          disabled={startIndex + rowsPerPage >= students.length}
+        >
+          Next
+        </Button>
+      </div>
     </Paper>
   );
 }
