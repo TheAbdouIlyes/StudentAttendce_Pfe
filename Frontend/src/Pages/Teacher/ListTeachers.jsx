@@ -86,7 +86,7 @@ export default function ListTeachers() {
           
         
         
-          <Button variant="contained" color="info" startIcon={<AddIcon />} onClick={() => setModalOpen(true)}>
+          <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={() => setModalOpen(true)}>
             Add
           </Button>
       </div>

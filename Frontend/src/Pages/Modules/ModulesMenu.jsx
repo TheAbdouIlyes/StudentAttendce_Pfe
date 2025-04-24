@@ -13,6 +13,8 @@ import {
 
 import TeacherSvg from "../../../public/TeacherSvg.svg"
 
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 
 const modules = ["L1", "L2", "L3", "M1", "M2"];
@@ -43,13 +45,26 @@ export default function ModulesMenu() {
         }}
       >
 
-        <Box sx={{height:"100%",maxWidth:"45%" ,display:"flex",alignItems:"center",flexDirection:"column"}}>
+        <Box sx={{height:"100%",width:"45%" ,display:"flex",alignItems:"center",flexDirection:"column"}}>
           <Typography variant="h4" fontWeight="bold" color="primary">
             Modules
           </Typography>
           <Typography variant="h6" sx={{ mt: 1 }}>
             Choose Your Specialty & Level to control and manage modules 
           </Typography>
+
+           <Box sx={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-evenly",mt:5}}>
+            <Button  variant="outlined" sx={{width:"130px"}}
+            startIcon={<ArrowBackIcon/>}
+            onClick={() => navigate("../MenuExams")}
+            
+            >Exams</Button>
+              <Typography variant="subtitle4">-- change menu to --</Typography>
+            <Button variant="outlined" sx={{width:"130px"}}
+            endIcon={<ArrowForwardIcon/>}
+            onClick={() => navigate("../MenuStudent")}
+            >Students </Button>
+          </Box>
         </Box>
         
 
