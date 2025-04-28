@@ -29,7 +29,7 @@ import {
 } from "recharts";
 import { useTheme } from "@mui/material/styles";
 
-const specialties = ["info","physic","gestion","biology","pharmacy","medcine"];
+const specialties = ["info", "physic", "gestion", "biology", "pharmacy", "medcine"];
 const levels = ["L1", "L2", "L3", "M1", "M2"];
 const pieColors = ["#4caf50", "#66bb6a", "#81c784", "#a5d6a7", "#c8e6c9", "#e8f5e9"];
 
@@ -39,43 +39,101 @@ const TeacherDashboard = () => {
   const [statsData, setStatsData] = useState([]);
   const [attendanceBySpecialty, setAttendanceBySpecialty] = useState([]);
   const [attendanceByLevel, setAttendanceByLevel] = useState([]);
+  const [teachersBySpecialty, setTeachersBySpecialty] = useState([]);
+  const [teachersByLevel, setTeachersByLevel] = useState([]);
   const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("accessToken");
 
   useEffect(() => {
-    // Dummy data (replace this later with actual fetch calls)
-    const stats = {
-      students_count: 120,
-      modules_count: 8,
-      attendance_count: 480,
-      absences_count: 40,
-      duties_count: 15,
+    const fetchData = async () => {
+      try {
+        const res = await fetch("http://127.0.0.1:8000/teacher/stats", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        const data = await res.json();
+
+        setStatsData([
+          {
+            label: "Total Students",
+            count: data.student_count,
+            icon: <People sx={{ fontSize: 40, color: "#1976d2" }} />
+          },
+          {
+            label: "Total Modules",
+            count: data.modul_count,
+            icon: <EventNote sx={{ fontSize: 40, color: "#7b1fa2" }} />
+          },
+          {
+            label: "Total Duties",
+            count: data.duties_count,
+            icon: <Visibility sx={{ fontSize: 40, color: "#ff9800" }} />
+          },
+          {
+            label: "Total Presences",
+            count: data.attendance_count,
+            icon: <CheckCircle sx={{ fontSize: 40, color: "#388e3c" }} />
+          },
+          {
+            label: "Total Absences",
+            count: data.absences_count,
+            icon: <Cancel sx={{ fontSize: 40, color: "#d32f2f" }} />
+          }
+        ]);
+
+        const specialtyResults = await Promise.all(
+          specialties.map(async (spec) => {
+            const response = await fetch(`http://127.0.0.1:8000/teacher_par_Spécialité/${spec}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            });
+            const result = await response.json();
+            return {
+              name: spec,
+              present: result.attendance_count,
+              absent: result.absences_count,
+              teacher_count: result.teacher_count
+            };
+          })
+        );
+
+        const levelResults = await Promise.all(
+          levels.map(async (lvl) => {
+            const response = await fetch(`http://127.0.0.1:8000/teacher_par_level/${lvl}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            });
+            const result = await response.json();
+            return {
+              level: lvl,
+              present: result.attendance_count,
+              absent: result.absences_count,
+              teacher_count: result.teacher_count
+            };
+          })
+        );
+
+        setAttendanceBySpecialty(specialtyResults);
+        setAttendanceByLevel(levelResults);
+        setTeachersBySpecialty(specialtyResults);
+        setTeachersByLevel(levelResults);
+
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    const specialtyResults = specialties.map((s, i) => ({
-      name: s,
-      present: Math.floor(Math.random() * 100),
-      absent: Math.floor(Math.random() * 30),
-    }));
-
-    const levelResults = levels.map((l) => ({
-      level: l,
-      present: Math.floor(Math.random() * 90),
-      absent: Math.floor(Math.random() * 20),
-    }));
-
-    setStatsData([
-      { label: "Total Students", count: stats.students_count, icon: <People sx={{ fontSize: 40, color: "#1976d2" }} /> },
-      { label: "Total Modules", count: stats.modules_count, icon: <EventNote sx={{ fontSize: 40, color: "#7b1fa2" }} /> },
-      { label: "Total Duties", count: stats.duties_count, icon: <Visibility sx={{ fontSize: 40, color: "#ff9800" }} /> },
-      { label: "Total Presences", count: stats.attendance_count, icon: <CheckCircle sx={{ fontSize: 40, color: "#388e3c" }} /> },
-      { label: "Total Absences", count: stats.absences_count, icon: <Cancel sx={{ fontSize: 40, color: "#d32f2f" }} /> },
-
-    ]);
-
-    setAttendanceBySpecialty(specialtyResults);
-    setAttendanceByLevel(levelResults);
-    setLoading(false);
-  }, []);
+    fetchData();
+  }, [token]);
 
   const detailedPresenceRates = attendanceBySpecialty.map((s) => ({
     name: s.name,
@@ -207,6 +265,41 @@ const TeacherDashboard = () => {
                 </ResponsiveContainer>
               </Card>
             </Grid>
+
+            <Grid item xs={12} md={6}>
+              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
+                <Typography variant="h6" mb={2}>
+                  Enseignants par Spécialité
+                </Typography>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={teachersBySpecialty}>
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="teacher_count" fill="#9c27b0" name="Total Enseignants" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </Card>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
+                <Typography variant="h6" mb={2}>
+                  Enseignants par Niveau
+                </Typography>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={teachersByLevel}>
+                    <XAxis dataKey="level" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="teacher_count" fill="#3f51b5" name="Total Enseignants" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </Card>
+            </Grid>
+
           </Grid>
         </>
       )}
