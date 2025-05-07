@@ -24,6 +24,8 @@ const columns = [
   { width: 120, label: "Presence", dataKey: "is_present" },
 ];
 
+
+
 export default function PresenceTable({ showActions, students, page, setPage, totalCount, rowsPerPage, onDelete }) {
   const navigate = useNavigate();
 
@@ -51,7 +53,10 @@ export default function PresenceTable({ showActions, students, page, setPage, to
               <TableRow key={student.id}>
                 {columns.map((column) => (
                   <TableCell key={column.dataKey} align="left">
-                    {column.dataKey === "actions" ? (
+                    {
+                    
+                    
+                    column.dataKey === "actions" ? (
                       <>
                         <IconButton
                           sx={{ marginRight: "8px", height: 30 }}
