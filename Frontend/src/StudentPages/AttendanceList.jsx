@@ -128,10 +128,10 @@ function ExamAttendance() {
                           backgroundColor: item.is_persent
                             ? "#cdf7c8"
                             : "#f5e4e5",
-                          color: item.is_persent ? "green" : "red",
+                          color: item.is_persent ? `${theme.palette.present.main}` : ` ${theme.palette.absent.main}`,
                           fontWeight: "bold",
 
-                          border :item.is_persent? "1px solid green":"1px solid red"
+                          border :item.is_persent? `1px solid ${theme.palette.present.main}`:`1px solid ${theme.palette.absent.main}`
                         }}
                       />
                     </TableCell>

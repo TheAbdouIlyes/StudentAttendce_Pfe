@@ -16,8 +16,9 @@ function UserID() {
           <div className="header-icon">
             <GraduationCap />
           </div>
-          <h1>Welcome to University Portal</h1>
-          <p>Please select your role to continue</p>
+          <h1>Welcome to the University Attendance Portal</h1>
+          <p>Select your role to manage or check student attendance</p>
+
         </div>
 
         {/* Role selection cards */}
@@ -36,7 +37,8 @@ function UserID() {
             <div className="role-card-content">
               <BookOpen className="role-card-icon" />
               <h2>Student</h2>
-              <p>Access courses and learning materials</p>
+              <p>View your attendance records and exam schedule</p>
+
             </div>
           </button>
 
@@ -45,7 +47,7 @@ function UserID() {
             <div className="role-card-content">
               <Building2 className="role-card-icon" />
               <h2>Teacher</h2>
-              <p>Manage classes and student progress</p>
+              <p>Record attendance and monitor student presence during exams</p>
             </div>
           </button>
         </div>

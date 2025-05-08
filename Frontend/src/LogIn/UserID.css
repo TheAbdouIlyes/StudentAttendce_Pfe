@@ -1,7 +1,7 @@
 /* Main container styles */
 .login-container {
-    /* height: 100vh; */
-    min-height: 100vh;
+    height: 100vh;
+    /* min-height: 100vh; */
     /* background: linear-gradient(to bottom right, #429252, #22853d); */
     background: linear-gradient(to bottom , #1467c0, #032d4f);
 
