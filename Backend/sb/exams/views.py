@@ -1299,3 +1299,32 @@ class UpdateSecretNumberView(APIView):
             serializer.save()
             return Response({'detail': 'Secret number updated successfully.'})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+class examsinfo(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        exam_id = self.kwargs['exam_id']
+        exam = get_object_or_404(Exam, id=exam_id)
+
+        return JsonResponse({
+            "date": exam.date.isoformat(),
+            "time": exam.time.strftime("%H:%M:%S")
+        })
+
+
+class examsinfo2(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        exam_name= self.kwargs['exam']
+
+        exam= get_object_or_404(Exam, subject__name= exam_name)
+
+        return JsonResponse({
+        
+            "date": exam.date.isoformat(),
+            "time": exam.time.strftime("%H:%M:%S")
+        })

@@ -52,7 +52,28 @@ export default function StudentsAttendance() {
   
     fetchStudents();
   }, [exam, page]);
+ const [examEnded, setExamEnded] = useState(false);
+  
+  
+  // ✅ Fetch exam info using fetch API
+  useEffect(() => {
+    const fetchExamInfo = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/exam_time2/${exam}`);
+        if (!response.ok) throw new Error("Failed to fetch exam info");
+        const data = await response.json();
+            console.log(data)
+        const examDateTime = new Date(`${data.date}T${data.time}`);
+        const now = new Date();
+        const fourHoursInMs = 4 * 60 * 60 * 1000;
+        setExamEnded(now - examDateTime > fourHoursInMs);
+      } catch (error) {
+        console.error("Error fetching exam info:", error);
+      }
+    };
 
+    fetchExamInfo();
+  }, [exam]);
   return (
     <Paper elevation={0} sx={{ p: 3, mt: 0 }}>
       <Box>
@@ -89,8 +110,8 @@ export default function StudentsAttendance() {
                       <TableCell align="left">{student.matricul}</TableCell>
                       <TableCell align="left">{student.first_name}</TableCell>
                       <TableCell align="left">{student.last_name}</TableCell>
-                      <TableCell align="center" sx={{ color: student.is_present ? "green" : "red" }}>
-                        {student.is_present ? "✔ Present" : "✘ Absent"}
+                      <TableCell align="center" sx={{ color:!examEnded ? "#6B7280":(student.is_present ? "green" : "red") }}>
+                        {!examEnded ? "------":(student.is_present ? "✔ Present" : "✘ Absent")}
                       </TableCell>
                     </TableRow>
                   ))

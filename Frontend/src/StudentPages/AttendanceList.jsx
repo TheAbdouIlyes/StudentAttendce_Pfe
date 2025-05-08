@@ -24,6 +24,10 @@ function ExamAttendance() {
   const [semester, setSemester] = useState("s1");
   const token = localStorage.getItem("accessToken");
   const theme = useTheme();
+  const [examEnded, setExamEnded] = useState(false);
+ 
+
+
 
   useEffect(() => {
     setLoading(true);
@@ -122,18 +126,27 @@ function ExamAttendance() {
                     <TableCell>{item.exam.time}</TableCell>
                     <TableCell align="center">{item.exam.amphi}</TableCell>
                     <TableCell align="right">
-                      <Chip
-                        label={item.is_persent ? "✔ Present" : "✘ Absent"}
-                        sx={{
-                          backgroundColor: item.is_persent
-                            ? "#cdf7c8"
-                            : "#f5e4e5",
-                          color: item.is_persent ? "green" : "red",
-                          fontWeight: "bold",
+                    {(() => {
+              const examDateTime = new Date(`${item.exam.date}T${item.exam.time}`);
+              const now = new Date();
+              const examEnded = now - examDateTime > 4 * 60 * 60 * 1000;
 
-                          border :item.is_persent? "1px solid green":"1px solid red"
-                        }}
-                      />
+              return examEnded ? (
+              <Chip
+              label={item.is_persent ? "✔ Present" : "✘ Absent"}
+                sx={{
+              backgroundColor: item.is_persent ? "#cdf7c8" : "#f5e4e5",
+              color: item.is_persent ? "green" : "red",
+              fontWeight: "bold",
+              border: item.is_persent ? "1px solid green" : "1px solid red"
+            }}
+            />
+            ) : (
+              <Typography align="right" sx={{ color: theme.palette.text.secondary }}>
+              -------
+            </Typography>
+            );
+              })()}
                     </TableCell>
                   </TableRow>
                 ))}
