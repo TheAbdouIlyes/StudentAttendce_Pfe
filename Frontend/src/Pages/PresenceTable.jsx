@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const columns = [
   { width: 50, label: "ID", dataKey: "id" },
@@ -24,14 +24,43 @@ const columns = [
   { width: 120, label: "Presence", dataKey: "is_present" },
 ];
 
-export default function PresenceTable({ showActions, students, page, setPage, totalCount, rowsPerPage, onDelete }) {
+export default function PresenceTable({
+  showActions,
+  students,
+  page,
+  setPage,
+  totalCount,
+  rowsPerPage,
+  onDelete,
+  examId,
+}) {
   const navigate = useNavigate();
+  const [examEnded, setExamEnded] = useState(false);
+  
+  
+  // ✅ Fetch exam info using fetch API
+  useEffect(() => {
+    const fetchExamInfo = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/exam_time/${examId}`);
+        if (!response.ok) throw new Error("Failed to fetch exam info");
+        const data = await response.json();
+            console.log(data)
+        const examDateTime = new Date(`${data.date}T${data.time}`);
+        const now = new Date();
+        const fourHoursInMs = 4 * 60 * 60 * 1000;
+        setExamEnded(now - examDateTime > fourHoursInMs);
+      } catch (error) {
+        console.error("Error fetching exam info:", error);
+      }
+    };
 
-  // ✅ Handle page change with correct indexing
+    fetchExamInfo();
+  }, [examId]);
+
   const handlePageChange = (_, newPage) => {
-    setPage(newPage + 1); // Convert zero-based index to one-based index
+    setPage(newPage + 1);
   };
-
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: 2 }}>
@@ -50,35 +79,42 @@ export default function PresenceTable({ showActions, students, page, setPage, to
             {students.map((student) => (
               <TableRow key={student.id}>
                 {columns.map((column) => (
-                  <TableCell key={column.dataKey} align="left">
-                    {column.dataKey === "actions" ? (
-                      <>
-                        <IconButton
-                          sx={{ marginRight: "8px", height: 30 }}
-                          onClick={() => navigate(`/edit-student/${student.id}`)}
+                  <TableCell key={column.dataKey}>
+                    {column.dataKey === "is_present" ? (
+                      !examEnded ? (
+                        <Box  
+                        sx={{
+                          maxWidth: "80px",
+                          p: 0.25,
+                          textAlign: "center",
+                          borderRadius: "1rem",
+                          backgroundColor: "#F3F4F6",
+                          color: "#6B7280",
+                          fontWeight: "bold",
+                          border: "1px solid #D1D5DB",
+                        }}
+                      >
+                        Not yet
+                        {/* {"-------"} */}
+                      </Box>
+  
+                        
+                      ) : (
+                        <Box
+                          sx={{
+                            maxWidth: "80px",
+                            p: 0.25,
+                            textAlign: "center",
+                            borderRadius: "1rem",
+                            backgroundColor: student.is_present ? "#cdf7c8" : "#f5e4e5",
+                            color: student.is_present ? "green" : "red",
+                            fontWeight: "bold",
+                            border: student.is_present ? "1px solid green" : "1px solid red",
+                          }}
                         >
-                          <EditIcon fontSize="small" />
-                        </IconButton>
-                        <IconButton
-                          sx={{ height: 30 }}
-                          onClick={() => onDelete(student.id)}
-                          color="error"
-                        >
-                          <DeleteIcon fontSize="small" />
-                        </IconButton>
-                      </>
-                    ) : column.dataKey === "is_present" ? (
-                      <Box
-                      sx={{maxWidth:"80px",p:0.25,textAlign:"center",borderRadius:"1rem",   
-                      backgroundColor: student.is_present
-                        ? "#cdf7c8"
-                        : "#f5e4e5",
-                      color: student.is_present ? "green" : "red",
-                      fontWeight: "bold",
-
-                      border :student.is_present? "1px solid green":"1px solid red"}}
-                      > {student.is_present ? "✔ Present" : "✘ Absent"}</Box>
-                      
+                          {student.is_present ? "✔ Present" : "✘ Absent"}
+                        </Box>
+                      )
                     ) : (
                       student[column.dataKey]
                     )}
@@ -89,14 +125,13 @@ export default function PresenceTable({ showActions, students, page, setPage, to
           </TableBody>
         </Table>
       </TableContainer>
-      {/* ✅ Fixed Pagination */}
       <TablePagination
         component="div"
         count={totalCount}
-        page={page - 1} // Convert back to zero-based index for MUI
+        page={page - 1}
         rowsPerPage={rowsPerPage}
         onPageChange={handlePageChange}
-        rowsPerPageOptions={[]} // Hide rows-per-page dropdown
+        rowsPerPageOptions={[]}
       />
     </Paper>
   );

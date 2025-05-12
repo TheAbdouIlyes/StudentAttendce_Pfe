@@ -63,4 +63,26 @@ class surveillanceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+from rest_framework import serializers
+from django.contrib.auth.password_validation import validate_password
 
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+    new_password2 = serializers.CharField(required=True)
+
+    def validate(self, data):
+        if data['new_password'] != data['new_password2']:
+            raise serializers.ValidationError("New passwords do not match.")
+        validate_password(data['new_password'], self.context['request'].user)
+        return data
+    
+
+
+
+
+
+class UpdateSecretNumberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = teacher
+        fields = ['secret_number']

@@ -213,7 +213,7 @@ const Dashboard = () => {
               </Card>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            {/* <Grid item xs={12} md={6}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
                 <Typography variant="h6" mb={2}>
                   Évolution des Présences par Spécialité
@@ -230,7 +230,45 @@ const Dashboard = () => {
                   </LineChart>
                 </ResponsiveContainer>
               </Card>
+            </Grid> */}
+
+
+
+            {/* new --------------------- */}
+
+            {/* <Grid item xs={12} md={6}>
+              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
+                <Typography variant="h6" mb={2}>
+                  Enseignants par Spécialité
+                </Typography>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={teachersBySpecialty}>
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="teacher_count" fill="#9c27b0" name="Total Enseignants" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </Card>
             </Grid>
+
+            <Grid item xs={12} md={6}>
+              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
+                <Typography variant="h6" mb={2}>
+                  Enseignants par Niveau
+                </Typography>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={teachersByLevel}>
+                    <XAxis dataKey="level" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="teacher_count" fill="#3f51b5" name="Total Enseignants" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </Card>
+            </Grid> */}
           </Grid>
         </>
       )}

@@ -102,6 +102,8 @@ const TeacherDashboard = () => {
           })
         );
 
+        console.log("res is iii ", specialtyResults);
+
         const levelResults = await Promise.all(
           levels.map(async (lvl) => {
             const response = await fetch(`http://127.0.0.1:8000/teacher_par_level/${lvl}`, {
@@ -221,7 +223,7 @@ const TeacherDashboard = () => {
               </Card>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            {/* <Grid item xs={12} md={6}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
                 <Typography variant="h6" mb={2}>
                   Taux de Présence par Spécialité (%)
@@ -245,60 +247,9 @@ const TeacherDashboard = () => {
                   </PieChart>
                 </ResponsiveContainer>
               </Card>
-            </Grid>
+            </Grid> */}
 
-            <Grid item xs={12} md={6}>
-              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" mb={2}>
-                  Évolution des Présences par Spécialité
-                </Typography>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={attendanceOverTime}>
-                    <XAxis dataKey="date" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    {specialties.map((specialty, index) => (
-                      <Line key={index} type="monotone" dataKey={specialty} stroke={pieColors[index % pieColors.length]} />
-                    ))}
-                  </LineChart>
-                </ResponsiveContainer>
-              </Card>
-            </Grid>
 
-            <Grid item xs={12} md={6}>
-              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" mb={2}>
-                  Enseignants par Spécialité
-                </Typography>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={teachersBySpecialty}>
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="teacher_count" fill="#9c27b0" name="Total Enseignants" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </Card>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" mb={2}>
-                  Enseignants par Niveau
-                </Typography>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={teachersByLevel}>
-                    <XAxis dataKey="level" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="teacher_count" fill="#3f51b5" name="Total Enseignants" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </Card>
-            </Grid>
 
           </Grid>
         </>

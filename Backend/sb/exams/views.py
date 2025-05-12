@@ -251,7 +251,7 @@ class CreateteacherView(APIView):
                
                return Response({"error": "teacher already exists."}, status=status.HTTP_400_BAD_REQUEST)
         
-        if teacher.objects.filter(matricul=matricul,secret_number= secret_number).exists():
+        if teacher.objects.filter(matricul=matricul).exists():
              return Response({"error": "teacher already exists."}, status=status.HTTP_400_BAD_REQUEST)
 
         # Generate a random password (since Django requires one)
@@ -1260,3 +1260,71 @@ class teacher_par_level(APIView):
            absences_count = expected_attendance - Attendance_count
            return JsonResponse({"absences_count": absences_count, "attendance_count": Attendance_count,"teacher_count":teacher_count})
 
+
+
+
+
+from .serializers import ChangePasswordSerializer
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
+
+        if serializer.is_valid():
+            user = request.user
+            if not user.check_password(serializer.validated_data['old_password']):
+                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+
+            user.set_password(serializer.validated_data['new_password'])
+            user.save()
+            return Response({"detail": "Password updated successfully"}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+from .serializers import UpdateSecretNumberSerializer
+
+class UpdateSecretNumberView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            teacher1 =teacher.objects.get(user=request.user)
+        except teacher1.DoesNotExist:
+            return Response({'detail': 'Teacher not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UpdateSecretNumberSerializer(teacher, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'detail': 'Secret number updated successfully.'})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+class examsinfo(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        exam_id = self.kwargs['exam_id']
+        exam = get_object_or_404(Exam, id=exam_id)
+
+        return JsonResponse({
+            "date": exam.date.isoformat(),
+            "time": exam.time.strftime("%H:%M:%S")
+        })
+
+
+class examsinfo2(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        exam_name= self.kwargs['exam']
+
+        exam= get_object_or_404(Exam, subject__name= exam_name)
+
+        return JsonResponse({
+        
+            "date": exam.date.isoformat(),
+            "time": exam.time.strftime("%H:%M:%S")
+        })

@@ -38,15 +38,37 @@ const TeacherSurveillanceTable = ({ exams }) => {
                 <TableCell align="center">{exam.subject_name}</TableCell>
                 <TableCell align="center">{exam.amphi}</TableCell>
                 <TableCell align="center">
+                {(() => {
+                    const examDateTime = new Date(`${exam.date}T${exam.time}`);
+                    const now = new Date();
+                    const fourHoursInMs = 4 * 60 * 60 * 1000;
+
+                    if (now - examDateTime > fourHoursInMs) {
+                        return (
+                          <Button
+                            color="present"
+                            onClick={() =>console.log("hhh")}
+                            >
+
+                            Ended
+                          </Button>
+                        );
+                    } else {
+                      return (
                         <Button
                           color="primary"
                           onClick={() =>
-                            navigate(`${exam.subject_name}/qr-scanner`)
+                            navigate(`${exam.subject_name}/qr-scanner`, {
+                              state: { module: exam.subject_name },
+                            })
                           }
-                          
                         >
                           Scan QR
                         </Button>
+                      );
+                    }
+                  })()}
+                       
                 </TableCell>
               </TableRow>
             ))}

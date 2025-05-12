@@ -48,6 +48,7 @@ export default function Presence() {
           setPage={setPage} 
           totalCount={totalCount} 
           rowsPerPage={rowsPerPage} 
+          examId={id}
         />
       </div>
     </div>

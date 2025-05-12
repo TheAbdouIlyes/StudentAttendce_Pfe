@@ -57,7 +57,7 @@ class teacher(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE,default=1) 
     
     matricul= models.CharField(max_length=15,unique=True, null=True)
-    secret_number= models.CharField(max_length=15,unique=True, null=True)
+    secret_number= models.CharField(max_length=15 , null=True)
 
 
 

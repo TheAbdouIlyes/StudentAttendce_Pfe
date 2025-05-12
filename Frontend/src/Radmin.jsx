@@ -56,15 +56,15 @@ import StudentsAttendances from "./TeacherPages/StudentsAttendance";
 import Surveillance from './TeacherPages/Surveillance';
 import ES from './StudentPages/ES';
 import StudentDashboard from './StudentPages/StudentDashboard';
-import LogOut from "./TheLogOut"
+import LogOut from "./TheLogOut";
 import ZButtons from './ZButtons';
 
 import { useState,useMemo } from 'react';
 
+import Settings from "./Pages/Settings";
 
 
 
-import ZZ from "./ZZ"
 
 
 export default function AdminLayouts({demoTheme,Skeleton }) {
@@ -173,7 +173,7 @@ export default function AdminLayouts({demoTheme,Skeleton }) {
             <Route path="MenuExams/:speciality/:year/:semester/:module/qr-scanner" element={<QRCOde />} />
             <Route path="MenuExams/:speciality/:year/:semester/:id/presence" element={<Presence/>} />
             <Route path="MenuExams/:speciality/:year/:semester/:exam_name/SerTeacher" element={<SerTeacher/>} /> 
-
+            <Route path="Settings" element={<Settings/>} /> 
 
 
 
