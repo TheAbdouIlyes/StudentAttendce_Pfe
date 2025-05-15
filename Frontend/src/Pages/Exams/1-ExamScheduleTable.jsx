@@ -92,7 +92,7 @@ const ExamScheduleTable = () => {
   };
 
   return (
-    <Box sx={{ m:0,p:0,mb:10 }}>
+    <Box sx={{ m:0,p:0 }}>
       
       <TableContainer elevation={0} component={Paper} className="Examan-MainTable">
         <Table>
@@ -125,7 +125,8 @@ const ExamScheduleTable = () => {
                     if (now - examDateTime > fourHoursInMs) {
                         return (
                           <Button
-                            color="present"
+                            variant="outlined"
+                            color="absent"
                             onClick={() =>console.log("hhh")}
                             >
 
@@ -135,12 +136,15 @@ const ExamScheduleTable = () => {
                     } else {
                       return (
                         <Button
-                          color="primary"
+                          variant="outlined"
+                          color="present"
                           onClick={() =>
                             navigate(`${row.subject_name}/qr-scanner`, {
                               state: { module: row.subject_name },
                             })
                           }
+                          // sx={{color:`${theme.palette.text.rev}`,boxShadow:0}}
+                          
                         >
                           Scan QR
                         </Button>

@@ -46,7 +46,7 @@ const TeacherSurveillanceTable = ({ exams }) => {
                     if (now - examDateTime > fourHoursInMs) {
                         return (
                           <Button
-                            color="present"
+                            color="absent"
                             onClick={() =>console.log("hhh")}
                             >
 

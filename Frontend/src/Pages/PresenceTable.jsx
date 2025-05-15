@@ -94,7 +94,8 @@ export default function PresenceTable({
                           border: "1px solid #D1D5DB",
                         }}
                       >
-                        {"-------"}
+                        Not yet
+                        {/* {"-------"} */}
                       </Box>
   
                         

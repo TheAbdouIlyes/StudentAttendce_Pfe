@@ -87,8 +87,8 @@ const demoTheme = extendTheme({
         },
         text: { primary: '#011723',rev:"#ffffff" },
         action:{hover:"#e3f6ff"},
-        absent:"#ff0000",
-        present:{dark:"#4caf50",light:"#e8f5e9"},
+        absent:{main:"#ff0000"},
+        present:{main:"#4caf50"},
         border:"#e3e5e7"
       },
     },
@@ -105,8 +105,8 @@ const demoTheme = extendTheme({
         },
         text: { primary: '#ffffff' ,rev:"#0c171d"},
         action:{hover:"#05496b"},
-        absent:"#ff0000",
-        present:{dark:"#e8f5e9",light:"#4caf50"},
+        absent:{main:"#ff5e5e"},
+        present:{main:"#e8f5e9"},
         border:"#303b42"
 
       },

@@ -20,17 +20,24 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
   LineChart,
   Line,
 } from "recharts";
 import { useTheme } from "@mui/material/styles";
+import { PieChart } from '@mui/x-charts/PieChart';
 
 const specialties = ["info","physic","gestion","biology","pharmacy","medcine"];
 const levels = ["L1", "L2", "L3", "M1", "M2"];
-const pieColors = ["#4caf50", "#66bb6a", "#81c784", "#a5d6a7", "#c8e6c9", "#e8f5e9"];
+// const pieColors = ["#4caf50", "#66bb6a", "#81c784", "#a5d6a7", "#c8e6c9", "#e8f5e9"];
+
+// Sample data for OS distribution
+const desktopOS = [
+  { id: 0, value: 10, label: 'Windows' },
+  { id: 1, value: 15, label: 'MacOS' },
+  { id: 2, value: 20, label: 'Linux' },
+];
+
+const valueFormatter = (value) => `${value}%`;
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -53,8 +60,6 @@ const Dashboard = () => {
           { label: "Total Exams", count: stats.exam_count, icon: <EventNote sx={{ fontSize: 40, color: "#7b1fa2" }} /> },
           { label: "Attendances", count: stats.attendance_count, icon: <CheckCircle sx={{ fontSize: 40, color: "#388e3c" }} /> },
           { label: "Absences", count: stats.absences_count, icon: <Cancel sx={{ fontSize: 40, color: "#d32f2f" }} /> },
-          
-
         ]);
 
         // Attendance by specialty
@@ -94,9 +99,12 @@ const Dashboard = () => {
     fetchStats();
   }, []);
 
-  const detailedPresenceRates = attendanceBySpecialty.map((s) => ({
-    name: s.name,
+  // Prepare data for the new PieChart format
+  const detailedPresenceRates = attendanceBySpecialty.map((s, index) => ({
+    id: index,
     value: Math.round((s.present / (s.present + s.absent)) * 100),
+    label: s.name,
+    // color: pieColors[index % pieColors.length]
   }));
 
   const attendanceOverTime = [
@@ -105,13 +113,9 @@ const Dashboard = () => {
     { date: "Mar", Informatique: 88, Mathématiques: 80, Chimie: 82, Physique: 95, Biologie: 72, Géologie: 68 },
     { date: "Apr", Informatique: 90, Mathématiques: 85, Chimie: 85, Physique: 93, Biologie: 75, Géologie: 70 },
   ];
-
+  console.log(attendanceBySpecialty)
   return (
-    <Box sx={{ p: 4 ,pt:0}}>
-      {/* <Typography variant="h6" gutterBottom>
-        Admin Dashboard – Présences aux Examens
-      </Typography> */}
-
+    <Box sx={{ p: 4, pt: 0 }}>
       {loading ? (
         <Box textAlign="center" py={10}>
           <CircularProgress />
@@ -119,22 +123,22 @@ const Dashboard = () => {
       ) : (
         <>
           {/* Stats Cards */}
-          <Box sx={{display:"flex", alignItems:"ceter" ,justifyContent:"space-evenly", flexWrap:"wrap"}}  gap={2}>
+          <Box sx={{ display: "flex", alignItems: "ceter", justifyContent: "space-evenly", flexWrap: "wrap" }} gap={2}>
             {statsData.map((item, index) => (
               <Card
-              elevation={0}
+                elevation={0}
                 key={index}
                 sx={{
-                  width: 'calc(20% - 16px)', // 5 per row with spacing
+                  width: 'calc(20% - 16px)',
                   minWidth: 150,
-                  height:100,
+                  height: 100,
                   border: `1.5px solid ${theme.palette.border}`,
                   borderRadius: 3,
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
                   p: 2,
-                  mb:2,
+                  mb: 2,
                 }}
               >
                 <Box>
@@ -148,9 +152,91 @@ const Dashboard = () => {
             ))}
           </Box>
 
-
           {/* Charts */}
-          <Grid container spacing={4}>
+
+
+
+            {/* 3 circles */}
+          <Grid container spacing={2} sx={{pb:2}}>
+
+            {/* Updated Taux de Présence par Spécialité (%) chart */}
+              <Grid item xs={12} md={4}>
+                <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
+                  <Typography variant="h6" >
+                    Taux de Présence par Spécialité
+                  </Typography>
+                  <Box sx={{ height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <PieChart
+                      series={[
+                        {
+                          data: detailedPresenceRates,
+                          highlightScope: { fade: 'global', highlight: 'item' },
+                          faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                          // valueFormatter,
+                          // arcLabel: (item) => `${item.label}: ${item.value}%`,
+                        },
+                      ]}
+                      width={350}
+                      height={180}
+                      hideLegend
+                    />
+                  </Box>
+                </Card>
+              </Grid>
+
+              {/* OS Distribution chart */}
+              <Grid item xs={12} md={4}>
+                <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
+                  <Typography variant="h6" >
+                    OS Distribution (Sample Data)
+                  </Typography>
+                  <Box sx={{ height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <PieChart
+                      series={[
+                        {
+                          data: desktopOS,
+                          highlightScope: { fade: 'global', highlight: 'item' },
+                          faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                          // valueFormatter,
+                        },
+                      ]}
+                      width={400}
+                      height={200}
+                      hideLegend
+                    />
+                  </Box>
+                </Card>
+              </Grid>
+
+              <Grid item xs={12} md={4}>
+                <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
+                  <Typography variant="h6" >
+                    Profs dutes ----
+                  </Typography>
+                  <Box sx={{ height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <PieChart
+                      series={[
+                        {
+                          data: desktopOS,
+                          highlightScope: { fade: 'global', highlight: 'item' },
+                          faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
+                          // valueFormatter,
+                        },
+                      ]}
+                      width={400}
+                      height={200}
+                      hideLegend
+                    />
+                  </Box>
+                </Card>
+              </Grid>
+
+            </Grid>
+
+
+
+          {/* 2 grpahes */}
+          <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
                 <Typography variant="h6" mb={2}>
@@ -186,51 +272,8 @@ const Dashboard = () => {
                 </ResponsiveContainer>
               </Card>
             </Grid>
-
-            <Grid item xs={12} md={6}>
-              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" mb={2}>
-                  Taux de Présence par Spécialité (%)
-                </Typography>
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={detailedPresenceRates}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={100}
-                      label={({ name, value }) => `${name}: ${value}%`}
-                    >
-                      {detailedPresenceRates.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </Card>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" mb={2}>
-                  Évolution des Présences par Spécialité
-                </Typography>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={attendanceOverTime}>
-                    <XAxis dataKey="date" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    {specialties.map((specialty, index) => (
-                      <Line key={index} type="monotone" dataKey={specialty} stroke={pieColors[index % pieColors.length]} />
-                    ))}
-                  </LineChart>
-                </ResponsiveContainer>
-              </Card>
-            </Grid>
+            
+            
           </Grid>
         </>
       )}

@@ -142,8 +142,8 @@ function ExamAttendance() {
             }}
             />
             ) : (
-              <Typography align="right" sx={{ color: theme.palette.text.secondary }}>
-              -------
+              <Typography align="right" sx={{ color: theme.palette.text.secondary ,mr:1.5}}>
+              Not yet
             </Typography>
             );
               })()}

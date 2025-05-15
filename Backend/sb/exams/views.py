@@ -1162,7 +1162,9 @@ class teacherstats(APIView):
     def get(self, request, *args, **kwargs):
         
         teacher_instance = get_object_or_404(teacher, user=request.user)
-        
+        #teacherin = get_object_or_404(User, id=request.user)
+        lname1 = teacher_instance.user.last_name
+        fname1= teacher_instance.user.first_name
         modul_count= teach.objects.filter(teacher= teacher_instance).count()
         duties_count= surveillance.objects.filter(teacher= teacher_instance).count()
                         
@@ -1187,7 +1189,7 @@ class teacherstats(APIView):
 
         absences_count = expected_attendance - Attendance_count
 
-        return JsonResponse({"modul_count":modul_count,"duties_count":duties_count,"student_count":student_count ,"absences_count": absences_count, "attendance_count": Attendance_count})
+        return JsonResponse({"last_name":lname1,"first_name":fname1,"modul_count":modul_count,"duties_count":duties_count,"student_count":student_count ,"absences_count": absences_count, "attendance_count": Attendance_count})
 
         
 

@@ -9,6 +9,10 @@ import {
 import TeacherSvg from "../../../public/PlanningSvg.svg"
 
 
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
+
 
 const levels = ["L1", "L2", "L3", "M1", "M2"];
 const specialities = ["info", "physic", "gestion", "biology", "pharmacy", "medicine"];
@@ -30,17 +34,32 @@ export default function ExamsMenu() {
        }} >
 
 
-        <img src={TeacherSvg} alt="Teacher" className="SvgPics" />
+        
 
-        <Box sx={{height:"100%",maxWidth:"45%" ,display:"flex",alignItems:"center",flexDirection:"column"}}>
+        <Box sx={{height:"100%",width:"45%" ,display:"flex",alignItems:"center",flexDirection:"column"}}>
           <Typography variant="h4" fontWeight="bold" color="primary">
             Exams
           </Typography>
           <Typography variant="h6" sx={{ mt: 1 }}>
                       Choose Your Specialty & Level to control and manage Exams
-           </Typography>
+          </Typography>
+
+          <Box sx={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-evenly",mt:5}}>
+            <Button  variant="outlined" sx={{width:"130px"}}
+            startIcon={<ArrowBackIcon/>}
+            onClick={() => navigate("../MenuStudent")}
+            
+            >Students</Button>
+             <Typography variant="subtitle4">-- change menu to --</Typography>
+            <Button variant="outlined" sx={{width:"130px"}}
+            endIcon={<ArrowForwardIcon/>}
+            onClick={() => navigate("../MenuModules")}
+            >Modules </Button>
+          </Box>
+           
         </Box>
 
+        <img src={TeacherSvg} alt="Teacher" className="SvgPics" />
 
         {/* <FormControl component="fieldset" sx={{ mt: 2 }}>
           <Typography variant="h6">Select Semester</Typography>

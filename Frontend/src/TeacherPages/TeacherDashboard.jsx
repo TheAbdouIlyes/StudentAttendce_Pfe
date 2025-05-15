@@ -31,7 +31,7 @@ import { useTheme } from "@mui/material/styles";
 
 const specialties = ["info", "physic", "gestion", "biology", "pharmacy", "medcine"];
 const levels = ["L1", "L2", "L3", "M1", "M2"];
-const pieColors = ["#4caf50", "#66bb6a", "#81c784", "#a5d6a7", "#c8e6c9", "#e8f5e9"];
+const pieColors = ["#0288d1", "#4c7dd0", "#736fc8", "#a5d6a7", "#c8e6c9", "#e8f5e9"];
 
 const TeacherDashboard = () => {
   const theme = useTheme();
@@ -43,7 +43,8 @@ const TeacherDashboard = () => {
   const [teachersByLevel, setTeachersByLevel] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("accessToken");
-
+  const [lastName, setLastName] = useState("");
+  const [firstName, setFirstName] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -53,9 +54,10 @@ const TeacherDashboard = () => {
             "Content-Type": "application/json",
           },
         });
-
+  
         const data = await res.json();
-
+        setLastName(data.last_name)
+        setFirstName(data.first_name)
         setStatsData([
           {
             label: "Total Students",
@@ -101,6 +103,8 @@ const TeacherDashboard = () => {
             };
           })
         );
+
+        console.log("res is iii ", specialtyResults);
 
         const levelResults = await Promise.all(
           levels.map(async (lvl) => {
@@ -155,6 +159,13 @@ const TeacherDashboard = () => {
         </Box>
       ) : (
         <>
+         <Typography variant="h5" fontWeight={600} mb={1} color="text.primary">
+            Welcome to your Dashboard, Professor {firstName} {lastName}.
+          </Typography>
+          <Typography variant="body1" mb={4} color="text.secondary">
+            Here is an overview of your current supervision and student attendance statistics.
+          </Typography>
+
           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-evenly", flexWrap: "wrap" }} gap={2}>
             {statsData.map((item, index) => (
               <Card
@@ -221,7 +232,7 @@ const TeacherDashboard = () => {
               </Card>
             </Grid>
 
-            <Grid item xs={12} md={6}>
+            {/* <Grid item xs={12} md={6}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
                 <Typography variant="h6" mb={2}>
                   Taux de Présence par Spécialité (%)
@@ -245,60 +256,7 @@ const TeacherDashboard = () => {
                   </PieChart>
                 </ResponsiveContainer>
               </Card>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" mb={2}>
-                  Évolution des Présences par Spécialité
-                </Typography>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={attendanceOverTime}>
-                    <XAxis dataKey="date" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    {specialties.map((specialty, index) => (
-                      <Line key={index} type="monotone" dataKey={specialty} stroke={pieColors[index % pieColors.length]} />
-                    ))}
-                  </LineChart>
-                </ResponsiveContainer>
-              </Card>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" mb={2}>
-                  Enseignants par Spécialité
-                </Typography>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={teachersBySpecialty}>
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="teacher_count" fill="#9c27b0" name="Total Enseignants" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </Card>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" mb={2}>
-                  Enseignants par Niveau
-                </Typography>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={teachersByLevel}>
-                    <XAxis dataKey="level" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="teacher_count" fill="#3f51b5" name="Total Enseignants" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </Card>
-            </Grid>
+            </Grid> */}
 
           </Grid>
         </>
