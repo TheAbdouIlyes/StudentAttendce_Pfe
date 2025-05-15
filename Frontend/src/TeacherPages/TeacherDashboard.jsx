@@ -31,7 +31,7 @@ import { useTheme } from "@mui/material/styles";
 
 const specialties = ["info", "physic", "gestion", "biology", "pharmacy", "medcine"];
 const levels = ["L1", "L2", "L3", "M1", "M2"];
-const pieColors = ["#4caf50", "#66bb6a", "#81c784", "#a5d6a7", "#c8e6c9", "#e8f5e9"];
+const pieColors = ["#0288d1", "#4c7dd0", "#736fc8", "#a5d6a7", "#c8e6c9", "#e8f5e9"];
 
 const TeacherDashboard = () => {
   const theme = useTheme();
@@ -157,6 +157,13 @@ const TeacherDashboard = () => {
         </Box>
       ) : (
         <>
+         <Typography variant="h5" fontWeight={600} mb={1} color="text.primary">
+            Welcome to your Dashboard, Professor.
+          </Typography>
+          <Typography variant="body1" mb={4} color="text.secondary">
+            Here is an overview of your current supervision and student attendance statistics.
+          </Typography>
+
           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-evenly", flexWrap: "wrap" }} gap={2}>
             {statsData.map((item, index) => (
               <Card
@@ -248,8 +255,6 @@ const TeacherDashboard = () => {
                 </ResponsiveContainer>
               </Card>
             </Grid> */}
-
-
 
           </Grid>
         </>

@@ -90,7 +90,7 @@ function Settings() {
         Make sure to choose a strong and memorable password before submitting.
       </Typography>
 </span>
-<img src={PWsvg} alt="Changing Password" style={{height:"25vh"}} />
+<img src={PWsvg} alt="Changing Password" style={{height:"13rem"}} />
 </Box>
 
 {/* <Typography variant="subtitle2" sx={{textAlign:"center", mb:5,opacity: 0.6}}>
@@ -110,7 +110,7 @@ function Settings() {
         </Alert>
       )}
 
-      <form onSubmit={handleSubmit} >
+      <form onSubmit={handleSubmit} style={{paddingRight:20,paddingLeft:20}}>
         <Stack spacing={2}>
           <TextField
             label="Old Password"
@@ -121,7 +121,7 @@ function Settings() {
             error={Boolean(errors.old_password)}
             helperText={errors.old_password?.[0]}
             required
-            fullWidth
+            // fullWidth
           />
 
           <TextField
@@ -133,7 +133,7 @@ function Settings() {
             error={Boolean(errors.new_password)}
             helperText={errors.new_password?.[0]}
             required
-            fullWidth
+            // fullWidth
           />
 
           <TextField
@@ -145,10 +145,10 @@ function Settings() {
             error={Boolean(errors.new_password2)}
             helperText={errors.new_password2?.[0]}
             required
-            fullWidth
+            // fullWidth
           />
 
-          <Button type="submit" variant="contained" disabled={loading}>
+          <Button type="submit" variant="contained" disabled={loading} sx={{height:"3rem"}}>
             {loading ? <CircularProgress size={24} /> : 'Change Password'}
           </Button>
         </Stack>
