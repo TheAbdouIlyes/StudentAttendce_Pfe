@@ -43,7 +43,8 @@ const TeacherDashboard = () => {
   const [teachersByLevel, setTeachersByLevel] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = localStorage.getItem("accessToken");
-
+  const [lastName, setLastName] = useState("");
+  const [firstName, setFirstName] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -53,9 +54,10 @@ const TeacherDashboard = () => {
             "Content-Type": "application/json",
           },
         });
-
+  
         const data = await res.json();
-
+        setLastName(data.last_name)
+        setFirstName(data.first_name)
         setStatsData([
           {
             label: "Total Students",
@@ -158,7 +160,7 @@ const TeacherDashboard = () => {
       ) : (
         <>
          <Typography variant="h5" fontWeight={600} mb={1} color="text.primary">
-            Welcome to your Dashboard, Professor.
+            Welcome to your Dashboard, Professor {firstName} {lastName}.
           </Typography>
           <Typography variant="body1" mb={4} color="text.secondary">
             Here is an overview of your current supervision and student attendance statistics.
