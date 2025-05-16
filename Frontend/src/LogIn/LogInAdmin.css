@@ -11,10 +11,11 @@
 .LeftSide-LogIn{
     width: 56rem;
     height: 100%;
-    border-radius:0 10rem 10rem 0 ;
-    border-radius:0 50% 50% 0 ;
+    border-radius:0 15rem 15rem 0 ;
+    /* border-radius:0 50% 50% 0 ; */
 
     background-color: #96d7fa;
+    background-image: url("../assets/logBG3.svg");
 
     display: flex;
     align-items: center;
@@ -24,26 +25,32 @@
 .LeftSide-LogIn2{
     width: 95%;
     height: 100%;
-    border-radius:0 13rem 13rem 0 ;
-    border-radius:0 50% 50% 0 ;
+    border-radius:0 17rem 17rem 0 ;
+    /* border-radius:0 50% 50% 0 ; */
 
 
     background-color: #0288d1;
+    background-image: url("../assets/logBG2.svg");
+
 
 
     display: flex;
     align-items: center;
     justify-content: start;
 }
+
 .LeftSide-LogIn3{
     width: 90%;
     height: 100%;
-    border-radius:0 13rem 13rem 0 ;
-    border-radius:0 50% 50% 0 ;
+    border-radius:0 17rem 17rem 0 ;
+    /* border-radius:0 50% 50% 0 ; */
 
 
     
     background-color: #013f60;
+    /* background-image: url("../assets/logBG1.svg"); */
+ 
+
 
     display: flex;
     align-items: start;
@@ -93,13 +100,13 @@
 
 
 .Login-SVG{
-    height: 30rem;
+    height: 40rem;
     position: absolute;
-    right: 30%;
+    left: 10%;
     bottom: 4rem;
 }
-.LogIn-Text{
+/* .LogIn-Text{
     margin-top: 7vh;
     font-size: 5vh;
     color: white;
-}
+} */

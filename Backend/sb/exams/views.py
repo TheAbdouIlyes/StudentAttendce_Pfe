@@ -1046,36 +1046,77 @@ class Examserv(APIView):
             return JsonResponse({"is_present": True})
      else:
             return JsonResponse({"is_present": False})
-       
+     
+
+
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from django.http import JsonResponse
+from django.utils import timezone
+from datetime import datetime
+
+from .models import Student, teacher, Exam, Attendance, surveillance
 
 class adminstats(APIView):
+    permission_classes = [AllowAny]
 
-    permission_classes = [AllowAny]  # Require authentication
     def get(self, request, *args, **kwargs):
-     
-     
-      students_count = Student.objects.count()
-     
-      exam_count = Exam.objects.count() 
-      teacher_count=teacher.objects.count()
-      Attendance_count=Attendance.objects.count()
-      expected_attendance = 0
+        # Student counts
+        students_count = Student.objects.count()
+        student_phisic = Student.objects.filter(speciality="physic").count()
+        student_INFO = Student.objects.filter(speciality="info").count()
+        student_gestion = Student.objects.filter(speciality="gestion").count()
+        student_biology = Student.objects.filter(speciality="biology").count()
+        student_pharmacy = Student.objects.filter(speciality="pharmacy").count()
+        student_medcine = Student.objects.filter(speciality="medcine").count()
 
-      exams = Exam.objects.all()
+        # General stats
+        exam_count = Exam.objects.count()
+        teacher_count = teacher.objects.count()
+        attendance_count = Attendance.objects.count()
 
-      for exam in exams:
+        # Expected attendance
+        expected_attendance = 0
+        now = timezone.now()
+        nd=now.date()
+        nt=now.time()
+        exams = Exam.objects.filter(date__lt=nd,time__lt=nt)
+        for exam in exams:
             expected_students = Student.objects.filter(
                 level=exam.subject.level,
                 speciality=exam.subject.speciality
             ).count()
             expected_attendance += expected_students
-            
-            
-            
-      absences_count = expected_attendance - Attendance_count
-            
 
-      return JsonResponse({"students_count": students_count,"exam_count": exam_count,"teacher_count":teacher_count ,"absences_count":absences_count, "attendance_count": Attendance_count})
+        absences_count = expected_attendance - attendance_count
+
+        # 🔹 Teachers without any surveillance duties
+        assigned_teacher_ids = surveillance.objects.values_list("teacher_id", flat=True).distinct()
+        teachers_without_duty = teacher.objects.exclude(id__in=assigned_teacher_ids).count()
+
+        # 🔹 Exams that have ended (date + time < now)
+        now = timezone.now()
+        exams_ended = 0
+        for exam in exams:
+            exam_datetime = timezone.make_aware(datetime.combine(exam.date, exam.time))
+            if exam_datetime < now:
+                exams_ended += 1
+
+        return JsonResponse({
+            "students_count": students_count,
+            "student_phisic": student_phisic,
+            "student_INFO": student_INFO,
+            "student_gestion": student_gestion,
+            "student_biology": student_biology,
+            "student_pharmacy": student_pharmacy,
+            "student_medcine": student_medcine,
+            "exam_count": exam_count,
+            "teacher_count": teacher_count,
+            "attendance_count": attendance_count,
+            "absences_count": absences_count,
+            "teachers_without_duty": teachers_without_duty,
+            "exams_ended": exams_ended,
+        })
 
 
 
@@ -1084,9 +1125,11 @@ class Présences_par_Spécialité(APIView):
     permission_classes = [AllowAny]  # Require authentication
     def get(self, request, *args, **kwargs):
            spes=self.kwargs['spes']
+           now = timezone.now()
+           nd=now.date()
+           nt=now.time()
          
-         
-           exams = Exam.objects.filter( subject__speciality=spes)
+           exams = Exam.objects.filter( subject__speciality=spes,date__lt=nd,time__lt=nt)
            Attendance_count=Attendance.objects.filter( exam__in=exams).count()
            expected_attendance = 0
            for exam in exams:
@@ -1100,7 +1143,7 @@ class Présences_par_Spécialité(APIView):
             
             
            absences_count = expected_attendance - Attendance_count
-           return JsonResponse({"absences_count": absences_count, "attendance_count": Attendance_count})
+           return JsonResponse({ "absences_count": absences_count, "attendance_count": Attendance_count})
 
 
  
@@ -1113,9 +1156,11 @@ class Présences_par_level(APIView):
     permission_classes = [AllowAny]  # Require authentication
     def get(self, request, *args, **kwargs):
            spes=self.kwargs['level']
-         
-         
-           exams = Exam.objects.filter( subject__level=spes)
+           
+           now = timezone.now()
+           nd=now.date()
+           nt=now.time()
+           exams = Exam.objects.filter( subject__level=spes,date__lt=nd,time__lt=nt)
            Attendance_count=Attendance.objects.filter( exam__in=exams).count()
            expected_attendance = 0
            for exam in exams:
@@ -1146,8 +1191,10 @@ class StudentStats(APIView):
         level1= student_instance.level
         spesiality1= student_instance.speciality
         exam_count=Exam.objects.filter(subject__level=level1,subject__speciality=spesiality1,subject__semester=semester1).count()
-        
-        exams=Exam.objects.filter(subject__level=level1,subject__speciality=spesiality1,subject__semester=semester1)
+        now = timezone.now()
+        nd=now.date()
+        nt=now.time()
+        exams=Exam.objects.filter(subject__level=level1,subject__speciality=spesiality1,subject__semester=semester1,date__lt=nd,time__lt=nt)
         Attendance_count =Attendance.objects.filter(student= student_instance,exam__in=exams).count()
         absence_count= exam_count - Attendance_count
         nom=request.user.last_name
@@ -1171,9 +1218,12 @@ class teacherstats(APIView):
         subjects = subject.objects.filter(
          id__in=teach.objects.filter(teacher=teacher_instance).values_list('subject__id', flat=True)
           )
+        now = timezone.now()
+        nd=now.date()
+        nt=now.time()
+        exams= Exam.objects.filter(subject__in=subjects,date__lt=nd,time__lt=nt)
         
-        exams= Exam.objects.filter(subject__in=subjects)
-
+        
         Attendance_count=Attendance.objects.filter(exam__in=exams).count()
        
         expected_attendance = 0
@@ -1183,6 +1233,7 @@ class teacherstats(APIView):
                 speciality=exam.subject.speciality
                ).count()
               expected_attendance += expected_students
+              
         level1=subject.objects.filter(id__in=subjects).values_list('level', flat=True)
         spe1 =subject.objects.filter(id__in=subjects).values_list('speciality', flat=True)
         student_count= Student.objects.filter(level__in= level1,speciality__in=spe1).count()
@@ -1206,8 +1257,10 @@ class teacher_par_Spécialité(APIView):
            subjects = subject.objects.filter(
              id__in=teach.objects.filter(teacher=teacher_instance).values_list('subject__id', flat=True)
               )
-  
-           exams= Exam.objects.filter(subject__in=subjects,subject__speciality=spes)
+           now = timezone.now()
+           nd=now.date()
+           nt=now.time()
+           exams= Exam.objects.filter(subject__in=subjects,date__lt=nd,time__lt=nt,subject__speciality=spes)
            Attendance_count=Attendance.objects.filter( exam__in=exams).count()
            expected_attendance = 0
            for exam in exams:
@@ -1215,6 +1268,7 @@ class teacher_par_Spécialité(APIView):
                 level=exam.subject.level,
                 speciality=exam.subject.speciality
                ).count()
+              
               expected_attendance += expected_students
             
            subject_total=subject.objects.filter(speciality=spes)
@@ -1241,8 +1295,10 @@ class teacher_par_level(APIView):
            subjects = subject.objects.filter(
              id__in=teach.objects.filter(teacher=teacher_instance).values_list('subject__id', flat=True)
               )
-  
-           exams= Exam.objects.filter(subject__in=subjects,subject__level=spes)
+           now = timezone.now()
+           nd=now.date()
+           nt=now.time()
+           exams= Exam.objects.filter(subject__in=subjects,date__lt=nd,time__lt=nt,subject__level=spes)
            Attendance_count=Attendance.objects.filter( exam__in=exams).count()
            expected_attendance = 0
            for exam in exams:
