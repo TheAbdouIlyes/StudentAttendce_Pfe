@@ -9,19 +9,23 @@
 }
 
 .LeftSide-LogIn{
-    width: 55%;
+    width: 56rem;
     height: 100%;
     border-radius:0 10rem 10rem 0 ;
+    border-radius:0 50% 50% 0 ;
+
     background-color: #96d7fa;
 
     display: flex;
     align-items: center;
     justify-content: start;
+    position: relative;
 }
 .LeftSide-LogIn2{
-    width: 92%;
+    width: 95%;
     height: 100%;
     border-radius:0 13rem 13rem 0 ;
+    border-radius:0 50% 50% 0 ;
 
 
     background-color: #0288d1;
@@ -32,16 +36,19 @@
     justify-content: start;
 }
 .LeftSide-LogIn3{
-    width: 88%;
+    width: 90%;
     height: 100%;
     border-radius:0 13rem 13rem 0 ;
+    border-radius:0 50% 50% 0 ;
+
 
     
     background-color: #013f60;
 
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: start;
+    justify-content: start;
+    padding-left: 2rem;
 }
 .RightSide-LogIn{
     width: 45%;
@@ -82,4 +89,17 @@
 .ReturnLog{
     width: 60%;
     margin-bottom: 4%;
+}
+
+
+.Login-SVG{
+    height: 30rem;
+    position: absolute;
+    right: 30%;
+    bottom: 4rem;
+}
+.LogIn-Text{
+    margin-top: 7vh;
+    font-size: 5vh;
+    color: white;
 }

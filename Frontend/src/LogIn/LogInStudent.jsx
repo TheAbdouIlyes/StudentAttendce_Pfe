@@ -4,6 +4,7 @@ import "./LogInAdmin.css";
 import LogInstudentform from './LoginStudentfrom';
 import ReturnButton from '../comps/ReturnButton';
 import { BookOpen} from "lucide-react";
+import TeacherSvg from "../assets/TeacherSVG.svg"
 
 
 export default function LogInStudent() {
@@ -14,6 +15,8 @@ export default function LogInStudent() {
                 <div className='LeftSide-LogIn2'>
                   <div className='LeftSide-LogIn3'>
                     {/* Left side content */}
+                    <img className='Login-SVG' src={TeacherSvg} alt="Teacher" />
+                    
                   </div>
                 </div>
               </div>

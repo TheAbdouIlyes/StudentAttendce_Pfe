@@ -18,7 +18,6 @@ function UserID() {
           </div>
           <h1>Welcome to the University Attendance Portal</h1>
           <p>Select your role to manage or check student attendance</p>
-
         </div>
 
         {/* Role selection cards */}

@@ -4,6 +4,7 @@ import "./LogInAdmin.css";
 import LogInteacherform from './Loginteacherform';
 import ReturnButton from '../comps/ReturnButton';
 import {Building2 } from "lucide-react";
+import TeacherSvg from "../assets/StudentSVG.svg"
 
 
 export default function LogInTeacher() {
@@ -14,6 +15,8 @@ export default function LogInTeacher() {
                 <div className='LeftSide-LogIn2'>
                   <div className='LeftSide-LogIn3'>
                     {/* Left side content */}
+                                <img className='Login-SVG' src={TeacherSvg} alt="Admin" />
+
                   </div>
                 </div>
               </div>
