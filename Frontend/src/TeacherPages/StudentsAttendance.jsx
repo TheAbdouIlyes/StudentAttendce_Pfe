@@ -74,10 +74,75 @@ export default function StudentsAttendance() {
 
     fetchExamInfo();
   }, [exam]);
+
+
+
+
+  const fetchAllStudents = async () => {
+  let page = 1;
+  let allStudents = [];
+  let totalPages = 1;
+
+  do {
+    const response = await fetch(`http://127.0.0.1:8000/student/subject/${exam}?page=${page}`);
+    if (!response.ok) throw new Error("Failed to fetch students");
+    const data = await response.json();
+    totalPages = Math.ceil(data.count / 5);
+    allStudents = allStudents.concat(data.results);
+    page++;
+  } while (page <= totalPages);
+
+  return allStudents;
+};
+
+
+const handleDownloadCSV = async () => {
+  try {
+    const allStudents = await fetchAllStudents(); // Fetch all pages
+
+    const headers = ["Matricule", "First Name", "Last Name", "Presence"];
+    const rows = allStudents.map(student => [
+      student.matricul,
+      student.first_name,
+      student.last_name,
+      !examEnded ? "------" : (student.is_present ? "Present" : "Absent")
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(row => row.join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `attendance_${exam}_${speciality}_${year}_all.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (error) {
+    console.error("CSV Download error:", error);
+    alert("Failed to download all student data.");
+  }
+};
+
+
   return (
     <Paper elevation={0} sx={{ p: 3, mt: 0 }}>
       <Box>
-        <ReturnButton />
+
+        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+          <ReturnButton />
+
+          <Button variant="outlined" onClick={handleDownloadCSV}>
+            Download CSV
+          </Button>
+        </Box>
+
+
+
         <Box sx={{ borderRadius: 2, mb: 4, textAlign: "center" }}>
           <Typography variant="h4" fontWeight="bold" color="text.primary">
             Attendance for <b>"{exam.toUpperCase()}"</b>

@@ -34,8 +34,14 @@ const levels = ["L1", "L2", "L3", "M1", "M2"];
 const desktopOS = [
   { id: 0, value: 10, label: 'Windows' },
   { id: 1, value: 15, label: 'MacOS' },
+  // { id: 2, value: 20, label: 'Linux' },
+];
+const desktopOS1 = [
+  { id: 0, value: 10, label: 'Windows' },
+  { id: 1, value: 15, label: 'MacOS' },
   { id: 2, value: 20, label: 'Linux' },
 ];
+
 
 const valueFormatter = (value) => `${value}%`;
 
@@ -122,6 +128,10 @@ const Dashboard = () => {
         </Box>
       ) : (
         <>
+          {/* <Typography variant="h6" color="text.main" mb={1}>
+            Welcome to the Administrator Dashboard 
+          </Typography> */}
+
           {/* Stats Cards */}
           <Box sx={{ display: "flex", alignItems: "ceter", justifyContent: "space-evenly", flexWrap: "wrap" }} gap={2}>
             {statsData.map((item, index) => (
@@ -162,8 +172,8 @@ const Dashboard = () => {
             {/* Updated Taux de Présence par Spécialité (%) chart */}
               <Grid item xs={12} md={4}>
                 <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                  <Typography variant="h6" >
-                    Taux de Présence par Spécialité
+                  <Typography variant="h6" textAlign={"center"}>
+                    Total Students by Specialty
                   </Typography>
                   <Box sx={{ height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <PieChart
@@ -187,8 +197,8 @@ const Dashboard = () => {
               {/* OS Distribution chart */}
               <Grid item xs={12} md={4}>
                 <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                  <Typography variant="h6" >
-                    OS Distribution (Sample Data)
+                  <Typography variant="h6" textAlign={"center"} >
+                    Available Professors ( Free )
                   </Typography>
                   <Box sx={{ height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <PieChart
@@ -210,14 +220,14 @@ const Dashboard = () => {
 
               <Grid item xs={12} md={4}>
                 <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                  <Typography variant="h6" >
-                    Profs dutes ----
+                  <Typography variant="h6" textAlign={"center"} >
+                    not yet
                   </Typography>
                   <Box sx={{ height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <PieChart
                       series={[
                         {
-                          data: desktopOS,
+                          data: desktopOS1,
                           highlightScope: { fade: 'global', highlight: 'item' },
                           faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
                           // valueFormatter,
