@@ -104,7 +104,7 @@ export default function AddModule({onClose,onAdd}) {
             <MenuItem value="gestion">Gestion</MenuItem>
             <MenuItem value="biology">Biology</MenuItem>
             <MenuItem value="pharmacy">Pharmacy</MenuItem>
-            <MenuItem value="medicine">Medicine</MenuItem>
+            <MenuItem value="medcine">Medcine</MenuItem>
           </Select>
         </FormControl>
 

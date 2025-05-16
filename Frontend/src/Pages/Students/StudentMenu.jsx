@@ -14,7 +14,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 
 const levels = ["L1", "L2", "L3", "M1", "M2"];
-const specialities = ["info", "physic", "gestion", "biology", "pharmacy", "medicine"];
+const specialities = ["info", "physic", "gestion", "biology", "pharmacy", "medcine"];
 
 export default function StudentsMenu() {
   const navigate = useNavigate();

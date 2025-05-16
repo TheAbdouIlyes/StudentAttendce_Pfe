@@ -19,7 +19,7 @@ export default function Examan1() {
     <div className={`container ${theme.palette.mode === "dark" ? "dark-mode" : "light-mode"}`}>
 
         
-      {["info", "physic", "gestion", "biology", "pharmacy", "medcine"].map((category, index) => (
+      {["info", "physic", "gestion", "biology", "pharmacy", "medicine"].map((category, index) => (
         <div key={index} className="spec">
           <h2>{category}</h2>
           <div className="contener">
