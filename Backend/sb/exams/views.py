@@ -1089,9 +1089,11 @@ class adminstats(APIView):
             expected_attendance += expected_students
 
         absences_count = expected_attendance - attendance_count
-
+        nd=now.date()
+        nt=now.time()
+        exams1 = Exam.objects.filter(date__lt=nd,time__lt=nt)
         # 🔹 Teachers without any surveillance duties
-        assigned_teacher_ids = surveillance.objects.values_list("teacher_id", flat=True).distinct()
+        assigned_teacher_ids = surveillance.objects.filter(exam__in=exams1).values_list("teacher_id", flat=True).distinct()
         teachers_without_duty = teacher.objects.exclude(id__in=assigned_teacher_ids).count()
 
         # 🔹 Exams that have ended (date + time < now)
@@ -1221,7 +1223,7 @@ class teacherstats(APIView):
         lname1 = teacher_instance.user.last_name
         fname1= teacher_instance.user.first_name
         modul_count= teach.objects.filter(teacher= teacher_instance).count()
-        duties_count= surveillance.objects.filter(teacher= teacher_instance).count()
+       
                         
         subjects = subject.objects.filter(
          id__in=teach.objects.filter(teacher=teacher_instance).values_list('subject__id', flat=True)
@@ -1230,7 +1232,8 @@ class teacherstats(APIView):
         nd=now.date()
         nt=now.time()
         exams= Exam.objects.filter(subject__in=subjects,date__lt=nd,time__lt=nt)
-        
+        exam1=Exam.objects.filter(date__lt=nd,time__lt=nt)
+        duties_count= surveillance.objects.filter(teacher= teacher_instance,exam__in=exam1).count()
         
         Attendance_count=Attendance.objects.filter(exam__in=exams).count()
        
