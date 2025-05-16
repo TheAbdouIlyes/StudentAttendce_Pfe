@@ -44,6 +44,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [profDuties, setProfDuties] = useState();
   const [professorAvailability, setProfessorAvailability] = useState([]);
+  const [examsGraph,setExamsGraph] = useState([]);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -93,10 +94,20 @@ const Dashboard = () => {
 
         const available = stats.teachers_without_duty;
         const assigned = stats.teacher_count - available;
+
         // const assigned = stats.assigned_teacher_ids;
         setProfessorAvailability([
           { id: 0, value: available, label: "Available" },
           { id: 1, value: assigned, label: "Assigned" },
+        ]);
+
+        
+        const ExamsDone = stats.exams_ended;
+        const ExamRest= stats.exam_count - ExamsDone;
+
+         setExamsGraph([
+          { id: 0, value: ExamRest, label: "ExamRest" },
+          { id: 1, value: ExamsDone, label: "ExamsDone" },
         ]);
 
         const specialtyResults = await Promise.all(
@@ -235,13 +246,13 @@ const Dashboard = () => {
             <Grid item xs={12} md={4}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
                 <Typography variant="h6" textAlign={"center"}>
-                  Not Yet
+                  Exams Rest
                 </Typography>
                 <Box sx={{ height: 300, display: "flex", justifyContent: "center", alignItems: "center" }}>
                   <PieChart
                     series={[
                       {
-                        data: desktopOS1,
+                        data: examsGraph,
                         highlightScope: { fade: "global", highlight: "item" },
                         faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
                       },
