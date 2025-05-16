@@ -38,9 +38,13 @@ useEffect(() => {
     fetchModules();
   }, [speciality, year]);
 
-  const columns = [
+  const columns1 = [
     { width: 50, label: "ID", dataKey: "id" },
-    { width: 200, label: "Module", dataKey: "name" },
+    { width: 200, label: "Module S1", dataKey: "name" },
+  ];
+  const columns2 = [
+    { width: 50, label: "ID", dataKey: "id" },
+    { width: 200, label: "Module S2", dataKey: "name" },
   ];
 
   const handleRowDelete = async (id, semester) => {
@@ -83,7 +87,7 @@ useEffect(() => {
         <div className="ModulesCard-Div">
           <ModelTable
             // showActions={showActions}
-            columns={columns}
+            columns={columns1}
             initialRows={modules1}
             onDelete={(id) => handleRowDelete(id, 1)}
           />
@@ -91,7 +95,7 @@ useEffect(() => {
         <div className="ModulesCard-Div">
           <ModelTable
             // showActions={showActions}
-            columns={columns}
+            columns={columns2}
             initialRows={modules2}
             onDelete={(id) => handleRowDelete(id, 2)}
           />

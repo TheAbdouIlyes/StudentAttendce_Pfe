@@ -126,9 +126,9 @@ export default function SerTeacher() {
   }
 
   return (
-    <Paper sx={{ width: "100%", padding: "20px" }}>
+    <Paper elevation={0} sx={{ width: "100%", padding: "20px" }}>
 
-      <Box sx={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+      <Box sx={{display:"flex",alignItems:"center",justifyContent:"space-between",mb:2,p:2}}>
         <ReturnButton/>
         <Typography variant="h5"><b>Available Teachers for {exam_name}</b></Typography>
         

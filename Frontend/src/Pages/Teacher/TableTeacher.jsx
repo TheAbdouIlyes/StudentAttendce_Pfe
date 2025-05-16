@@ -19,6 +19,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ModulesEditor from "./ModulesEditor"
 import EditTeacher from "./EditTeacher";
+import Swal from "sweetalert2";
+
 
 const columns = [
   { width: 80, label: "First Name", dataKey: "first_name" },
@@ -77,11 +79,35 @@ export default function TableTeacher({ setRows,onAdd, rows, page, setPage, total
                         </IconButton>
                         <IconButton
                           sx={{ height: 30, width: 30 }}
+
                           onClick={() => {
-                            if (window.confirm("Are you sure you want to delete this teacher?")) {
-                              handleDelete(row.id);
-                            }
+                            Swal.fire({
+                              title: "Are you sure?",
+                              text: "You won't be able to revert this!",
+                              icon: "warning",
+                              showCancelButton: true,
+                              confirmButtonColor: "#d33",
+                              cancelButtonColor: "#3085d6",
+                              confirmButtonText: "Yes, delete it!",
+                              toast:true,
+                              position: "bottom-end",
+
+                            }).then((result) => {
+                              if (result.isConfirmed) {
+                                handleDelete(row.id);
+                                Swal.fire({
+                                  title: "Deleted!",
+                                  text: "The teacher has been deleted.",
+                                  icon: "success",
+                                  position: "bottom-end",
+                                  showConfirmButton: false,
+                                  timer: 2000,
+                                  toast: true,
+                                });
+                              }
+                            });
                           }}
+
                           color="error"
                         >
                           <DeleteIcon fontSize="small" />

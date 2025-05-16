@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 import { useParams, useLocation } from 'react-router-dom';
-
 import {
   Box,
   Typography,
   Paper,
-  Alert,
   useTheme,
+  Alert,
 } from "@mui/material";
+import Swal from 'sweetalert2';
 import ReturnButton from '../../comps/ReturnButton';
 
 function QRCode({ onScan }) {
@@ -17,7 +17,8 @@ function QRCode({ onScan }) {
   const stateModule = location.state?.module;
   const finalModule = stateModule || module;
 
-  const [scanResult, setScanResult] = useState(null);
+  const [lastScan, setLastScan] = useState(null);
+  const lastScannedRef = useRef(null);
 
   useEffect(() => {
     const scanner = new Html5QrcodeScanner('reader', {
@@ -28,15 +29,19 @@ function QRCode({ onScan }) {
     scanner.render(success, error);
 
     function success(result) {
-      scanner.clear();
-      setScanResult(result);
-      
-      if (onScan) {
-        onScan(result);
-      }
+      // Avoid scanning same QR twice
+      if (result === lastScannedRef.current) return;
 
-      // ✅ Call handleScan when QR code is successfully scanned
+      setLastScan(result);
+      lastScannedRef.current = result;
+
+      if (onScan) onScan(result);
       handleScan(result, finalModule);
+
+      // Cooldown
+      setTimeout(() => {
+        lastScannedRef.current = null;
+      }, 3000);
     }
 
     async function handleScan(scanResult, module) {
@@ -47,12 +52,14 @@ function QRCode({ onScan }) {
         });
 
         if (!response.ok) {
-          throw new Error("Failed to mark attendance");
+          const errorData = await response.json(); // if backend returns JSON error
+          throw new Error(errorData?.message || "Failed to mark attendance");
         }
-        alert("Attendance marked successfully!");
+
+        showToast("Attendance marked successfully!", "success");
       } catch (error) {
         console.error("Error:", error);
-        alert(error.message);
+        showToast(error.message || "Invalid or already present", "error");
       }
     }
 
@@ -60,20 +67,47 @@ function QRCode({ onScan }) {
       console.warn(err);
     }
 
-    return () => scanner.clear(); // Cleanup when component unmounts
-  }, [onScan, finalModule]); // ✅ Ensure finalModule is up-to-date
+    function showToast(msg, icon = "success") {
+      Swal.fire({
+        toast: true,
+        position: "bottom-end",
+        icon: icon,
+        title: msg,
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+      });
+    }
+
+    return () => {
+      scanner.clear().catch(err => console.error("Failed to clear scanner:", err));
+    };
+  }, [onScan, finalModule]);
 
   return (
-    <Box sx={{ display: "flex",flexDirection:'column', height: "100%",width:'100%' }}>
-      <Box sx={{ display: "flex",alignItems:'center', height: "auto",width:'100%',mb:5 }}>
+    <Box sx={{ p: 3, height: "100%", width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <Paper elevation={2} sx={{ p: 4, width: "100%", maxWidth: 800 }}>
+        <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+          <ReturnButton />
+          <Typography variant="h5" sx={{ ml: 2 }}>
+            QR-Code Scanning Page for {speciality} {year} {semester} - {finalModule}
+          </Typography>
+        </Box>
 
-        <ReturnButton/><h1 style={{margin:'0',padding:'0',marginLeft:'2%'}}>QR-Code Scanning Page for {speciality} {year} {semester} - {finalModule}</h1>
-      </Box>
+        <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>
+          <Box id="reader" sx={{ width: 300 }}></Box>
+        </Box>
 
-    <div>
-      
-      {scanResult ? <p>Scanned: {scanResult}</p> : <div id="reader">Waiting for scan...</div>}
-    </div>
+        {lastScan && (
+          <Alert severity="info" sx={{ mb: 2 }}>
+            Last scanned: <strong>{lastScan}</strong>
+          </Alert>
+        )}
+
+        <Typography variant="body2" color="text.secondary" align="center">
+          Keep scanning QR codes. Press return to exit.
+        </Typography>
+      </Paper>
     </Box>
   );
 }

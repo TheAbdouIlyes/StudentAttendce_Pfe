@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom"; // ✅ Import useNavigate
 import { GraduationCap, Users, BookOpen, Building2 } from "lucide-react";
 import "./UserID.css";
+import { motion } from "framer-motion"; // ✅ Framer Motion
+
 
 function UserID() {
   const navigate = useNavigate(); // ✅ Initialize navigation
@@ -10,7 +12,11 @@ function UserID() {
     <div className="login-container">
       <div className="background-overlay" />
 
-      <div className="content-wrapper">
+      <motion.div className="content-wrapper"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.3, ease: "easeOut"}}
+              >
         {/* Header */}
         <div className="header">
           <div className="header-icon">
@@ -23,39 +29,39 @@ function UserID() {
         {/* Role selection cards */}
         <div className="role-cards">
           {/* Admin Card */}
-          <button className="role-card" onClick={() => navigate("/Admin")}>
+          <motion.button className="role-card" onClick={() => navigate("/Admin")}>
             <div className="role-card-content">
               <Users className="role-card-icon" />
               <h2>Admin</h2>
               <p>System administration and management</p>
             </div>
-          </button>
+          </motion.button>
 
           {/* Student Card */}
-          <button className="role-card" onClick={() => navigate("/Student")}>
+          <motion.button className="role-card" onClick={() => navigate("/Student")}>
             <div className="role-card-content">
               <BookOpen className="role-card-icon" />
               <h2>Student</h2>
               <p>View your attendance records and exam schedule</p>
 
             </div>
-          </button>
+          </motion.button>
 
           {/* Teacher Card */}
-          <button className="role-card" onClick={() => navigate("/Teacher")}>
+          <motion.button className="role-card" onClick={() => navigate("/Teacher")}>
             <div className="role-card-content">
               <Building2 className="role-card-icon" />
               <h2>Teacher</h2>
               <p>Record attendance and monitor student presence during exams</p>
             </div>
-          </button>
+          </motion.button>
         </div>
 
         {/* Footer */}
         <div className="footer">
           <p>© 2025 University Portal. All rights reserved.</p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

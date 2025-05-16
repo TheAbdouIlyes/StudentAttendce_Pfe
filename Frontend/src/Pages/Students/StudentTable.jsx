@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import {
   Table,
   TableBody,
@@ -48,7 +49,6 @@ export default function StudentTable({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Sync the incoming students with local state
   useEffect(() => {
     setStudentData(students);
   }, [students]);
@@ -82,23 +82,68 @@ export default function StudentTable({
     try {
       const res = await fetch(`http://127.0.0.1:8000/u_student/${currentStudent.id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(currentStudent),
       });
 
-      if (!res.ok) {
-        throw new Error("Update failed");
-      }
+      if (!res.ok) throw new Error("Update failed");
 
       const updated = studentData.map((student) =>
         student.id === currentStudent.id ? currentStudent : student
       );
       setStudentData(updated);
       setOpen(false);
+
+      Swal.fire({
+        icon: "success",
+        title: "Student updated",
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+
     } catch (err) {
       setError("Failed to update student.");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const result = await Swal.fire({
+    title: "Are you sure?",
+    text: "This action cannot be undone.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "Yes, delete it!",
+    cancelButtonText: "Cancel",
+    toast: true,
+    // position: "bottom-end"
+  });
+
+  if (!result.isConfirmed) return;
+
+
+    try {
+      await onDelete(id);
+      Swal.fire({
+        icon: "success",
+        title: "Student deleted",
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Delete failed",
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        timer: 2000,
+      });
     }
   };
 
@@ -131,11 +176,7 @@ export default function StudentTable({
                           </IconButton>
                           <IconButton
                             sx={{ height: 30, width: 30 }}
-                            onClick={() => {
-                              if (window.confirm("Are you sure you want to delete this student?")) {
-                                onDelete(student.id);
-                              }
-                            }}
+                            onClick={() => handleDelete(student.id)}
                             color="error"
                           >
                             <DeleteIcon fontSize="small" />
@@ -197,53 +238,59 @@ export default function StudentTable({
                 onChange={handleInputChange}
               />
 
-                  <FormControl fullWidth margin="normal">
-                  <InputLabel id="year-label">Year</InputLabel>
-                  <Select
-                    labelId="year-label"
-                    id="year-select"
-                    name="level"
-                    value={currentStudent.level} // Ensure consistency between name and value binding
-                    label="Year"
-                    onChange={handleInputChange}
-                  >
-                    <MenuItem value="l1">L1</MenuItem>
-                    <MenuItem value="l2">L2</MenuItem>
-                    <MenuItem value="l3">L3</MenuItem>
-                    <MenuItem value="m1">M1</MenuItem>
-                    <MenuItem value="m2">M2</MenuItem>
-                  </Select>
-                </FormControl>
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="year-label">Year</InputLabel>
+                <Select
+                  labelId="year-label"
+                  id="year-select"
+                  name="level"
+                  value={currentStudent.level}
+                  label="Year"
+                  onChange={handleInputChange}
+                >
+                  <MenuItem value="l1">L1</MenuItem>
+                  <MenuItem value="l2">L2</MenuItem>
+                  <MenuItem value="l3">L3</MenuItem>
+                  <MenuItem value="m1">M1</MenuItem>
+                  <MenuItem value="m2">M2</MenuItem>
+                </Select>
+              </FormControl>
 
-                <FormControl fullWidth margin="normal">
-                  <InputLabel>Speciality</InputLabel>
-                  <Select label="Speciality" name="speciality" value={currentStudent.speciality} onChange={handleInputChange}>
-                    <MenuItem value="info">Info</MenuItem>
-                    <MenuItem value="physic">Physic</MenuItem>
-                    <MenuItem value="gestion">Gestion</MenuItem>
-                    <MenuItem value="biology">Biology</MenuItem>
-                    <MenuItem value="pharmacy">Pharmacy</MenuItem>
-                    <MenuItem value="medicine">Medicine</MenuItem>
-                  </Select>
-                </FormControl>
-                <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => setOpen(false)}
-                    sx={{ mt: 2,border:0 }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="info"
-                    onClick={handleUpdate}
-                    sx={{ mt: 2 }}
-                  >
-                    Save
-                  </Button>
-                </Box>
+              <FormControl fullWidth margin="normal">
+                <InputLabel>Speciality</InputLabel>
+                <Select
+                  label="Speciality"
+                  name="speciality"
+                  value={currentStudent.speciality}
+                  onChange={handleInputChange}
+                >
+                  <MenuItem value="info">Info</MenuItem>
+                  <MenuItem value="physic">Physic</MenuItem>
+                  <MenuItem value="gestion">Gestion</MenuItem>
+                  <MenuItem value="biology">Biology</MenuItem>
+                  <MenuItem value="pharmacy">Pharmacy</MenuItem>
+                  <MenuItem value="medicine">Medicine</MenuItem>
+                </Select>
+              </FormControl>
+
+              <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => setOpen(false)}
+                  sx={{ mt: 2, border: 0 }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  color="info"
+                  onClick={handleUpdate}
+                  sx={{ mt: 2 }}
+                >
+                  Save
+                </Button>
+              </Box>
             </>
           ) : null}
         </DialogContent>

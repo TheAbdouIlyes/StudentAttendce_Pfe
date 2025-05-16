@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-
+import Swal from 'sweetalert2';
 
 export default function LogInForm() {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
@@ -25,7 +25,7 @@ export default function LogInForm() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          username: credentials.username, // Adjust field names if needed
+          username: credentials.username,
           password: credentials.password
         })
       });
@@ -33,22 +33,43 @@ export default function LogInForm() {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("accessToken", data.access); // Store token
+        localStorage.setItem("accessToken", data.access);
         localStorage.setItem("refreshToken", data.refresh);
-        localStorage.setItem("role", "admin"); // Store role for future navigation
-        navigate("/Dashboard"); // Redirect after successful login
+        localStorage.setItem("role", "admin");
+
+        // ✅ SweetAlert success message
+        Swal.fire({
+          icon: 'success',
+          title: 'Login Successful',
+          text: 'Welcome back!',
+          timer: 1000,
+          showConfirmButton: false
+        });
+
+        setTimeout(() => {
+          navigate("/Dashboard");
+        }, 1000); // wait for SweetAlert to finish
       } else {
-        setError("Invalid credentials. Please try again.");
+        // ❌ SweetAlert error message
+        Swal.fire({
+          icon: 'error',
+          title: 'Login Failed',
+          text: 'Invalid credentials. Please try again.'
+        });
       }
     } catch (error) {
-      setError("Something went wrong. Please check your connection.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Connection Error',
+        text: 'Something went wrong. Please check your internet connection.'
+      });
     }
   };
 
   return (
     <div className='FormLogIn'>
       <form onSubmit={handleSubmit} className='FormLogIn'>
-        <h3 className='LogIn-Info'>username</h3>
+        <h3 className='LogIn-Info'>Username</h3>
         <Box sx={{ width: 300, marginBottom: 4, maxWidth: '100%' }}>
           <TextField
             fullWidth
@@ -60,7 +81,7 @@ export default function LogInForm() {
           />
         </Box>
 
-        <h3 className='LogIn-Info'>password</h3>
+        <h3 className='LogIn-Info'>Password</h3>
         <Box sx={{ width: 300, marginBottom: 4, maxWidth: '100%' }}>
           <TextField
             fullWidth
@@ -73,14 +94,14 @@ export default function LogInForm() {
           />
         </Box>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
-
         <Button 
-        variant='contained' 
-        sx={{height:40 ,maxWidth:130}}
-        color="info" 
-        type="submit" 
-       >Submit</Button>
+          variant='contained' 
+          sx={{ height: 40, maxWidth: 130 }}
+          color="info" 
+          type="submit"
+        >
+          Submit
+        </Button>
       </form>
     </div>
   );

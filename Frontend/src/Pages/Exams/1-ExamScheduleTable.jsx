@@ -27,14 +27,13 @@ import {
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import EditIcon from '@mui/icons-material/Edit';
 import { useTheme } from "@mui/material";
+import Swal from "sweetalert2";
 
 const ExamScheduleTable = () => {
   const navigate = useNavigate();
   const { speciality, year, semester } = useParams();
   const [examData, setExamData] = useState([]);
   const [editedData, setEditedData] = useState([]);
-  // const [showQrColumn, setShowQrColumn] = useState(false);
-  // const [addTeachers, setAddTeachers] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedExam, setSelectedExam] = useState(null);
   const theme = useTheme();
@@ -54,7 +53,6 @@ const ExamScheduleTable = () => {
   }, [year, speciality, semester]);
 
   const handleDialogOpen = (exam) => {
-    console.log('Selected exam time:', exam.time);  // Log to check the date value
     setSelectedExam({ ...exam });
     setOpenDialog(true);
   };
@@ -79,7 +77,10 @@ const ExamScheduleTable = () => {
         time: selectedExam.time,
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to update");
+        return response.json();
+      })
       .then(() => {
         const updated = examData.map((item) =>
           item.id === selectedExam.id ? selectedExam : item
@@ -87,25 +88,49 @@ const ExamScheduleTable = () => {
         setExamData(updated);
         setEditedData(updated);
         handleDialogClose();
+
+        // SweetAlert2 success toast
+        Swal.fire({
+          icon: "success",
+          title: "Exam updated successfully!",
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+        });
       })
-      .catch((error) => console.error("Error updating data:", error));
+      .catch((error) => {
+        console.error("Error updating data:", error);
+
+        // SweetAlert2 error toast
+        Swal.fire({
+          icon: "error",
+          title: "Failed to update exam!",
+          text: error.message,
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+        });
+      });
   };
 
   return (
-    <Box sx={{ m:0,p:0 }}>
-      
+    <Box sx={{ m: 0, p: 0 }}>
       <TableContainer elevation={0} component={Paper} className="Examan-MainTable">
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="left" sx={{fontWeight:"bolder"}}>Date</TableCell>
-              <TableCell align="left" sx={{fontWeight:"bolder"}}>Exam</TableCell>
-              <TableCell align="left" sx={{fontWeight:"bolder"}}>Place</TableCell>
-              <TableCell align="left" sx={{fontWeight:"bolder"}}>Time</TableCell>
-              <TableCell align="center" sx={{fontWeight:"bolder"}}>QR State</TableCell>
-              <TableCell align="center" sx={{fontWeight:"bolder"}}>Surveillance</TableCell>
-              <TableCell align="center" sx={{fontWeight:"bolder"}}>Edit</TableCell>
-              <TableCell align="left" sx={{fontWeight:"bolder"}}></TableCell>
+              <TableCell align="left" sx={{ fontWeight: "bolder" }}>Date</TableCell>
+              <TableCell align="left" sx={{ fontWeight: "bolder" }}>Exam</TableCell>
+              <TableCell align="left" sx={{ fontWeight: "bolder" }}>Place</TableCell>
+              <TableCell align="left" sx={{ fontWeight: "bolder" }}>Time</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bolder" }}>QR State</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bolder" }}>Surveillance</TableCell>
+              <TableCell align="center" sx={{ fontWeight: "bolder" }}>Edit</TableCell>
+              <TableCell align="left" sx={{ fontWeight: "bolder" }}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -123,28 +148,37 @@ const ExamScheduleTable = () => {
                     const fourHoursInMs = 4 * 60 * 60 * 1000;
 
                     if (now - examDateTime > fourHoursInMs) {
-                        return (
-                          <Button
-                            variant="outlined"
-                            color="absent"
-                            onClick={() =>console.log("hhh")}
-                            >
+                      return (
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        onClick={() => {
+                          Swal.fire({
+                            icon: 'warning',
+                            title: "Exam ended",
+                            text: "You can't scan QR code now.",
+                            toast: true,
+                            position: 'bottom-end',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true,
+                          });
+                        }}
+                      >
+                        Ended
+                      </Button>
 
-                            Ended
-                          </Button>
-                        );
+                      );
                     } else {
                       return (
                         <Button
                           variant="outlined"
-                          color="present"
+                          color="success"
                           onClick={() =>
                             navigate(`${row.subject_name}/qr-scanner`, {
                               state: { module: row.subject_name },
                             })
                           }
-                          // sx={{color:`${theme.palette.text.rev}`,boxShadow:0}}
-                          
                         >
                           Scan QR
                         </Button>
@@ -153,26 +187,19 @@ const ExamScheduleTable = () => {
                   })()}
                 </TableCell>
 
-               
-                  <TableCell align="center">
-
-                    <Box sx={{display:"flex",flexDirection:"column",alignItems:"center"}}>
-                      <Typography variant="h8">{row.teacher_count}</Typography>
-                      <Button
-                      sx={{width:"30px",height:"30px"}}
+                <TableCell align="center">
+                  <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                    <Typography variant="body2">{row.teacher_count}</Typography>
+                    <Button
+                      sx={{ width: "30px", height: "30px" }}
                       variant="outlined"
                       color="primary"
-                      onClick={() =>
-                        navigate(`${row.subject_name}/SerTeacher/`)
-                      }
+                      onClick={() => navigate(`${row.subject_name}/SerTeacher/`)}
                     >
                       +
-                     
                     </Button>
-                    </Box>
-                    
-                  </TableCell>
-                
+                  </Box>
+                </TableCell>
 
                 <TableCell align="center">
                   <IconButton onClick={() => handleDialogOpen(row)}>
@@ -186,7 +213,6 @@ const ExamScheduleTable = () => {
                     variant="outlined"
                     onClick={() => navigate(`${row.id}/presence`)}
                     startIcon={<ArrowForwardIcon />}
-                    // sx={{ border: "1px solid", borderRadius: '0.5rem' }}
                   >
                     View Exam
                   </Button>
@@ -199,14 +225,24 @@ const ExamScheduleTable = () => {
 
       {/* Dialog for editing exam */}
       {selectedExam && (
-        <Dialog open={openDialog} onClose={handleDialogClose}>
+        <Dialog
+          open={openDialog}
+          onClose={handleDialogClose}
+          PaperProps={{
+            elevation: 0,
+            sx: {
+              boxShadow: "none",
+              border: "1px solid #ccc",
+              padding: 3,
+            },
+          }}
+        >
           <DialogTitle>Edit <b>"{selectedExam.subject_name}"</b> Exam</DialogTitle>
           <DialogContent
             sx={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: "300px" }}
           >
-
             <TextField
-              sx={{ mt:1 }}
+              sx={{ mt: 1 }}
               label="Date"
               type="date"
               value={selectedExam.date}
@@ -218,18 +254,6 @@ const ExamScheduleTable = () => {
               value={selectedExam.amphi}
               onChange={(e) => handleDialogChange("amphi", e.target.value)}
             />
-
-            {/* <Select
-              label="Time"
-              value={selectedExam.time}
-              onChange={(e) => handleDialogChange("time", e.target.value)}
-              // displayEmpty
-            >
-              {timeOptions.map((time) => (
-                <MenuItem key={time} value={time}>{time}</MenuItem>
-              ))}
-            </Select> */}
-
             <FormControl fullWidth>
               <InputLabel id="time-label">Time</InputLabel>
               <Select
@@ -243,7 +267,6 @@ const ExamScheduleTable = () => {
                 ))}
               </Select>
             </FormControl>
-
           </DialogContent>
           <DialogActions>
             <Button onClick={handleDialogClose}>Cancel</Button>

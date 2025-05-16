@@ -32,7 +32,7 @@ export default function LogInStudent() {
           >
             {/* Popping SVG */}
             <motion.img
-              className='Login-SVG'
+              className='Login-SVG-Student'
               src={StudentSvg}
               alt="Student"
               initial={{ scale: 0.8, opacity: 0 }}

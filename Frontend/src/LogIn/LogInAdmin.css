@@ -11,7 +11,9 @@
 .LeftSide-LogIn{
     width: 56rem;
     height: 100%;
-    border-radius:0 15rem 15rem 0 ;
+    /* border-radius:0 15rem 15rem 0 ; */
+    border-radius:0 30rem 30rem 0 ;
+
     /* border-radius:0 50% 50% 0 ; */
 
     background-color: #96d7fa;
@@ -24,8 +26,10 @@
 }
 .LeftSide-LogIn2{
     width: 95%;
-    height: 100%;
-    border-radius:0 17rem 17rem 0 ;
+    height: 99%;
+    /* border-radius:0 17rem 17rem 0 ; */
+    border-radius:0 30rem 30rem 0 ;
+
     /* border-radius:0 50% 50% 0 ; */
 
 
@@ -42,7 +46,7 @@
 .LeftSide-LogIn3{
     width: 90%;
     height: 100%;
-    border-radius:0 17rem 17rem 0 ;
+    border-radius:0 30rem 30rem 0 ;
     /* border-radius:0 50% 50% 0 ; */
 
 
@@ -99,10 +103,25 @@
 }
 
 
-.Login-SVG{
+.Login-SVG-Admin{
     height: 40rem;
     position: absolute;
-    right: 24%;
+    /* right: 24%; */
+    left:8% ;
+    bottom: 4rem;
+}
+.Login-SVG-Teacher{
+    height: 40rem;
+    position: absolute;
+    /* right: 24%; */
+    left:2.5% ;
+    bottom: 4rem;
+}
+.Login-SVG-Student{
+    height: 40rem;
+    position: absolute;
+    /* right: 24%; */
+    left:2.5% ;
     bottom: 4rem;
 }
 /* .LogIn-Text{

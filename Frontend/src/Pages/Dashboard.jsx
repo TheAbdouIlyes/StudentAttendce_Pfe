@@ -4,7 +4,8 @@ import {
   Grid,
   Card,
   Typography,
-  CircularProgress
+  CircularProgress,
+  Fade,
 } from "@mui/material";
 import {
   People,
@@ -20,30 +21,23 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  LineChart,
-  Line,
 } from "recharts";
 import { useTheme } from "@mui/material/styles";
-import { PieChart } from '@mui/x-charts/PieChart';
+import { PieChart } from "@mui/x-charts/PieChart";
 
-const specialties = ["info","physic","gestion","biology","pharmacy","medcine"];
+const specialties = ["info", "physic", "gestion", "biology", "pharmacy", "medcine"];
 const levels = ["L1", "L2", "L3", "M1", "M2"];
-// const pieColors = ["#4caf50", "#66bb6a", "#81c784", "#a5d6a7", "#c8e6c9", "#e8f5e9"];
 
-// Sample data for OS distribution
 const desktopOS = [
-  { id: 0, value: 10, label: 'Windows' },
-  { id: 1, value: 15, label: 'MacOS' },
-  // { id: 2, value: 20, label: 'Linux' },
+  { id: 0, value: 10, label: "Windows" },
+  { id: 1, value: 15, label: "MacOS" },
 ];
+
 const desktopOS1 = [
-  { id: 0, value: 10, label: 'Windows' },
-  { id: 1, value: 15, label: 'MacOS' },
-  { id: 2, value: 20, label: 'Linux' },
+  { id: 0, value: 10, label: "Windows" },
+  { id: 1, value: 15, label: "MacOS" },
+  { id: 2, value: 20, label: "Linux" },
 ];
-
-
-const valueFormatter = (value) => `${value}%`;
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -56,19 +50,37 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        // General stats
         const statsRes = await fetch("http://127.0.0.1:8000/adminstats/");
         const stats = await statsRes.json();
 
         setStatsData([
-          { label: "Total Students", count: stats.students_count, icon: <People sx={{ fontSize: 40, color: "#1976d2" }} /> },
-          { label: "Total Teachers", count: stats.teacher_count, icon: <People sx={{ fontSize: 40, color: "#1976d2" }} /> },
-          { label: "Total Exams", count: stats.exam_count, icon: <EventNote sx={{ fontSize: 40, color: "#7b1fa2" }} /> },
-          { label: "Attendances", count: stats.attendance_count, icon: <CheckCircle sx={{ fontSize: 40, color: "#388e3c" }} /> },
-          { label: "Absences", count: stats.absences_count, icon: <Cancel sx={{ fontSize: 40, color: "#d32f2f" }} /> },
+          {
+            label: "Total Students",
+            count: stats.students_count,
+            icon: <People sx={{ fontSize: 40, color: "#1976d2" }} />,
+          },
+          {
+            label: "Total Teachers",
+            count: stats.teacher_count,
+            icon: <People sx={{ fontSize: 40, color: "#1976d2" }} />,
+          },
+          {
+            label: "Total Exams",
+            count: stats.exam_count,
+            icon: <EventNote sx={{ fontSize: 40, color: "#7b1fa2" }} />,
+          },
+          {
+            label: "Attendances",
+            count: stats.attendance_count,
+            icon: <CheckCircle sx={{ fontSize: 40, color: "#388e3c" }} />,
+          },
+          {
+            label: "Absences",
+            count: stats.absences_count,
+            icon: <Cancel sx={{ fontSize: 40, color: "#d32f2f" }} />,
+          },
         ]);
 
-        // Attendance by specialty
         const specialtyResults = await Promise.all(
           specialties.map(async (s) => {
             const res = await fetch(`http://127.0.0.1:8000/Présences_par_Spécialité/${s}`);
@@ -82,7 +94,6 @@ const Dashboard = () => {
         );
         setAttendanceBySpecialty(specialtyResults);
 
-        // Attendance by level
         const levelResults = await Promise.all(
           levels.map(async (l) => {
             const res = await fetch(`http://127.0.0.1:8000/Présences_par_level/${l}`);
@@ -105,41 +116,42 @@ const Dashboard = () => {
     fetchStats();
   }, []);
 
-  // Prepare data for the new PieChart format
   const detailedPresenceRates = attendanceBySpecialty.map((s, index) => ({
     id: index,
     value: Math.round((s.present / (s.present + s.absent)) * 100),
     label: s.name,
-    // color: pieColors[index % pieColors.length]
   }));
 
-  const attendanceOverTime = [
-    { date: "Jan", Informatique: 80, Mathématiques: 70, Chimie: 75, Physique: 85, Biologie: 65, Géologie: 60 },
-    { date: "Feb", Informatique: 85, Mathématiques: 75, Chimie: 80, Physique: 90, Biologie: 70, Géologie: 65 },
-    { date: "Mar", Informatique: 88, Mathématiques: 80, Chimie: 82, Physique: 95, Biologie: 72, Géologie: 68 },
-    { date: "Apr", Informatique: 90, Mathématiques: 85, Chimie: 85, Physique: 93, Biologie: 75, Géologie: 70 },
-  ];
-  console.log(attendanceBySpecialty)
   return (
     <Box sx={{ p: 4, pt: 0 }}>
-      {loading ? (
-        <Box textAlign="center" py={10}>
-          <CircularProgress />
+      <Fade in={loading}>
+        <Box
+          sx={{
+            display: loading ? "flex" : "none",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            minHeight: "60vh",
+            gap: 2,
+          }}
+        >
+          <CircularProgress size={60} />
+          <Typography variant="h6" color="text.secondary">
+            Loading dashboard...
+          </Typography>
         </Box>
-      ) : (
-        <>
-          {/* <Typography variant="h6" color="text.main" mb={1}>
-            Welcome to the Administrator Dashboard 
-          </Typography> */}
+      </Fade>
 
+      {!loading && (
+        <>
           {/* Stats Cards */}
-          <Box sx={{ display: "flex", alignItems: "ceter", justifyContent: "space-evenly", flexWrap: "wrap" }} gap={2}>
+          <Box sx={{ display: "flex", justifyContent: "space-evenly", flexWrap: "wrap" }} gap={2}>
             {statsData.map((item, index) => (
               <Card
                 elevation={0}
                 key={index}
                 sx={{
-                  width: 'calc(20% - 16px)',
+                  width: "calc(20% - 16px)",
                   minWidth: 150,
                   height: 100,
                   border: `1.5px solid ${theme.palette.border}`,
@@ -162,90 +174,76 @@ const Dashboard = () => {
             ))}
           </Box>
 
-          {/* Charts */}
-
-
-
-            {/* 3 circles */}
-          <Grid container spacing={2} sx={{pb:2}}>
-
-            {/* Updated Taux de Présence par Spécialité (%) chart */}
-              <Grid item xs={12} md={4}>
-                <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                  <Typography variant="h6" textAlign={"center"}>
-                    Total Students by Specialty
-                  </Typography>
-                  <Box sx={{ height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <PieChart
-                      series={[
-                        {
-                          data: detailedPresenceRates,
-                          highlightScope: { fade: 'global', highlight: 'item' },
-                          faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                          // valueFormatter,
-                          // arcLabel: (item) => `${item.label}: ${item.value}%`,
-                        },
-                      ]}
-                      width={350}
-                      height={180}
-                      hideLegend
-                    />
-                  </Box>
-                </Card>
-              </Grid>
-
-              {/* OS Distribution chart */}
-              <Grid item xs={12} md={4}>
-                <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                  <Typography variant="h6" textAlign={"center"} >
-                    Available Professors ( Free )
-                  </Typography>
-                  <Box sx={{ height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <PieChart
-                      series={[
-                        {
-                          data: desktopOS,
-                          highlightScope: { fade: 'global', highlight: 'item' },
-                          faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                          // valueFormatter,
-                        },
-                      ]}
-                      width={400}
-                      height={200}
-                      hideLegend
-                    />
-                  </Box>
-                </Card>
-              </Grid>
-
-              <Grid item xs={12} md={4}>
-                <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                  <Typography variant="h6" textAlign={"center"} >
-                    not yet
-                  </Typography>
-                  <Box sx={{ height: 300, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <PieChart
-                      series={[
-                        {
-                          data: desktopOS1,
-                          highlightScope: { fade: 'global', highlight: 'item' },
-                          faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
-                          // valueFormatter,
-                        },
-                      ]}
-                      width={400}
-                      height={200}
-                      hideLegend
-                    />
-                  </Box>
-                </Card>
-              </Grid>
-
+          {/* Pie Charts Section */}
+          <Grid container spacing={2} sx={{ pb: 2 }}>
+            <Grid item xs={12} md={4}>
+              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
+                <Typography variant="h6" textAlign={"center"}>
+                  Total Students by Specialty
+                </Typography>
+                <Box sx={{ height: 300, display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <PieChart
+                    series={[
+                      {
+                        data: detailedPresenceRates,
+                        highlightScope: { fade: "global", highlight: "item" },
+                        faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
+                      },
+                    ]}
+                    width={350}
+                    height={180}
+                    hideLegend
+                  />
+                </Box>
+              </Card>
             </Grid>
 
+            <Grid item xs={12} md={4}>
+              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
+                <Typography variant="h6" textAlign={"center"}>
+                  Available Professors (Free)
+                </Typography>
+                <Box sx={{ height: 300, display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <PieChart
+                    series={[
+                      {
+                        data: desktopOS,
+                        highlightScope: { fade: "global", highlight: "item" },
+                        faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
+                      },
+                    ]}
+                    width={400}
+                    height={200}
+                    hideLegend
+                  />
+                </Box>
+              </Card>
+            </Grid>
 
+            <Grid item xs={12} md={4}>
+              <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
+                <Typography variant="h6" textAlign={"center"}>
+                  Not Yet
+                </Typography>
+                <Box sx={{ height: 300, display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <PieChart
+                    series={[
+                      {
+                        data: desktopOS1,
+                        highlightScope: { fade: "global", highlight: "item" },
+                        faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
+                      },
+                    ]}
+                    width={400}
+                    height={200}
+                    hideLegend
+                  />
+                </Box>
+              </Card>
+            </Grid>
+          </Grid>
 
-          {/* 2 grpahes */}
+          {/* Bar Charts Section */}
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
@@ -282,8 +280,6 @@ const Dashboard = () => {
                 </ResponsiveContainer>
               </Card>
             </Grid>
-            
-            
           </Grid>
         </>
       )}

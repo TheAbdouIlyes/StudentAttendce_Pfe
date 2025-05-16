@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-
+import Swal from 'sweetalert2';
 
 export default function LogInteacherform() {
   const [credentials, setCredentials] = useState({ matricul: '', secret_number: '' });
@@ -25,22 +25,46 @@ export default function LogInteacherform() {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            matricul: credentials.matricul, 
-            secret_number: credentials.secret_number
+          matricul: credentials.matricul,
+          secret_number: credentials.secret_number
         })
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("accessToken", data.access); // Store token
+        localStorage.setItem("accessToken", data.access);
         localStorage.setItem("refreshToken", data.refresh);
         localStorage.setItem("role", data.role);
-        navigate("Dashboard"); // Redirect after successful login
+
+        // ✅ Show success alert
+        Swal.fire({
+          icon: 'success',
+          title: 'Login successful!',
+          text: 'Redirecting to your dashboard...',
+          timer: 2000,
+          showConfirmButton: false
+        });
+
+        setTimeout(() => {
+          navigate("Dashboard");
+        }, 2000);
       } else {
+        // ❌ Invalid credentials alert
+        Swal.fire({
+          icon: 'error',
+          title: 'Invalid credentials',
+          text: 'Please check your matricul and secret number.'
+        });
         setError("Invalid credentials. Please try again.");
       }
     } catch (error) {
+      // ❌ Network error alert
+      Swal.fire({
+        icon: 'error',
+        title: 'Network Error',
+        text: 'Something went wrong. Please check your connection.'
+      });
       setError("Something went wrong. Please check your connection.");
     }
   };
@@ -66,7 +90,7 @@ export default function LogInteacherform() {
             fullWidth
             id="secret_number"
             name="secret_number"
-            type="secret_number"
+            type="password"
             value={credentials.secret_number}
             onChange={handleInputChange}
             required
@@ -75,12 +99,14 @@ export default function LogInteacherform() {
 
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-         <Button 
-                variant='contained' 
-                sx={{height:40 ,maxWidth:130}}
-                color="info" 
-                type="submit" 
-               >Submit</Button>
+        <Button
+          variant='contained'
+          sx={{ height: 40, maxWidth: 130 }}
+          color="info"
+          type="submit"
+        >
+          Submit
+        </Button>
       </form>
     </div>
   );

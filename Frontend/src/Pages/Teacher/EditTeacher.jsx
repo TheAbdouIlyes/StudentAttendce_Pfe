@@ -1,51 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { TextField, Button, Paper, List, ListItem, IconButton, MenuItem,Box } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
-import ReturnButton from "../../comps/ReturnButton";
-import DeleteIcon from "@mui/icons-material/Delete";
-// import { Box } from "lucide-react";
+import { TextField, Button, Paper, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
-export default function EditTeacher({teacherId, onClose, onAdd }) {
+export default function EditTeacher({ teacherId, onClose, onAdd }) {
   const navigate = useNavigate();
-  const  id  = teacherId ;
+  const id = teacherId;
+
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
     email: "",
   });
 
-  const [subjects, setSubjects] = useState([]); // Assigned subjects
-  const [availableSubjects, setAvailableSubjects] = useState([]); // All available subjects
-  const [newSubject, setNewSubject] = useState(""); // Store subject name
+  const [originalFormData, setOriginalFormData] = useState(null); // for comparison
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [matricul, setMatricul] = useState(""); // Single value for matricul
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch teacher info
         const teacherResponse = await fetch(`http://127.0.0.1:8000/teacher/info/${id}`);
         if (!teacherResponse.ok) throw new Error("Failed to fetch teacher data");
         const teacherData = await teacherResponse.json();
-        setFormData({
+
+        const data = {
           first_name: teacherData.first_name || "",
           last_name: teacherData.last_name || "",
           email: teacherData.email || "",
-        });
-        setMatricul(teacherData.matricul || ""); // Ensure matricul is set correctly
+        };
 
-        // Fetch assigned subjects
-        const subjectsResponse = await fetch(`http://127.0.0.1:8000/teacher_subject/${id}`);
-        if (!subjectsResponse.ok) throw new Error("Failed to fetch assigned subjects");
-        const assignedSubjects = await subjectsResponse.json();
-        setSubjects(Array.isArray(assignedSubjects) ? assignedSubjects : []);
-
-        // Fetch all available subjects
-        const availableResponse = await fetch("http://127.0.0.1:8000/subjects/");
-        if (!availableResponse.ok) throw new Error("Failed to fetch subjects list");
-        const availableData = await availableResponse.json();
-        setAvailableSubjects(Array.isArray(availableData) ? availableData : []);
+        setFormData(data);
+        setOriginalFormData(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -60,101 +46,105 @@ export default function EditTeacher({teacherId, onClose, onAdd }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const isUnchanged = () => {
+    return (
+      originalFormData &&
+      formData.first_name === originalFormData.first_name &&
+      formData.last_name === originalFormData.last_name &&
+      formData.email === originalFormData.email
+    );
+  };
+
   const handleSave = async () => {
+    if (isUnchanged()) {
+      Swal.fire({
+        icon: "info",
+        title: "No changes detected",
+        text: "Nothing was changed to save.",
+        position: "bottom-end",
+        showConfirmButton: false,
+        timer: 2000,
+        toast: true,
+      });
+      return;
+    }
+
     try {
       const response = await fetch(`http://127.0.0.1:8000/u_teacher/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
+
       if (!response.ok) throw new Error("Failed to update teacher");
-      // navigate(-1);
+
+      Swal.fire({
+        icon: "success",
+        title: "Teacher updated",
+        text: "The teacher's information has been successfully updated.",
+        position: "bottom-end",
+        showConfirmButton: false,
+        timer: 2000,
+        toast: true,
+      });
+
+      onAdd(formData);
+      onClose();
     } catch (err) {
-      setError(err.message);
+      Swal.fire({
+        icon: "error",
+        title: "Update failed",
+        text: err.message || "Something went wrong.",
+        position: "bottom-end",
+        showConfirmButton: false,
+        timer: 2000,
+        toast: true,
+      });
     }
-    onAdd(formData);
-    onClose();
   };
-
-  // const handleAddSubject = async () => {
-  //   if (!newSubject || !matricul) return;
-
-  //   // Check if subject exists in availableSubjects
-  //   const subjectToAdd = availableSubjects.find((subj) => subj.name === newSubject);
-  //   if (!subjectToAdd) return;
-
-  //   try {
-  //     const response = await fetch(`http://127.0.0.1:8000/tea/${matricul}/sub/${newSubject}/`, { method: "POST" });
-  //     if (!response.ok) throw new Error("Failed to assign subject");
-
-  //     setSubjects([...subjects, subjectToAdd]); // Add subject object to state
-  //     setNewSubject("");
-  //   } catch (err) {
-  //     setError(err.message);
-  //   }
-  // };
-
-  // const handleRemoveSubject = async (subjectName) => {
-  //   if (!matricul) return;
-  //   try {
-  //     const response = await fetch(`http://127.0.0.1:8000/tea/${matricul}/sub/${subjectName}/not`, { method: "DELETE" });
-  //     if (!response.ok) throw new Error("Failed to remove subject");
-  //     setSubjects(subjects.filter((sub) => sub.name !== subjectName));
-  //   } catch (err) {
-  //     setError(err.message);
-  //   }
-  // };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-    <Paper elevation={0} sx={{ padding: 3, pb:5, maxWidth: 500, margin: "auto"}}>
-      <Box sx={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+    <Paper elevation={0} sx={{ padding: 3, pb: 5, maxWidth: 500, margin: "auto" }}>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <h2>Edit Teacher {id}</h2>
       </Box>
-      
-      <TextField fullWidth label="First Name" name="first_name" value={formData.first_name} onChange={handleChange} margin="normal" />
-      <TextField fullWidth label="Last Name" name="last_name" value={formData.last_name} onChange={handleChange} margin="normal" />
-      <TextField fullWidth label="Email" name="email" value={formData.email} onChange={handleChange} margin="normal" />
-      
-       <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
-      <Button variant="outlined" color="primary" onClick={onClose}  sx={{ pr:1,pl:1,mt: 2,border:0 }}>Cancel</Button>
-      <Button variant="contained"color="info" sx={{ mt: 2,border:0 }} onClick={handleSave} >Save</Button>
-      </Box>
-
-      {/* <h3>Subjects</h3>
-      <List>
-        {subjects.map((subject) => (
-          <ListItem key={subject.name} secondaryAction={
-            <IconButton edge="end" onClick={() => handleRemoveSubject(subject.name)}>
-              <DeleteIcon />
-            </IconButton>
-          }>
-            {subject.name}
-          </ListItem>
-        ))}
-      </List>
 
       <TextField
-        select
         fullWidth
-        label="New Subject"
-        value={newSubject}
-        onChange={(e) => setNewSubject(e.target.value)}
+        label="First Name"
+        name="first_name"
+        value={formData.first_name}
+        onChange={handleChange}
         margin="normal"
-      >
-        {availableSubjects
-          .filter((subj) => !subjects.some((assigned) => assigned.name === subj.name)) // Ensure no duplicate assignment
-          .map((subject) => (
-            <MenuItem key={subject.name} value={subject.name}>
-              {subject.name}
-            </MenuItem>
-          ))}
-      </TextField>
-      <Button variant="contained" color="secondary" onClick={handleAddSubject} sx={{ marginTop: 2 }}>
-        Add Subject
-      </Button> */}
+      />
+      <TextField
+        fullWidth
+        label="Last Name"
+        name="last_name"
+        value={formData.last_name}
+        onChange={handleChange}
+        margin="normal"
+      />
+      <TextField
+        fullWidth
+        label="Email"
+        name="email"
+        value={formData.email}
+        onChange={handleChange}
+        margin="normal"
+      />
+
+      <Box display="flex" justifyContent="flex-end" gap={2} mt={2}>
+        <Button variant="outlined" color="primary" onClick={onClose} sx={{ pr: 1, pl: 1, mt: 2, border: 0 }}>
+          Cancel
+        </Button>
+        <Button variant="contained" color="info" sx={{ mt: 2, border: 0 }} onClick={handleSave}>
+          Save
+        </Button>
+      </Box>
     </Paper>
   );
 }

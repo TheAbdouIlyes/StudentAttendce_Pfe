@@ -15,6 +15,7 @@ import {
   MenuItem,
   Box
 } from "@mui/material";
+import Swal from "sweetalert2";
 import ReturnButton from "../../comps/ReturnButton";
 
 export default function AddTeacher({ onClose, onAdd }) {
@@ -25,7 +26,7 @@ export default function AddTeacher({ onClose, onAdd }) {
     secret_number: "",
     matricul: ""
   });
-  
+
   const [teachers, setTeachers] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState("");
@@ -50,51 +51,113 @@ export default function AddTeacher({ onClose, onAdd }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(teacherData)
       });
-  
-      const result = await response.json(); // Get backend response
 
-      onAdd(teacherData); // callback to update parent
-      onClose(); // close modal
-  
+      const result = await response.json();
+
       if (!response.ok) {
         if (response.status === 400 && result?.error?.includes("already exists")) {
-          alert("Error: A teacher with this email or matricule already exists.");
+          Swal.fire({
+            icon: "error",
+            title: "A teacher with this email or matricule already exists.",
+            toast: true,
+            position: "bottom-end",
+            showConfirmButton: false,
+            timer: 2000,
+          });
         } else {
-          alert("Failed to add teacher: " + result.error);
+          Swal.fire({
+            icon: "error",
+            title: `Failed to add teacher: ${result.error}`,
+            toast: true,
+            position: "bottom-end",
+            showConfirmButton: false,
+            timer: 2000,
+          });
         }
         return;
       }
-  
-      // If successful, add teacher to state
+
+      onAdd(teacherData);
+      onClose();
       setTeachers([...teachers, result]);
       setTeacherData({ first_name: "", last_name: "", email: "", secret_number: "", matricul: "" });
-  
+
+      Swal.fire({
+        icon: "success",
+        title: "Teacher added successfully",
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        timer: 2000,
+      });
     } catch (error) {
       console.error("Error:", error);
-      alert("Something went wrong. Please try again.");
+      Swal.fire({
+        icon: "error",
+        title: "Something went wrong. Please try again.",
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        timer: 2000,
+      });
     }
   };
-  
 
   const assignSubject = async () => {
     if (!selectedTeacher || !selectedSubject) {
-      alert("Please select a teacher and a subject");
+      Swal.fire({
+        icon: "warning",
+        title: "Please select both a teacher and a subject",
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        timer: 2000,
+      });
       return;
     }
 
-    try {
-      const response = await fetch(`http://127.0.0.1:8000/tea/${selectedTeacher}/sub/${selectedSubject}/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" }
-      });
+    const confirmResult = await Swal.fire({
+      title: "Assign subject?",
+      text: `Assign "${selectedSubject}" to teacher "${selectedTeacher}"?`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes, assign",
+      cancelButtonText: "Cancel",
+      toast: true,
+      position: "bottom-end",
+    });
 
-      if (!response.ok) {
-        throw new Error("Failed to assign subject");
-      }
-      alert("Subject assigned successfully");
+    if (!confirmResult.isConfirmed) return;
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/tea/${selectedTeacher}/sub/${selectedSubject}/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" }
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to assign subject");
+
+      Swal.fire({
+        icon: "success",
+        title: "Subject assigned successfully",
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        timer: 2000,
+      });
     } catch (error) {
       console.error("Error:", error);
-      alert(error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Error assigning subject",
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        timer: 2000,
+      });
     }
   };
 
@@ -107,12 +170,12 @@ export default function AddTeacher({ onClose, onAdd }) {
         <TextField label="Email" name="email" value={teacherData.email} onChange={handleChange} required />
         <TextField label="Secret Number" name="secret_number" value={teacherData.secret_number} onChange={handleChange} required />
         <TextField label="Matricule" name="matricul" value={teacherData.matricul} onChange={handleChange} required />
-        <Box display="flex" justifyContent="flex-end" sx={{mb:2}} gap={2} mt={2}>
-          <Button variant="outlined" color="primary" onClick={onClose}  sx={{ pr:1,pl:1,mt: 2,border:0 }}>Cancel</Button>
-          <Button variant="contained"color="info" sx={{ mt: 2,border:0 }}  type="submit">Add</Button>
+        <Box display="flex" justifyContent="flex-end" sx={{ mb: 2 }} gap={2} mt={2}>
+          <Button variant="outlined" color="primary" onClick={onClose} sx={{ pr: 1, pl: 1, mt: 2, border: 0 }}>Cancel</Button>
+          <Button variant="contained" color="info" sx={{ mt: 2, border: 0 }} type="submit">Add</Button>
         </Box>
       </form>
-      
+
       {teachers.length > 0 && (
         <TableContainer component={Paper} style={{ marginTop: "20px" }}>
           <Table>
@@ -137,7 +200,7 @@ export default function AddTeacher({ onClose, onAdd }) {
           </Table>
         </TableContainer>
       )}
-      
+
       {/* <h3>Assign Subject to Teacher</h3>
       <FormControl fullWidth>
         <InputLabel>Teacher Matricule</InputLabel>
@@ -147,7 +210,7 @@ export default function AddTeacher({ onClose, onAdd }) {
           ))}
         </Select>
       </FormControl>
-      
+
       <FormControl fullWidth style={{ marginTop: "10px" }}>
         <InputLabel>Subject</InputLabel>
         <Select value={selectedSubject} onChange={(e) => setSelectedSubject(e.target.value)}>
@@ -156,12 +219,10 @@ export default function AddTeacher({ onClose, onAdd }) {
           ))}
         </Select>
       </FormControl>
-      
+
       <Button onClick={assignSubject} variant="contained" color="secondary" style={{ marginTop: "10px" }}>
         Assign Subject
       </Button> */}
-
-      
     </div>
   );
 }

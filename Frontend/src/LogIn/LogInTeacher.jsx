@@ -29,9 +29,9 @@ export default function LogInTeacher() {
         transition={{ duration: 0.45, ease: "easeOut" }}
         >
            <motion.img
-              className='Login-SVG'
+              className='Login-SVG-Teacher'
               src={TeacherSvg}
-              alt="Admin"
+              alt="Teacher"
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}

@@ -34,7 +34,7 @@ export default function LogInAdmin() {
           >
             {/* Popping admin SVG */}
             <motion.img
-              className='Login-SVG'
+              className='Login-SVG-Admin'
               src={AdminSvg}
               alt="Admin"
               initial={{ scale: 0.8, opacity: 0 }}
