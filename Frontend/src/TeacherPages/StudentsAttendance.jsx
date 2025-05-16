@@ -78,21 +78,21 @@ export default function StudentsAttendance() {
 
 
 
-  const fetchAllStudents = async () => {
-  let page = 1;
-  let allStudents = [];
-  let totalPages = 1;
+const fetchAllStudents = async () => {
+let page = 1;
+let allStudents = [];
+let totalPages = 1;
 
-  do {
-    const response = await fetch(`http://127.0.0.1:8000/student/subject/${exam}?page=${page}`);
-    if (!response.ok) throw new Error("Failed to fetch students");
-    const data = await response.json();
-    totalPages = Math.ceil(data.count / 5);
-    allStudents = allStudents.concat(data.results);
-    page++;
-  } while (page <= totalPages);
+do {
+  const response = await fetch(`http://127.0.0.1:8000/student/subject/${exam}?page=${page}`);
+  if (!response.ok) throw new Error("Failed to fetch students");
+  const data = await response.json();
+  totalPages = Math.ceil(data.count / 5);
+  allStudents = allStudents.concat(data.results);
+  page++;
+} while (page <= totalPages);
 
-  return allStudents;
+return allStudents;
 };
 
 
