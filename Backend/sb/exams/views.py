@@ -1089,9 +1089,11 @@ class adminstats(APIView):
             expected_attendance += expected_students
 
         absences_count = expected_attendance - attendance_count
-
+        nd=now.date()
+        nt=now.time()
+        exams1 = Exam.objects.filter(date__lt=nd,time__lt=nt)
         # 🔹 Teachers without any surveillance duties
-        assigned_teacher_ids = surveillance.objects.values_list("teacher_id", flat=True).distinct()
+        assigned_teacher_ids = surveillance.objects.filter(exam__in=exams1).values_list("teacher_id", flat=True).distinct()
         teachers_without_duty = teacher.objects.exclude(id__in=assigned_teacher_ids).count()
 
         # 🔹 Exams that have ended (date + time < now)
@@ -1177,7 +1179,7 @@ class Présences_par_level(APIView):
            return JsonResponse({"absences_count": absences_count, "attendance_count": Attendance_count})
 
 
-
+from django.db.models import Q
 
 class StudentStats(APIView):
 
@@ -1190,13 +1192,21 @@ class StudentStats(APIView):
 
         level1= student_instance.level
         spesiality1= student_instance.speciality
-        exam_count=Exam.objects.filter(subject__level=level1,subject__speciality=spesiality1,subject__semester=semester1).count()
+        exam=Exam.objects.filter(subject__level=level1,subject__speciality=spesiality1,subject__semester=semester1)
+        exam_count=exam.count()
         now = timezone.now()
         nd=now.date()
         nt=now.time()
-        exams=Exam.objects.filter(subject__level=level1,subject__speciality=spesiality1,subject__semester=semester1,date__lt=nd,time__lt=nt)
+        exams=exam.filter(date__lt=nd, time__lt=nt)
+        exam_1= 0
+        for e in exam:
+            exam_datetime = timezone.make_aware(datetime.combine(e.date, e.time))
+            if exam_datetime < now:
+             exam_1+=1
+            
         Attendance_count =Attendance.objects.filter(student= student_instance,exam__in=exams).count()
-        absence_count= exam_count - Attendance_count
+
+        absence_count= exam_1 - Attendance_count
         nom=request.user.last_name
         prenom=request.user.first_name
         return JsonResponse({"absences_count": absence_count, "attendance_count": Attendance_count,"exam_count": exam_count,"nom":nom,"prenom":prenom})
@@ -1213,7 +1223,7 @@ class teacherstats(APIView):
         lname1 = teacher_instance.user.last_name
         fname1= teacher_instance.user.first_name
         modul_count= teach.objects.filter(teacher= teacher_instance).count()
-        duties_count= surveillance.objects.filter(teacher= teacher_instance).count()
+       
                         
         subjects = subject.objects.filter(
          id__in=teach.objects.filter(teacher=teacher_instance).values_list('subject__id', flat=True)
@@ -1222,7 +1232,8 @@ class teacherstats(APIView):
         nd=now.date()
         nt=now.time()
         exams= Exam.objects.filter(subject__in=subjects,date__lt=nd,time__lt=nt)
-        
+        exam1=Exam.objects.filter(date__lt=nd,time__lt=nt)
+        duties_count= surveillance.objects.filter(teacher= teacher_instance,exam__in=exam1).count()
         
         Attendance_count=Attendance.objects.filter(exam__in=exams).count()
        

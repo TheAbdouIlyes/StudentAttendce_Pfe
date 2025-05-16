@@ -80,10 +80,12 @@ const StudentDashboard = () => {
     semester1: {
       attended: data1.attendance_count || 0,
       total: data1.exam_count || 0,
+      absent:data1.absences_count || 0
     },
     semester2: {
       attended: data2.attendance_count || 0,
       total: data2.exam_count || 0,
+      absent: data2.absences_count || 0
     },
     examScheduleUploaded: true, // This can be dynamic
   };
@@ -99,7 +101,7 @@ const StudentDashboard = () => {
   const currentData = selectedSemester === "semester1" ? semester1 : semester2;
   const pieData = [
     { name: "Présent", value: currentData.attended },
-    { name: "Absent", value: currentData.total - currentData.attended },
+    { name: "Absent", value: currentData.absent },
   ];
 
   return (
@@ -170,7 +172,7 @@ const StudentDashboard = () => {
             </Typography>
             <Typography variant="h6" mt={1}>
               <Cancel color="error" sx={{ verticalAlign: "middle", mr: 1 }} />
-              {currentData.total - currentData.attended}
+              {currentData.absent}
             </Typography>
           </Card>
         </Grid>
