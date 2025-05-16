@@ -1073,7 +1073,10 @@ class adminstats(APIView):
         # General stats
         exam_count = Exam.objects.count()
         teacher_count = teacher.objects.count()
-        attendance_count = Attendance.objects.count()
+        now = timezone.now()
+        nd=now.date()
+        nt=now.time()
+        attendance_count = Attendance.objects.filter(exam__date__lt=nd,exam__time__lt=nt).count()
 
         # Expected attendance
         expected_attendance = 0

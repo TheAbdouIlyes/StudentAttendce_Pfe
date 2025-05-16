@@ -28,11 +28,6 @@ import { PieChart } from "@mui/x-charts/PieChart";
 const specialties = ["info", "physic", "gestion", "biology", "pharmacy", "medcine"];
 const levels = ["L1", "L2", "L3", "M1", "M2"];
 
-const desktopOS = [
-  { id: 0, value: 10, label: "Windows" },
-  { id: 1, value: 15, label: "MacOS" },
-];
-
 const desktopOS1 = [
   { id: 0, value: 10, label: "Windows" },
   { id: 1, value: 15, label: "MacOS" },
@@ -45,7 +40,10 @@ const Dashboard = () => {
   const [statsData, setStatsData] = useState([]);
   const [attendanceBySpecialty, setAttendanceBySpecialty] = useState([]);
   const [attendanceByLevel, setAttendanceByLevel] = useState([]);
+  const [totalStudentsPerSpecialty, setTotalStudentsPerSpecialty] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [profDuties, setProfDuties] = useState();
+  const [professorAvailability, setProfessorAvailability] = useState([]);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -79,6 +77,26 @@ const Dashboard = () => {
             count: stats.absences_count,
             icon: <Cancel sx={{ fontSize: 40, color: "#d32f2f" }} />,
           },
+        ]);
+
+        const specialtiesPieData = [
+          { id: 0, value: stats.student_INFO, label: "Info" },
+          { id: 1, value: stats.student_phisic, label: "Physic" },
+          { id: 2, value: stats.student_gestion, label: "Gestion" },
+          { id: 3, value: stats.student_biology, label: "Biology" },
+          { id: 4, value: stats.student_pharmacy, label: "Pharmacy" },
+          { id: 5, value: stats.student_medcine, label: "Medcine" },
+        ];
+        setTotalStudentsPerSpecialty(specialtiesPieData);
+
+        setProfDuties(stats.teachers_without_duty);
+
+        const available = stats.teachers_without_duty;
+        const assigned = stats.teacher_count - available;
+        // const assigned = stats.assigned_teacher_ids;
+        setProfessorAvailability([
+          { id: 0, value: available, label: "Available" },
+          { id: 1, value: assigned, label: "Assigned" },
         ]);
 
         const specialtyResults = await Promise.all(
@@ -115,12 +133,6 @@ const Dashboard = () => {
 
     fetchStats();
   }, []);
-
-  const detailedPresenceRates = attendanceBySpecialty.map((s, index) => ({
-    id: index,
-    value: Math.round((s.present / (s.present + s.absent)) * 100),
-    label: s.name,
-  }));
 
   return (
     <Box sx={{ p: 4, pt: 0 }}>
@@ -185,7 +197,7 @@ const Dashboard = () => {
                   <PieChart
                     series={[
                       {
-                        data: detailedPresenceRates,
+                        data: totalStudentsPerSpecialty,
                         highlightScope: { fade: "global", highlight: "item" },
                         faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
                       },
@@ -201,13 +213,13 @@ const Dashboard = () => {
             <Grid item xs={12} md={4}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
                 <Typography variant="h6" textAlign={"center"}>
-                  Available Professors (Free)
+                  Professor Availability
                 </Typography>
                 <Box sx={{ height: 300, display: "flex", justifyContent: "center", alignItems: "center" }}>
                   <PieChart
                     series={[
                       {
-                        data: desktopOS,
+                        data: professorAvailability,
                         highlightScope: { fade: "global", highlight: "item" },
                         faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
                       },
