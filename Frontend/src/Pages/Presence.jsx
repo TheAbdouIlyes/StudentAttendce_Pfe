@@ -36,10 +36,12 @@ export default function Presence() {
 
   return (
     <div className="Student-Container">
-      <div style={{display:'flex',width:"100%",marginBottom:"2%"}}>
+      {/* <div style={{display:'flex',width:"100%",marginBottom:"2%"}}>
         <ReturnButton/>
         <h1 className="StudentListTitle">Student List</h1>
-      </div>
+
+
+      </div> */}
 
       <div className="MainSection-Bottom">
         <PresenceTable 

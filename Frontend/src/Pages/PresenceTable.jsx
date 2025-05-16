@@ -10,10 +10,13 @@ import {
   IconButton,
   TablePagination,
   Box,
+  Button,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate, useParams } from "react-router-dom";
+import ReturnButton from "../comps/ReturnButton";
+
 
 const columns = [
   { width: 50, label: "ID", dataKey: "id" },
@@ -62,8 +65,84 @@ export default function PresenceTable({
     setPage(newPage + 1);
   };
 
+
+
+  const handleDownloadCSV = async () => {
+  try {
+    let allStudents = [];
+    let currentPage = 1;
+    let total = 0;
+
+    // Fetch first page to get total count
+    const firstResponse = await fetch(`http://127.0.0.1:8000/student/subject/${examId}?page=${currentPage}`);
+    if (!firstResponse.ok) throw new Error("Failed to fetch students");
+    const firstData = await firstResponse.json();
+
+    total = firstData.count;
+    allStudents = allStudents.concat(firstData.results);
+    const totalPages = Math.ceil(total / rowsPerPage);
+
+    // Fetch remaining pages
+    while (currentPage < totalPages) {
+      currentPage++;
+      const res = await fetch(`http://127.0.0.1:8000/student/subject/${examId}?page=${currentPage}`);
+      if (!res.ok) throw new Error("Failed to fetch page " + currentPage);
+      const data = await res.json();
+      allStudents = allStudents.concat(data.results);
+    }
+
+    //console.log("All students:", allStudents);
+
+    const headers = ["ID", "First Name", "Last Name", "Speciality", "Level", "Presence"];
+    const rows = allStudents.map((student) => [
+      student.id,
+      student.first_name,
+      student.last_name,
+      student.speciality,
+      student.level,
+      !examEnded ? "Not yet" : student.is_present ? "Present" : "Absent",
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map((row) => row.join(",")),
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `attendance_${examId}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } catch (error) {
+    console.error("CSV download error:", error);
+  }
+
+  
+};
+
+
+
   return (
-    <Paper sx={{ width: "100%", overflow: "hidden", borderRadius: 2 }}>
+
+    <Box sx={{ width: "100%",borderRadius: 2 }}>
+
+      <div style={{display:'flex',justifyContent:"space-between",width:"100%",marginBottom:"2%"}}>
+        <ReturnButton/>
+        <h1 className="StudentListTitle">Student List</h1>
+
+        <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
+          {/* <Button variant="outlined" onClick={handleDownloadCSV}>
+            Download CSV
+          </Button> */}
+        </Box>
+
+      </div>
+    
+    <Paper elevation={0} sx={{ width: "100%", borderRadius: 2 }}>
       <TableContainer>
         <Table>
           <TableHead>
@@ -134,5 +213,6 @@ export default function PresenceTable({
         rowsPerPageOptions={[]}
       />
     </Paper>
+    </Box>
   );
 }

@@ -1,4 +1,7 @@
 import React, { useEffect } from 'react';
+import "./TheLogOut.css"
+
+import LogOutSVG from "../src/assets/LogOutSVG.svg"
 // import CircularProgress from '@mui/material/CircularProgress';
 
 export default function LogOut() {
@@ -44,10 +47,22 @@ export default function LogOut() {
   }, []);
 
   return (
-    <div style={{ padding: "2rem", textAlign: "center" }}>
+    <div className='LogoutSection'>
       {/* <CircularProgress disableShrink /> */}
-      Logging out...
+
+      {/* <img src={LogOutSVG} alt="" /> */}
+
+      <div className='LogOutText'>
+        <h1>
+          Logging out
+        </h1>
+        <div className='loader'/>
+
+      </div>
+
+      
 
     </div>
+    
   );
 }
