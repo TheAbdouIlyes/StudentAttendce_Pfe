@@ -25,6 +25,9 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { PieChart } from "@mui/x-charts/PieChart";
 
+
+
+
 const specialties = ["info", "physic", "gestion", "biology", "pharmacy", "medcine"];
 const levels = ["L1", "L2", "L3", "M1", "M2"];
 
@@ -79,6 +82,8 @@ const Dashboard = () => {
             icon: <Cancel sx={{ fontSize: 40, color: "#d32f2f" }} />,
           },
         ]);
+
+        console.log("test",stats.attendance_count)
 
         const specialtiesPieData = [
           { id: 0, value: stats.student_INFO, label: "Info" },
@@ -201,9 +206,11 @@ const Dashboard = () => {
           <Grid container spacing={2} sx={{ pb: 2 }}>
             <Grid item xs={12} md={4}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" textAlign={"center"}>
-                  Total Students by Specialty
+                <Typography variant="h6" textAlign="center" display="flex" alignItems="center" justifyContent="center" gap={1}>
+                 
+                  Students by Specialty <People />
                 </Typography>
+
                 <Box sx={{ height: 300, display: "flex", justifyContent: "center", alignItems: "center" }}>
                   <PieChart
                     series={[
@@ -213,8 +220,8 @@ const Dashboard = () => {
                         faded: { innerRadius: 30, additionalRadius: -30, color: "gray" },
                       },
                     ]}
-                    width={350}
-                    height={180}
+                    width={400}
+                    height={200}
                     hideLegend
                   />
                 </Box>
@@ -223,9 +230,11 @@ const Dashboard = () => {
 
             <Grid item xs={12} md={4}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" textAlign={"center"}>
-                  Professor Availability
+                <Typography variant="h6" textAlign="center" display="flex" alignItems="center" justifyContent="center" gap={1}>
+                 
+                  Teacher Assignment Status <EventNote />
                 </Typography>
+
                 <Box sx={{ height: 300, display: "flex", justifyContent: "center", alignItems: "center" }}>
                   <PieChart
                     series={[
@@ -245,9 +254,11 @@ const Dashboard = () => {
 
             <Grid item xs={12} md={4}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" textAlign={"center"}>
-                  Exams Rest
+                <Typography variant="h6" textAlign="center" display="flex" alignItems="center" justifyContent="center" gap={1}>
+                  
+                  Exam Completion Status<CheckCircle />
                 </Typography>
+
                 <Box sx={{ height: 300, display: "flex", justifyContent: "center", alignItems: "center" }}>
                   <PieChart
                     series={[
@@ -270,9 +281,11 @@ const Dashboard = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" mb={2}>
-                  Présences par Spécialité
+                <Typography variant="h6" display="flex" alignItems="center" gap={1} mb={2}>
+                 
+                  Attendance by Specialty <People />
                 </Typography>
+
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={attendanceBySpecialty}>
                     <XAxis dataKey="name" />
@@ -288,9 +301,11 @@ const Dashboard = () => {
 
             <Grid item xs={12} md={6}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" mb={2}>
-                  Présences par Niveau
+                <Typography variant="h6" display="flex" alignItems="center" gap={1} mb={2}>
+                 
+                  Attendance by Academic Level <People/>
                 </Typography>
+
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={attendanceByLevel}>
                     <XAxis dataKey="level" />
