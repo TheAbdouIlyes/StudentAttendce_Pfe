@@ -68,11 +68,13 @@ import HomeIcon from '@mui/icons-material/Home';
 
 
 const NAVIGATION_Student = [
-  { kind: 'header', title: 'Home Page' },
+  // { kind: 'header', title: 'Home Page' },
+  { kind: 'header', title: 'Student Space'},
+
   { segment: 'Student/Home', title: 'Home', icon: <HomeIcon  /> },
-  { kind: 'divider' },
-  { kind: 'header', title: 'Espace Student' },
-  { segment: 'Student/profile', title: 'Student infos', icon: <PersonIcon /> },
+  // { kind: 'divider' },
+  // { kind: 'header', title: 'Espace Student' },
+  // { segment: 'Student/profile', title: 'Student infos', icon: <PersonIcon /> },
 
   // { segment: 'Student/planning', title: 'Planning', icon: <CalendarMonthIcon /> },
   { segment: 'Student/Attendance', title: 'Attendance', icon: <EventAvailableIcon /> },
@@ -103,9 +105,9 @@ export default function StudentLayouts({demoTheme,Skeleton }) {
           <PageContainer className='MainPage-Conatiner'>
             <Routes >
             <Route path="Home" element={<StudentDashboard />} />
-              <Route path="profile" element={<ES />} />
+              {/* <Route path="profile" element={<ES />} /> */}
               <Route path="Attendance" element={<AttendanceList />} />
-              <Route path="planning" element={<PlanningExams/>} />
+              {/* <Route path="planning" element={<PlanningExams/>} /> */}
   
              
             </Routes>

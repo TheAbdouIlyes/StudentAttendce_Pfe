@@ -281,7 +281,7 @@ const Dashboard = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" display="flex" alignItems="center" gap={1} mb={2}>
+                <Typography textAlign="center" variant="h6" display="flex" alignItems="center" gap={1} mb={2}>
                  
                   Attendance by Specialty <People />
                 </Typography>
@@ -301,7 +301,7 @@ const Dashboard = () => {
 
             <Grid item xs={12} md={6}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" display="flex" alignItems="center" gap={1} mb={2}>
+                <Typography textAlign="center" variant="h6" display="flex" alignItems="center" gap={1} mb={2}>
                  
                   Attendance by Academic Level <People/>
                 </Typography>

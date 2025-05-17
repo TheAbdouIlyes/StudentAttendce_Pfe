@@ -47,7 +47,7 @@ export default function LogInStudentForm() {
         });
 
         setTimeout(() => {
-          navigate("/student/profile");
+          navigate("/student/Home")
         }, 1000);
       } else {
         // ❌ Show error alert

@@ -76,7 +76,7 @@ export default function ES() {
             width: '100%',
             p: 3,
             pb:0,
-            borderRadius: 8,
+            borderRadius: 3,
             bgcolor: theme.palette.background.paper,
             color: theme.palette.text.primary,
           }}
