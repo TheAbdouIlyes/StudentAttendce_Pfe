@@ -1076,21 +1076,23 @@ class adminstats(APIView):
         now = timezone.now()
         nd=now.date()
         nt=now.time()
-        attendance_count = Attendance.objects.filter(exam__date__lt=nd,exam__time__lt=nt).count()
+
 
         # Expected attendance
         expected_attendance = 0
+        attendance_count=0
         now = timezone.now()
         nd=now.date()
         nt=now.time()
         exams = Exam.objects.all()
-        for exam in exams:
+        for exam1 in exams:
             expected_students = Student.objects.filter(
-                level=exam.subject.level,
-                speciality=exam.subject.speciality
+                level=exam1.subject.level,
+                speciality=exam1.subject.speciality
             ).count()
-            exam_datetime = timezone.make_aware(datetime.combine(exam.date, exam.time))
+            exam_datetime = timezone.make_aware(datetime.combine(exam1.date, exam1.time))
             if exam_datetime < now:
+             attendance_count += Attendance.objects.filter(exam=exam1).count()
              expected_attendance += expected_students
 
         absences_count = expected_attendance - attendance_count
@@ -1135,26 +1137,24 @@ class Présences_par_Spécialité(APIView):
            now = timezone.now()
            nd=now.date()
            nt=now.time()
-         
-           exams = Exam.objects.filter( subject__speciality=spes,date__lt=nd,time__lt=nt)
-           Attendance_count=Attendance.objects.filter( exam__in=exams).count()
+          
+          
+        #    Attendance_count=Attendance.objects.filter( exam__in=exams).count()
            expected_attendance = 0
            exams1=Exam.objects.filter( subject__speciality=spes)
-           for exam in exams1:
-              expected_students = Student.objects.filter(
-                level=exam.subject.level,
-                speciality=exam.subject.speciality
-               ).count()
-              
-              exam_datetime = timezone.make_aware(datetime.combine(exam.date, exam.time))
-              if exam_datetime < now:
-               expected_attendance += expected_students
+           attendance_count=0
+           for exam1 in exams1:
+            expected_students = Student.objects.filter(
+                level=exam1.subject.level,
+                speciality=exam1.subject.speciality
+            ).count()
+            exam_datetime = timezone.make_aware(datetime.combine(exam1.date, exam1.time))
+            if exam_datetime < now:
+             attendance_count += Attendance.objects.filter(exam=exam1).count()
+             expected_attendance += expected_students
             
-            
-            
-            
-           absences_count = expected_attendance - Attendance_count
-           return JsonResponse({ "absences_count": absences_count, "attendance_count": Attendance_count})
+           absences_count = expected_attendance - attendance_count
+           return JsonResponse({ "absences_count": absences_count, "attendance_count": attendance_count})
 
 
  
@@ -1172,21 +1172,23 @@ class Présences_par_level(APIView):
            nd=now.date()
            nt=now.time()
            exams = Exam.objects.filter(subject__level=spes).filter(date__lt=nd,time__lt=nt)
-           Attendance_count=Attendance.objects.filter(exam__in=exams).count()
+        #    Attendance_count=Attendance.objects.filter(exam__in=exams).count()
            expected_attendance = 0
            exams1=Exam.objects.filter( subject__level=spes)
-           for exam in exams1:
-              expected_students = Student.objects.filter(
-                level=exam.subject.level,
-                speciality=exam.subject.speciality
-               ).count()
-              exam_datetime = timezone.make_aware(datetime.combine(exam.date, exam.time))
-              if exam_datetime < now:
-               expected_attendance += expected_students
+           attendance_count=0
+           for exam1 in exams1:
+            expected_students = Student.objects.filter(
+                level=exam1.subject.level,
+                speciality=exam1.subject.speciality
+            ).count()
+            exam_datetime = timezone.make_aware(datetime.combine(exam1.date, exam1.time))
+            if exam_datetime < now:
+             attendance_count += Attendance.objects.filter(exam=exam1).count()
+             expected_attendance += expected_students
             
             
-           absences_count = expected_attendance - Attendance_count
-           return JsonResponse({"absences_count": absences_count, "attendance_count": Attendance_count})
+           absences_count = expected_attendance - attendance_count
+           return JsonResponse({"absences_count": absences_count, "attendance_count": attendance_count})
 
 
 from django.db.models import Q
@@ -1207,16 +1209,18 @@ class StudentStats(APIView):
         now = timezone.now()
         nd=now.date()
         nt=now.time()
-        exams=exam.filter(date__lt=nd, time__lt=nt)
-        exam_1= 0
+        
+        exam_exp= 0
+        Attendance_count=0
         for e in exam:
             exam_datetime = timezone.make_aware(datetime.combine(e.date, e.time))
             if exam_datetime < now:
-             exam_1+=1
+             exam_exp +=1
+             Attendance_count += Attendance.objects.filter(student= student_instance,exam=e).count()
             
-        Attendance_count =Attendance.objects.filter(student= student_instance,exam__in=exams).count()
+       
 
-        absence_count= exam_1 - Attendance_count
+        absence_count= exam_exp - Attendance_count
         nom=request.user.last_name
         prenom=request.user.first_name
         return JsonResponse({"absences_count": absence_count, "attendance_count": Attendance_count,"exam_count": exam_count,"nom":nom,"prenom":prenom})
@@ -1241,19 +1245,23 @@ class teacherstats(APIView):
         now = timezone.now()
         nd=now.date()
         nt=now.time()
-        exams= Exam.objects.filter(subject__in=subjects,date__lt=nd,time__lt=nt)
-        exam1=Exam.objects.filter(date__lt=nd,time__lt=nt)
+        exams= Exam.objects.filter(subject__in=subjects)
+       
         duties_count= surveillance.objects.filter(teacher= teacher_instance,exam__date__gt=nd).count()
         
-        Attendance_count=Attendance.objects.filter(exam__in=exams).count()
+        Attendance_count=0
        
         expected_attendance = 0
-        for exam in exams:
+        for exam1 in exams:
               expected_students = Student.objects.filter(
-                level=exam.subject.level,
-                speciality=exam.subject.speciality
+                level=exam1.subject.level,
+                speciality=exam1.subject.speciality
                ).count()
-              expected_attendance += expected_students
+              exam_datetime = timezone.make_aware(datetime.combine(exam1.date, exam1.time))
+              if exam_datetime < now:
+               expected_attendance += expected_students
+               Attendance_count +=Attendance.objects.filter(exam=exam1).count()
+
               
         level1=subject.objects.filter(id__in=subjects).values_list('level', flat=True)
         spe1 =subject.objects.filter(id__in=subjects).values_list('speciality', flat=True)
@@ -1281,16 +1289,19 @@ class teacher_par_Spécialité(APIView):
            now = timezone.now()
            nd=now.date()
            nt=now.time()
-           exams= Exam.objects.filter(subject__in=subjects,date__lt=nd,time__lt=nt,subject__speciality=spes)
-           Attendance_count=Attendance.objects.filter( exam__in=exams).count()
+           exams= Exam.objects.filter(subject__in=subjects,subject__speciality=spes)
+           Attendance_count=0
+       
            expected_attendance = 0
-           for exam in exams:
+           for exam1 in exams:
               expected_students = Student.objects.filter(
-                level=exam.subject.level,
-                speciality=exam.subject.speciality
+                level=exam1.subject.level,
+                speciality=exam1.subject.speciality
                ).count()
-              
-              expected_attendance += expected_students
+              exam_datetime = timezone.make_aware(datetime.combine(exam1.date, exam1.time))
+              if exam_datetime < now:
+               expected_attendance += expected_students
+               Attendance_count +=Attendance.objects.filter(exam=exam1).count()
             
            subject_total=subject.objects.filter(speciality=spes)
             
@@ -1319,15 +1330,19 @@ class teacher_par_level(APIView):
            now = timezone.now()
            nd=now.date()
            nt=now.time()
-           exams= Exam.objects.filter(subject__in=subjects,date__lt=nd,time__lt=nt,subject__level=spes)
-           Attendance_count=Attendance.objects.filter( exam__in=exams).count()
+           exams= Exam.objects.filter(subject__in=subjects,subject__level=spes)
+           Attendance_count=0
+       
            expected_attendance = 0
-           for exam in exams:
+           for exam1 in exams:
               expected_students = Student.objects.filter(
-                level=exam.subject.level,
-                speciality=exam.subject.speciality
+                level=exam1.subject.level,
+                speciality=exam1.subject.speciality
                ).count()
-              expected_attendance += expected_students
+              exam_datetime = timezone.make_aware(datetime.combine(exam1.date, exam1.time))
+              if exam_datetime < now:
+               expected_attendance += expected_students
+               Attendance_count +=Attendance.objects.filter(exam=exam1).count()
             
            subject_total=subject.objects.filter(level=spes)
             
