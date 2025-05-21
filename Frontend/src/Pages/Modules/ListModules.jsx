@@ -79,7 +79,7 @@ useEffect(() => {
           <BookIcon sx={{textAlign:"center",ml:1}} />
         </h3>
 
-          <Button color="info"  variant="contained" startIcon={<AddIcon />} onClick={() => setModalOpen(true)}>
+          <Button color="primary"  variant="contained" startIcon={<AddIcon />} onClick={() => setModalOpen(true)}>
             Add
           </Button>
           {/* <Button variant="contained" onClick={() => setShowActions((prev) => !prev)}>

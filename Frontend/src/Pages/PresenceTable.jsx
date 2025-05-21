@@ -10,21 +10,24 @@ import {
   IconButton,
   TablePagination,
   Box,
+  Chip,
   Button,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate, useParams } from "react-router-dom";
 import ReturnButton from "../comps/ReturnButton";
+import { useTheme } from "@mui/material/styles";
+
 
 
 const columns = [
   { width: 50, label: "ID", dataKey: "id" },
-  { width: 100, label: "First Name", dataKey: "first_name" },
-  { width: 150, label: "Last Name", dataKey: "last_name" },
+  { width: 120, label: "First Name", dataKey: "first_name" },
+  { width: 180, label: "Last Name", dataKey: "last_name" },
   { width: 180, label: "Speciality", dataKey: "speciality" },
   { width: 120, label: "Year", dataKey: "level" },
-  { width: 120, label: "Presence", dataKey: "is_present" },
+  { width: 100, label: "Presence", dataKey: "is_present" },
 ];
 
 export default function PresenceTable({
@@ -125,6 +128,7 @@ export default function PresenceTable({
 };
 
 
+const theme = useTheme();
 
   return (
 
@@ -161,38 +165,25 @@ export default function PresenceTable({
                   <TableCell key={column.dataKey}>
                     {column.dataKey === "is_present" ? (
                       !examEnded ? (
-                        <Box  
-                        sx={{
-                          maxWidth: "80px",
-                          p: 0.25,
-                          textAlign: "center",
-                          borderRadius: "1rem",
-                          backgroundColor: "#F3F4F6",
-                          color: "#6B7280",
-                          fontWeight: "bold",
-                          border: "1px solid #D1D5DB",
-                        }}
-                      >
-                        Not yet
-                        {/* {"-------"} */}
-                      </Box>
+                       <Chip align="center" sx={{ 
+                        width:100,
+                        color: theme.palette.text.secondary , 
+                        // backgroundColor: item.is_persent ? "#cdf7c8" : "#f5e4e5",
+                        fontWeight: "bold"}}
+                        label="Not yet ..."/>
   
                         
                       ) : (
-                        <Box
-                          sx={{
-                            maxWidth: "80px",
-                            p: 0.25,
-                            textAlign: "center",
-                            borderRadius: "1rem",
-                            backgroundColor: student.is_present ? "#cdf7c8" : "#f5e4e5",
-                            color: student.is_present ? "green" : "red",
-                            fontWeight: "bold",
-                            border: student.is_present ? "1px solid green" : "1px solid red",
-                          }}
-                        >
-                          {student.is_present ? "✔ Present" : "✘ Absent"}
-                        </Box>
+                          <Chip
+                              label={student.is_present ? "✔ Present" : "✘ Absent"}
+                              sx={{
+                              width:100,
+                              backgroundColor: student.is_present ? `${theme.palette.present.secondary}` : `${theme.palette.absent.secondary}`,
+                              color: student.is_present ? `${theme.palette.present.main}` : `${theme.palette.absent.main}`,
+                              fontWeight: "bold",
+                              // border: item.is_persent ? "1px solid green" : "1px solid red"
+                            }}
+                            />
                       )
                     ) : (
                       student[column.dataKey]

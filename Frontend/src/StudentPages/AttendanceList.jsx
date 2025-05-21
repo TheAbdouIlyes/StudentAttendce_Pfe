@@ -115,7 +115,7 @@ function ExamAttendance() {
                   <TableCell><b>Date</b></TableCell>
                   <TableCell><b>Time</b></TableCell>
                   <TableCell align="center"><b>Amphi</b></TableCell>
-                  <TableCell align="right"><b>Attendance</b></TableCell>
+                  <TableCell align="center"><b>Attendance</b></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -125,7 +125,7 @@ function ExamAttendance() {
                     <TableCell>{item.exam.date}</TableCell>
                     <TableCell>{item.exam.time}</TableCell>
                     <TableCell align="center">{item.exam.amphi}</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">
                     {(() => {
               const examDateTime = new Date(`${item.exam.date}T${item.exam.time}`);
               const now = new Date();
@@ -135,16 +135,21 @@ function ExamAttendance() {
               <Chip
               label={item.is_persent ? "✔ Present" : "✘ Absent"}
                 sx={{
-              backgroundColor: item.is_persent ? "#cdf7c8" : "#f5e4e5",
-              color: item.is_persent ? "green" : "red",
+                  width:100,
+              backgroundColor: item.is_persent ? `${theme.palette.present.secondary}` : `${theme.palette.absent.secondary}`,
+              color: item.is_persent ? `${theme.palette.present.main}` : `${theme.palette.absent.main}`,
               fontWeight: "bold",
-              border: item.is_persent ? "1px solid green" : "1px solid red"
+              // border: item.is_persent ? "1px solid green" : "1px solid red"
             }}
             />
             ) : (
-              <Typography align="right" sx={{ color: theme.palette.text.secondary ,mr:1.5}}>
-              Not yet
-            </Typography>
+              <Chip align="center" sx={{ 
+                  width:100,
+                  color: theme.palette.text.secondary , 
+              // backgroundColor: item.is_persent ? "#cdf7c8" : "#f5e4e5",
+              fontWeight: "bold"}}
+              label="Not yet ..."/>
+          
             );
               })()}
                     </TableCell>

@@ -172,7 +172,7 @@ export default function AddTeacher({ onClose, onAdd }) {
         <TextField label="Matricule" name="matricul" value={teacherData.matricul} onChange={handleChange} required />
         <Box display="flex" justifyContent="flex-end" sx={{ mb: 2 }} gap={2} mt={2}>
           <Button variant="outlined" color="primary" onClick={onClose} sx={{ pr: 1, pl: 1, mt: 2, border: 0 }}>Cancel</Button>
-          <Button variant="contained" color="info" sx={{ mt: 2, border: 0 }} type="submit">Add</Button>
+          <Button variant="contained" color="primary" sx={{ mt: 2, border: 0 }} type="submit">Add</Button>
         </Box>
       </form>
 
