@@ -129,3 +129,16 @@
     font-size: 5vh;
     color: white;
 } */
+
+@media (max-width: 768px) {
+  .LeftSide-LogIn,
+  .LeftSide-LogIn2,
+  .LeftSide-LogIn3 {
+    display: none !important;
+  }
+}
+@media (max-width: 768px) {
+  .RightSide-LogIn {
+    width: 100%;
+  }
+}

@@ -18,7 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate, useParams } from "react-router-dom";
 import ReturnButton from "../comps/ReturnButton";
 import { useTheme } from "@mui/material/styles";
-
+// import { useParams } from "react-router-dom";
 
 
 const columns = [
@@ -42,6 +42,8 @@ export default function PresenceTable({
 }) {
   const navigate = useNavigate();
   const [examEnded, setExamEnded] = useState(false);
+ const { module } = useParams();
+
   
   
   // ✅ Fetch exam info using fetch API
@@ -51,7 +53,6 @@ export default function PresenceTable({
         const response = await fetch(`http://127.0.0.1:8000/exam_time/${examId}`);
         if (!response.ok) throw new Error("Failed to fetch exam info");
         const data = await response.json();
-            console.log(data)
         const examDateTime = new Date(`${data.date}T${data.time}`);
         const now = new Date();
         const fourHoursInMs = 4 * 60 * 60 * 1000;
@@ -63,6 +64,9 @@ export default function PresenceTable({
 
     fetchExamInfo();
   }, [examId]);
+
+ 
+
 
   const handlePageChange = (_, newPage) => {
     setPage(newPage + 1);
@@ -136,7 +140,7 @@ const theme = useTheme();
 
       <div style={{display:'flex',justifyContent:"space-between",width:"100%",marginBottom:"2%"}}>
         <ReturnButton/>
-        <h1 className="StudentListTitle">Student List</h1>
+        <h1 className="StudentListTitle">Student List of <b>"{module}"</b> </h1>
 
         <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
           {/* <Button variant="outlined" onClick={handleDownloadCSV}>

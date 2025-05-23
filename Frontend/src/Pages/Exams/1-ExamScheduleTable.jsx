@@ -211,7 +211,7 @@ const ExamScheduleTable = () => {
                   <Button
                     color="success"
                     variant="outlined"
-                    onClick={() => navigate(`${row.id}/presence`)}
+                    onClick={() => navigate(`${row.id}/${row.subject_name}/presence`)}
                     startIcon={<ArrowForwardIcon />}
                   >
                     View Exam
