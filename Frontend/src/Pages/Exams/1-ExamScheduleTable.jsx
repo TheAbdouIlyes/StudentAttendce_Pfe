@@ -151,7 +151,7 @@ const ExamScheduleTable = () => {
                       return (
                       <Button
                         variant="outlined"
-                        color="error"
+                        color="absent"
                         onClick={() => {
                           Swal.fire({
                             icon: 'warning',
@@ -173,7 +173,7 @@ const ExamScheduleTable = () => {
                       return (
                         <Button
                           variant="outlined"
-                          color="success"
+                          color="present"
                           onClick={() =>
                             navigate(`${row.subject_name}/qr-scanner`, {
                               state: { module: row.subject_name },
@@ -211,7 +211,7 @@ const ExamScheduleTable = () => {
                   <Button
                     color="success"
                     variant="outlined"
-                    onClick={() => navigate(`${row.id}/presence`)}
+                    onClick={() => navigate(`${row.id}/${row.subject_name}/presence`)}
                     startIcon={<ArrowForwardIcon />}
                   >
                     View Exam

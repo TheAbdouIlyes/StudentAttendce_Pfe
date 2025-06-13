@@ -7,7 +7,7 @@ import {
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import GroupIcon from "@mui/icons-material/Group";
 
-import TeacherSvg from "../../../public/Sabora.svg"
+import TeacherSvg from "../../assets/Students.svg"
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -24,7 +24,7 @@ export default function StudentsMenu() {
   }
 
   return (
-    <Box sx={{ p: 3, backgroundColor: theme.palette.background.default }}>
+    <Box sx={{ p: 3,pt:0, backgroundColor: theme.palette.background.default }}>
 
 
       {/* Header Section */}
@@ -38,13 +38,13 @@ export default function StudentsMenu() {
 
         <Box sx={{height:"100%",width:"45%" ,display:"flex",alignItems:"center",flexDirection:"column"}}>
           <Typography variant="h4" fontWeight="bold" color="primary" sx={{display:"flex",alignItems:"center",justifyContent:"center"}}>
-          <GroupIcon fontSize="large" sx={{ mr: 1 }} /> Students
+          Students<GroupIcon fontSize="large" sx={{ ml: 1 }} /> 
           </Typography>
           <Typography variant="h6" sx={{ mt: 1 }}>
             Choose Your Specialty & Level to control and manage Students in Your Faculty
           </Typography>
           
-          <Box sx={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-evenly",mt:5}}>
+          {/* <Box sx={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-evenly",mt:5}}>
             <Button  variant="outlined" sx={{width:"130px"}}
             startIcon={<ArrowBackIcon/>}
             onClick={() => navigate("../MenuModules")}
@@ -55,7 +55,7 @@ export default function StudentsMenu() {
             endIcon={<ArrowForwardIcon/>}
             onClick={() => navigate("../MenuExams")}
             >Exams </Button>
-          </Box>
+          </Box> */}
           
         </Box>
 
@@ -74,7 +74,7 @@ export default function StudentsMenu() {
                 <Typography variant="h5" fontWeight="bold" color="primary">
                   {speciality.toUpperCase()}
                 </Typography>
-                <Grid container spacing={1} sx={{ mt: 2 }}>
+                <Grid container spacing={1} sx={{ mt: 1 }}>
                   {levels.map((level) => (
                     <Grid item xs={6} key={level}>
                       <Button
@@ -84,7 +84,7 @@ export default function StudentsMenu() {
                         sx={{ 
                           color: `${theme.palette.text.rev}` ,
                           transition: "0.3s", "&:hover": { transform: "scale(1.05)" } , fontWeight: "bold", borderRadius: 2 }}
-                          onClick={() => NAVStudent(speciality,level)}
+                          onClick={() => NAVStudent(speciality.toLowerCase(),level.toLowerCase())}
                       >
                         {level}
                       </Button>

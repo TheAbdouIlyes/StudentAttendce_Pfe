@@ -6,11 +6,12 @@ import {
   FormControlLabel, Radio, Button 
 } from "@mui/material";
 
-import TeacherSvg from "../../../public/PlanningSvg.svg"
+import TeacherSvg from "../../assets/Exams.svg"
 
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 
 
 
@@ -23,7 +24,7 @@ export default function ExamsMenu() {
   const [semester, setSemester] = useState("S1");
 
   return (
-    <Box sx={{ p: 3, backgroundColor: theme.palette.background.default }}>
+    <Box sx={{ p: 3,pt:0, backgroundColor: theme.palette.background.default }}>
       {/* Header Section */}
       <Paper elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`,p: 3, mb: 4,
       borderRadius: 2,
@@ -37,14 +38,14 @@ export default function ExamsMenu() {
         
 
         <Box sx={{height:"100%",width:"45%" ,display:"flex",alignItems:"center",flexDirection:"column"}}>
-          <Typography variant="h4" fontWeight="bold" color="primary">
-            Exams
+          <Typography variant="h4" fontWeight="bold" color="primary" sx={{display:"flex",alignItems:"center",justifyContent:"center"}}>
+            Exams<AssignmentIcon  fontSize="large" sx={{ ml: 1 }} /> 
           </Typography>
           <Typography variant="h6" sx={{ mt: 1 }}>
                       Choose Your Specialty & Level to control and manage Exams
           </Typography>
 
-          <Box sx={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-evenly",mt:5}}>
+          {/* <Box sx={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-evenly",mt:5}}>
             <Button  variant="outlined" sx={{width:"130px"}}
             startIcon={<ArrowBackIcon/>}
             onClick={() => navigate("../MenuStudent")}
@@ -55,7 +56,7 @@ export default function ExamsMenu() {
             endIcon={<ArrowForwardIcon/>}
             onClick={() => navigate("../MenuModules")}
             >Modules </Button>
-          </Box>
+          </Box> */}
            
         </Box>
 
@@ -80,7 +81,7 @@ export default function ExamsMenu() {
                 <Typography variant="h5" fontWeight="bold" color="primary">
                   {speciality.toUpperCase()}
                 </Typography>
-                <Grid container spacing={1} sx={{ mt: 2 }}>
+                <Grid container spacing={1} sx={{ mt: 1 }}>
                   {levels.map((level) => (
                     <Grid item xs={6} key={level}>
                       <Button

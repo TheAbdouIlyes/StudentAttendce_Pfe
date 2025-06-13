@@ -18,33 +18,38 @@ import {
   FormControlLabel,
   FormLabel,
   Box,
-
 } from "@mui/material";
-import ReturnButton from "../../comps/ReturnButton";
+import Swal from "sweetalert2";
+import "sweetalert2/dist/sweetalert2.min.css";
+import { useParams } from "react-router-dom";
 
-export default function AddModule({onClose,onAdd}) {
+export default function AddModule({ onClose, onAdd }) {
+  const { speciality, year } = useParams();
   const [moduleData, setModuleData] = useState({
     name: "",
-    level: "",
-    speciality: "",
-    semester: "s1", // Default semester
+    level: year || "",
+    speciality: speciality || "",
+    semester: "s1",
   });
 
-  const [modules, setModules] = useState([]); // Store modules
-  
+  const [modules, setModules] = useState([]);
 
-  // Handle input changes
   const handleChange = (event) => {
     setModuleData({ ...moduleData, [event.target.name]: event.target.value });
   };
 
-  // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Validation
-    if (!moduleData.name || !moduleData.level|| !moduleData.speciality || !moduleData.semester) {
-      alert("All fields are required!");
+    if (!moduleData.name || !moduleData.level || !moduleData.speciality || !moduleData.semester) {
+      Swal.fire({
+        icon: "error",
+        title: "All fields are required!",
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        timer: 2000,
+      });
       return;
     }
 
@@ -58,36 +63,47 @@ export default function AddModule({onClose,onAdd}) {
       const responseData = await response.json();
 
       if (!response.ok) {
-        console.error("API Error Response:", responseData);
-        throw new Error(responseData?.detail || "Failed to add subject.");
+        console.error("API Error:", responseData);
+        throw new Error(responseData?.detail || "Failed to add module.");
       }
 
-      // Update state
       setModules([...modules, moduleData]);
-      setModuleData({ name: "", level: "", speciality: "", semester: "s1" }); // Reset form
-      
-      onAdd(moduleData)
-      onClose(); // close modal
+      setModuleData({ name: "", level: "", speciality: "", semester: "s1" });
 
+      onAdd(moduleData);
+      onClose();
 
+      Swal.fire({
+        icon: "success",
+        title: "Module added successfully!",
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        timer: 2000,
+      });
     } catch (error) {
       console.error("Error:", error);
-      alert(error.message);
+      Swal.fire({
+        icon: "error",
+        title: error.message || "Something went wrong",
+        toast: true,
+        position: "bottom-end",
+        showConfirmButton: false,
+        timer: 2000,
+      });
     }
   };
 
   return (
-    <Box sx={{ pb:3, maxWidth: "600px", margin: "auto" }}>
-      <h2>
-        Add a New Module
-      </h2>
+    <Box sx={{ pb: 3, maxWidth: "600px", margin: "auto" }}>
+      <h2>Add a New Module</h2>
 
       <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
         <TextField label="Module Name" name="name" value={moduleData.name} onChange={handleChange} required />
 
         <FormControl>
           <InputLabel>Year</InputLabel>
-          <Select label="Year" name="level" value={moduleData.level} onChange={handleChange} required>
+          <Select name="level" label="Year" value={moduleData.level} onChange={handleChange} required>
             <MenuItem value="l1">L1</MenuItem>
             <MenuItem value="l2">L2</MenuItem>
             <MenuItem value="l3">L3</MenuItem>
@@ -98,7 +114,7 @@ export default function AddModule({onClose,onAdd}) {
 
         <FormControl>
           <InputLabel>Speciality</InputLabel>
-          <Select label="Speciality" name="speciality" value={moduleData.speciality} onChange={handleChange} required>
+          <Select name="speciality" label="Speciality" value={moduleData.speciality} onChange={handleChange} required>
             <MenuItem value="info">Info</MenuItem>
             <MenuItem value="physic">Physic</MenuItem>
             <MenuItem value="gestion">Gestion</MenuItem>
@@ -108,7 +124,6 @@ export default function AddModule({onClose,onAdd}) {
           </Select>
         </FormControl>
 
-        {/* Semester Selection (Radio Buttons) */}
         <FormControl component="fieldset">
           <FormLabel component="legend">Semester</FormLabel>
           <RadioGroup row name="semester" value={moduleData.semester} onChange={handleChange}>
@@ -117,24 +132,23 @@ export default function AddModule({onClose,onAdd}) {
           </RadioGroup>
         </FormControl>
 
-
         <Box display="flex" justifyContent="flex-end" gap={2}>
-          <Button variant="outlined" color="primary" onClick={onClose}  sx={{ pr:1,pl:1,mt: 2,border:0 }}>Cancel</Button>
-
-          <Button variant="contained"color="info" sx={{ mt: 2,border:0 }}  type="submit">
+          <Button variant="outlined" color="primary" onClick={onClose} sx={{ pr: 1, pl: 1, mt: 2, border: 0 }}>
+            Cancel
+          </Button>
+          <Button variant="contained" color="primary" sx={{ mt: 2, border: 0 }} type="submit">
             Add Module
           </Button>
         </Box>
       </form>
 
-      {/* Table to display modules */}
       {modules.length > 0 && (
         <TableContainer component={Paper} style={{ marginTop: "20px" }}>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell><b>Name</b></TableCell>
-                <TableCell><b>level</b></TableCell>
+                <TableCell><b>Level</b></TableCell>
                 <TableCell><b>Speciality</b></TableCell>
                 <TableCell><b>Semester</b></TableCell>
               </TableRow>

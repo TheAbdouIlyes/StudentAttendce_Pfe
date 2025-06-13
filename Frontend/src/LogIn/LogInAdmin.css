@@ -17,7 +17,7 @@
     /* border-radius:0 50% 50% 0 ; */
 
     background-color: #96d7fa;
-    background-image: url("../assets/logBG3.svg");
+    /* background-image: url("../assets/logBG3.svg"); */
 
     display: flex;
     align-items: center;
@@ -34,7 +34,7 @@
 
 
     background-color: #0288d1;
-    background-image: url("../assets/logBG2.svg");
+    /* background-image: url("../assets/logBG2.svg"); */
 
 
 
@@ -129,3 +129,16 @@
     font-size: 5vh;
     color: white;
 } */
+
+@media (max-width: 768px) {
+  .LeftSide-LogIn,
+  .LeftSide-LogIn2,
+  .LeftSide-LogIn3 {
+    display: none !important;
+  }
+}
+@media (max-width: 768px) {
+  .RightSide-LogIn {
+    width: 100%;
+  }
+}

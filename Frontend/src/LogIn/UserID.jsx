@@ -19,10 +19,11 @@ function UserID() {
               >
         {/* Header */}
         <div className="header">
-          <div className="header-icon">
+          <div className="header-icon" >
             <GraduationCap />
+            {/* <h2>TUAP</h2> */}
           </div>
-          <h1>Welcome to the University Attendance Portal</h1>
+          <h1>Welcome to The University Attendance Portal</h1>
           <p>Select your role to manage or check student attendance</p>
         </div>
 
@@ -59,7 +60,7 @@ function UserID() {
 
         {/* Footer */}
         <div className="footer">
-          <p>© 2025 University Portal. All rights reserved.</p>
+          <p>© 2025 TUAP. All rights reserved.</p>
         </div>
       </motion.div>
     </div>

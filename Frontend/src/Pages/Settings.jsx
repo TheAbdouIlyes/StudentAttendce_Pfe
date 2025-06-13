@@ -52,7 +52,7 @@ function Settings() {
       const data = await response.json();
 
       if (response.ok) {
-        setMessage('✅ Password changed successfully!');
+        setMessage(' Password changed successfully!');
         setForm({ old_password: '', new_password: '', new_password2: '' });
       } else {
         setMessage('');

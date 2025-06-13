@@ -12,14 +12,16 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import Swal from "sweetalert2";
+import { useParams } from "react-router-dom";
 
 export default function AddStudent({ onClose, onAdd }) {
+  const { speciality, year } = useParams();
   const [studentData, setStudentData] = useState({
     first_name: "",
     last_name: "",
     email: "",
-    level: "",
-    speciality: "",
+    level: year || "",
+    speciality: speciality||"",
     roll_number: "",
     matricul: "",
   });

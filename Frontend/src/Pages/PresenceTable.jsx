@@ -10,21 +10,24 @@ import {
   IconButton,
   TablePagination,
   Box,
+  Chip,
   Button,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate, useParams } from "react-router-dom";
 import ReturnButton from "../comps/ReturnButton";
+import { useTheme } from "@mui/material/styles";
+// import { useParams } from "react-router-dom";
 
 
 const columns = [
   { width: 50, label: "ID", dataKey: "id" },
-  { width: 100, label: "First Name", dataKey: "first_name" },
-  { width: 150, label: "Last Name", dataKey: "last_name" },
+  { width: 120, label: "First Name", dataKey: "first_name" },
+  { width: 180, label: "Last Name", dataKey: "last_name" },
   { width: 180, label: "Speciality", dataKey: "speciality" },
   { width: 120, label: "Year", dataKey: "level" },
-  { width: 120, label: "Presence", dataKey: "is_present" },
+  { width: 100, label: "Presence", dataKey: "is_present" },
 ];
 
 export default function PresenceTable({
@@ -39,6 +42,8 @@ export default function PresenceTable({
 }) {
   const navigate = useNavigate();
   const [examEnded, setExamEnded] = useState(false);
+ const { module } = useParams();
+
   
   
   // ✅ Fetch exam info using fetch API
@@ -48,7 +53,6 @@ export default function PresenceTable({
         const response = await fetch(`http://127.0.0.1:8000/exam_time/${examId}`);
         if (!response.ok) throw new Error("Failed to fetch exam info");
         const data = await response.json();
-            console.log(data)
         const examDateTime = new Date(`${data.date}T${data.time}`);
         const now = new Date();
         const fourHoursInMs = 4 * 60 * 60 * 1000;
@@ -60,6 +64,9 @@ export default function PresenceTable({
 
     fetchExamInfo();
   }, [examId]);
+
+ 
+
 
   const handlePageChange = (_, newPage) => {
     setPage(newPage + 1);
@@ -125,6 +132,7 @@ export default function PresenceTable({
 };
 
 
+const theme = useTheme();
 
   return (
 
@@ -132,7 +140,7 @@ export default function PresenceTable({
 
       <div style={{display:'flex',justifyContent:"space-between",width:"100%",marginBottom:"2%"}}>
         <ReturnButton/>
-        <h1 className="StudentListTitle">Student List</h1>
+        <h1 className="StudentListTitle">Student List of <b>"{module}"</b> </h1>
 
         <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
           {/* <Button variant="outlined" onClick={handleDownloadCSV}>
@@ -161,38 +169,25 @@ export default function PresenceTable({
                   <TableCell key={column.dataKey}>
                     {column.dataKey === "is_present" ? (
                       !examEnded ? (
-                        <Box  
-                        sx={{
-                          maxWidth: "80px",
-                          p: 0.25,
-                          textAlign: "center",
-                          borderRadius: "1rem",
-                          backgroundColor: "#F3F4F6",
-                          color: "#6B7280",
-                          fontWeight: "bold",
-                          border: "1px solid #D1D5DB",
-                        }}
-                      >
-                        Not yet
-                        {/* {"-------"} */}
-                      </Box>
+                       <Chip align="center" sx={{ 
+                        width:100,
+                        color: theme.palette.text.secondary , 
+                        // backgroundColor: item.is_persent ? "#cdf7c8" : "#f5e4e5",
+                        fontWeight: "bold"}}
+                        label="Not yet ..."/>
   
                         
                       ) : (
-                        <Box
-                          sx={{
-                            maxWidth: "80px",
-                            p: 0.25,
-                            textAlign: "center",
-                            borderRadius: "1rem",
-                            backgroundColor: student.is_present ? "#cdf7c8" : "#f5e4e5",
-                            color: student.is_present ? "green" : "red",
-                            fontWeight: "bold",
-                            border: student.is_present ? "1px solid green" : "1px solid red",
-                          }}
-                        >
-                          {student.is_present ? "✔ Present" : "✘ Absent"}
-                        </Box>
+                          <Chip
+                              label={student.is_present ? "✔ Present" : "✘ Absent"}
+                              sx={{
+                              width:100,
+                              backgroundColor: student.is_present ? `${theme.palette.present.secondary}` : `${theme.palette.absent.secondary}`,
+                              color: student.is_present ? `${theme.palette.present.main}` : `${theme.palette.absent.main}`,
+                              fontWeight: "bold",
+                              // border: item.is_persent ? "1px solid green" : "1px solid red"
+                            }}
+                            />
                       )
                     ) : (
                       student[column.dataKey]

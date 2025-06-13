@@ -62,6 +62,7 @@ import ZButtons from './ZButtons';
 import { useState,useMemo } from 'react';
 
 import Settings from "./Pages/Settings";
+import ErrorPage from './ErrorPage';
 
 
 
@@ -171,9 +172,12 @@ export default function AdminLayouts({demoTheme,Skeleton }) {
 
             {/* <Route path="MenuExams/:speciality/:year/:semester/qr-scanner" element={<QRCOde />} /> */}
             <Route path="MenuExams/:speciality/:year/:semester/:module/qr-scanner" element={<QRCOde />} />
-            <Route path="MenuExams/:speciality/:year/:semester/:id/presence" element={<Presence/>} />
+            <Route path="MenuExams/:speciality/:year/:semester/:id/:module/presence" element={<Presence/>} />
             <Route path="MenuExams/:speciality/:year/:semester/:exam_name/SerTeacher" element={<SerTeacher/>} /> 
             <Route path="Settings" element={<Settings/>} /> 
+
+            <Route path="*" element={<ErrorPage />} />
+            
 
 
 

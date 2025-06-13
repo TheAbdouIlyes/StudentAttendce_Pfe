@@ -69,6 +69,8 @@ import Rteacher from "./Rteacher"
 import Rstudent from "./Rstudent"
 import Radmin from "./Radmin"
 
+import ErrorPage from './ErrorPage';
+
 
 
 
@@ -87,8 +89,8 @@ const demoTheme = extendTheme({
         },
         text: { primary: '#011723',rev:"#ffffff" },
         action:{hover:"#e3f6ff"},
-        absent:{main:"#ff0000"},
-        present:{main:"#4caf50"},
+        absent:{main:"#ff0000",secondary:"#ffc2c2"},
+        present:{main:"#4caf50",secondary:"#dcfcd7"},
         border:"#e3e5e7"
       },
     },
@@ -105,8 +107,8 @@ const demoTheme = extendTheme({
         },
         text: { primary: '#ffffff' ,rev:"#0c171d"},
         action:{hover:"#05496b"},
-        absent:{main:"#ff5e5e"},
-        present:{main:"#e8f5e9"},
+        absent:{main:"#ffc2c2",secondary:"#ff0000"},
+        present:{main:"#dcfcd7",secondary:"#4caf50"},
         border:"#303b42"
 
       },
@@ -205,6 +207,9 @@ export default function App() {
 
         {/* Redirect unknown routes to home */}
         {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
+
+        <Route path="*" element={<ErrorPage />} />
+        
       </Routes>
     </Router>
   );

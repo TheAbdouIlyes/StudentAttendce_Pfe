@@ -20,7 +20,7 @@ import { PieChart } from "@mui/x-charts/PieChart";
 import Espaceetudiant from "./espaceetudiant";
 import ES from "./ES";
 
-const COLORS = ["#4caf50", "#f44336"];
+const COLORS = ["#1976d2", "#ffb422"];
 
 const StudentDashboard = () => {
   const theme = useTheme();

@@ -13,7 +13,7 @@ export default function ListExams() {
 
   const navigate = useNavigate();
   const { speciality, year,semester } = useParams();
-  const validSpecialities = ["info", "physic", "gestion", "biology", "pharmacy", "medicine"];
+  const validSpecialities = ["info", "physic", "gestion", "biology", "pharmacy", "medcine"];
   const validYears = ["L1", "L2", "L3", "M1", "M2"];
   const validsemester = ["S1", "S2"];
 

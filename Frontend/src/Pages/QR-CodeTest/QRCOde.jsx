@@ -7,9 +7,13 @@ import {
   Paper,
   useTheme,
   Alert,
+  IconButton,
+  Tooltip
 } from "@mui/material";
 import Swal from 'sweetalert2';
 import ReturnButton from '../../comps/ReturnButton';
+import FullscreenIcon from '@mui/icons-material/Fullscreen';
+import FullscreenExitIcon from '@mui/icons-material/FullscreenExit';
 
 function QRCode({ onScan }) {
   const { speciality, year, semester, module } = useParams();
@@ -19,6 +23,8 @@ function QRCode({ onScan }) {
 
   const [lastScan, setLastScan] = useState(null);
   const lastScannedRef = useRef(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const fullscreenRef = useRef(null);
 
   useEffect(() => {
     const scanner = new Html5QrcodeScanner('reader', {
@@ -29,7 +35,6 @@ function QRCode({ onScan }) {
     scanner.render(success, error);
 
     function success(result) {
-      // Avoid scanning same QR twice
       if (result === lastScannedRef.current) return;
 
       setLastScan(result);
@@ -38,7 +43,6 @@ function QRCode({ onScan }) {
       if (onScan) onScan(result);
       handleScan(result, finalModule);
 
-      // Cooldown
       setTimeout(() => {
         lastScannedRef.current = null;
       }, 3000);
@@ -52,7 +56,7 @@ function QRCode({ onScan }) {
         });
 
         if (!response.ok) {
-          const errorData = await response.json(); // if backend returns JSON error
+          const errorData = await response.json();
           throw new Error(errorData?.message || "Failed to mark attendance");
         }
 
@@ -84,14 +88,31 @@ function QRCode({ onScan }) {
     };
   }, [onScan, finalModule]);
 
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      fullscreenRef.current?.requestFullscreen();
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen();
+      setIsFullscreen(false);
+    }
+  };
+
   return (
     <Box sx={{ p: 3, height: "100%", width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <Paper elevation={2} sx={{ p: 4, width: "100%", maxWidth: 800 }}>
-        <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
-          <ReturnButton />
-          <Typography variant="h5" sx={{ ml: 2 }}>
-            QR-Code Scanning Page for {speciality} {year} {semester} - {finalModule}
-          </Typography>
+      <Paper elevation={0} sx={{ p: 4, width: "100%", maxWidth: 800 }} ref={fullscreenRef}>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mb: 3 }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <ReturnButton />
+            <Typography variant="h5" sx={{ ml: 2 }}>
+              QR-Code Scanning Page for {speciality} {year} {semester} - <b>{finalModule}</b>
+            </Typography>
+          </Box>
+          <Tooltip title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}>
+            <IconButton onClick={toggleFullscreen} size="large">
+              {isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+            </IconButton>
+          </Tooltip>
         </Box>
 
         <Box sx={{ display: "flex", justifyContent: "center", mb: 3 }}>

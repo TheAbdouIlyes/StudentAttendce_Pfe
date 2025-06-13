@@ -72,17 +72,17 @@ const TeacherDashboard = () => {
           {
             label: "Total Duties",
             count: data.duties_count,
-            icon: <Visibility sx={{ fontSize: 40, color: "#ff9800" }} />
+            icon: <Visibility sx={{ fontSize: 40, color: "#ffb422" }} />
           },
           {
             label: "Total Presences",
             count: data.attendance_count,
-            icon: <CheckCircle sx={{ fontSize: 40, color: "#388e3c" }} />
+            icon: <CheckCircle sx={{ fontSize: 40, color: "#22bf75" }} />
           },
           {
             label: "Total Absences",
             count: data.absences_count,
-            icon: <Cancel sx={{ fontSize: 40, color: "#d32f2f" }} />
+            icon: <Cancel sx={{ fontSize: 40, color: "#f35865" }} />
           }
         ]);
 
@@ -198,8 +198,8 @@ const TeacherDashboard = () => {
           <Grid container spacing={4}>
             <Grid item xs={12} md={6}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" mb={2}>
-                  Présences par Spécialité
+                <Typography textAlign="center" variant="h6" display="flex" alignItems="center" gap={1} mb={2}>
+                  Attendance by Specialty <People />
                 </Typography>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={attendanceBySpecialty}>
@@ -207,8 +207,8 @@ const TeacherDashboard = () => {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="present" stackId="a" fill="#4caf50" name="Présents" />
-                    <Bar dataKey="absent" stackId="a" fill="#f44336" name="Absents" />
+                    <Bar dataKey="present" stackId="a" fill="#22bf75" name="Présents" />
+                    <Bar dataKey="absent" stackId="a" fill="#f35865" name="Absents" />
                   </BarChart>
                 </ResponsiveContainer>
               </Card>
@@ -216,8 +216,8 @@ const TeacherDashboard = () => {
 
             <Grid item xs={12} md={6}>
               <Card elevation={0} sx={{ border: `1.5px solid ${theme.palette.border}`, borderRadius: 3, p: 2 }}>
-                <Typography variant="h6" mb={2}>
-                  Présences par Niveau
+                <Typography textAlign="center" variant="h6" display="flex" alignItems="center" gap={1} mb={2}>
+                  Attendance by Academic Level <People/>
                 </Typography>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={attendanceByLevel}>
@@ -225,8 +225,8 @@ const TeacherDashboard = () => {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="present" stackId="a" fill="#2196f3" name="Présents" />
-                    <Bar dataKey="absent" stackId="a" fill="#e91e63" name="Absents" />
+                    <Bar dataKey="present" stackId="a" fill="#22bf75" name="Présents" />
+                    <Bar dataKey="absent" stackId="a" fill="#f35865" name="Absents" />
                   </BarChart>
                 </ResponsiveContainer>
               </Card>

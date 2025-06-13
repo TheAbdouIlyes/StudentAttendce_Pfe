@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Button ,  Modal,Box} from "@mui/material";
+import { Button ,Typography,  Modal,Box} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ModelTable from "./ModuleTable";
 import ReturnButton from "../../comps/ReturnButton";
 import "./ListModules.css";
 import AddModule from "./AddModule";
+import BookIcon from '@mui/icons-material/Book';
+
 
 export default function ListModules() {
   const navigate = useNavigate();
@@ -71,10 +73,13 @@ useEffect(() => {
       <div className="ModulesAll-TOP">
         <ReturnButton />
         <h3>
-          Speciality: {speciality} | Level: {year}
+          <BookIcon sx={{textAlign:"center",mr:1}}/>
+          <Typography variant="h6">Speciality: <b>{speciality} </b>| Level: <b>{year}</b></Typography>
+           
+          <BookIcon sx={{textAlign:"center",ml:1}} />
         </h3>
 
-          <Button color="info"  variant="contained" startIcon={<AddIcon />} onClick={() => setModalOpen(true)}>
+          <Button color="primary"  variant="contained" startIcon={<AddIcon />} onClick={() => setModalOpen(true)}>
             Add
           </Button>
           {/* <Button variant="contained" onClick={() => setShowActions((prev) => !prev)}>

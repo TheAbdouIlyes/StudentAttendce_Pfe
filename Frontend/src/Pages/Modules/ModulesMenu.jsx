@@ -11,10 +11,11 @@ import {
   Button,
 } from "@mui/material";
 
-import TeacherSvg from "../../../public/TeacherSvg.svg"
+import TeacherSvg from "../../assets/Table.svg"
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ClassIcon from '@mui/icons-material/Class';
 
 
 const modules = ["L1", "L2", "L3", "M1", "M2"];
@@ -27,6 +28,7 @@ export default function ModulesMenu() {
     <Box
       sx={{
         p: 3,
+        pt:0,
         // minHeight: "100vh",
         backgroundColor: theme.palette.background.default,
       }}
@@ -46,14 +48,14 @@ export default function ModulesMenu() {
       >
 
         <Box sx={{height:"100%",width:"45%" ,display:"flex",alignItems:"center",flexDirection:"column"}}>
-          <Typography variant="h4" fontWeight="bold" color="primary">
-            Modules
+          <Typography variant="h4" fontWeight="bold" color="primary" sx={{display:"flex",alignItems:"center",justifyContent:"center"}}>
+           Modules <ClassIcon  fontSize="large" sx={{ ml: 1 }} /> 
           </Typography>
           <Typography variant="h6" sx={{ mt: 1 }}>
             Choose Your Specialty & Level to control and manage modules 
           </Typography>
 
-           <Box sx={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-evenly",mt:5}}>
+           {/* <Box sx={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-evenly",mt:5}}>
             <Button  variant="outlined" sx={{width:"130px"}}
             startIcon={<ArrowBackIcon/>}
             onClick={() => navigate("../MenuExams")}
@@ -64,7 +66,7 @@ export default function ModulesMenu() {
             endIcon={<ArrowForwardIcon/>}
             onClick={() => navigate("../MenuStudent")}
             >Students </Button>
-          </Box>
+          </Box> */}
         </Box>
         
 
@@ -85,10 +87,10 @@ export default function ModulesMenu() {
               }}
             >
               <CardContent sx={{ textAlign: "center" }}>
-                <Typography variant="h5" fontWeight="bold" color="primary">
+                <Typography variant="h5" fontWeight="bold" color="primary" >
                   {category.toUpperCase()}
                 </Typography>
-                <Grid container spacing={1} sx={{ mt: 2 }}>
+                <Grid container spacing={1} sx={{ mt: 1 }}>
                   {modules.map((module) => (
                     <Grid item xs={6} key={module}>
                       <Button

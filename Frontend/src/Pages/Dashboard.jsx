@@ -59,12 +59,12 @@ const Dashboard = () => {
           {
             label: "Total Students",
             count: stats.students_count,
-            icon: <People sx={{ fontSize: 40, color: "#1976d2" }} />,
+            icon: <People sx={{ fontSize: 40, color: "#4254fb" }} />,
           },
           {
             label: "Total Teachers",
             count: stats.teacher_count,
-            icon: <People sx={{ fontSize: 40, color: "#1976d2" }} />,
+            icon: <People sx={{ fontSize: 40, color: "#4254fb" }} />,
           },
           {
             label: "Total Exams",
@@ -74,12 +74,12 @@ const Dashboard = () => {
           {
             label: "Attendances",
             count: stats.attendance_count,
-            icon: <CheckCircle sx={{ fontSize: 40, color: "#388e3c" }} />,
+            icon: <CheckCircle sx={{ fontSize: 40, color: "#22bf75" }} />,
           },
           {
             label: "Absences",
             count: stats.absences_count,
-            icon: <Cancel sx={{ fontSize: 40, color: "#d32f2f" }} />,
+            icon: <Cancel sx={{ fontSize: 40, color: "#f35865" }} />,
           },
         ]);
 
@@ -292,8 +292,8 @@ const Dashboard = () => {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="present" stackId="a" fill="#4caf50" name="Présents" />
-                    <Bar dataKey="absent" stackId="a" fill="#f44336" name="Absents" />
+                    <Bar dataKey="present" stackId="a" fill="#22bf75" name="Présents" />
+                    <Bar dataKey="absent" stackId="a" fill="#fa4f58" name="Absents" />
                   </BarChart>
                 </ResponsiveContainer>
               </Card>
@@ -312,8 +312,8 @@ const Dashboard = () => {
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="present" stackId="a" fill="#2196f3" name="Présents" />
-                    <Bar dataKey="absent" stackId="a" fill="#e91e63" name="Absents" />
+                    <Bar dataKey="present" stackId="a" fill="#22bf75" name="Présents" />
+                    <Bar dataKey="absent" stackId="a" fill="#fa4f58" name="Absents" />
                   </BarChart>
                 </ResponsiveContainer>
               </Card>
